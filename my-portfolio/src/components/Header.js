@@ -34,9 +34,9 @@ export default function Header() {
                 className="group flex items-center space-x-2 text-2xl lg:text-3xl font-bold text-black hover:text-blue-600 transition-colors duration-300"
               >
                 <div className="w-8 h-8 lg:w-10 lg:h-10 bg-gradient-to-br from-blue-500 to-blue-700 rounded-lg flex items-center justify-center text-white font-bold text-sm lg:text-base shadow-md group-hover:shadow-lg transition-shadow duration-300">
-                  M
+                  DC
                 </div>
-                <span className="hidden sm:block">Dasun Methmal</span>
+                <span className="hidden sm:block">DCode</span>
               </a>
             </div>
             
