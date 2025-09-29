@@ -6,13 +6,10 @@ import {
   MagnifyingGlassIcon,
   EyeIcon,
   CodeBracketSquareIcon,
-  ArrowTopRightOnSquareIcon,
   CalendarIcon,
-  TagIcon,
   SparklesIcon,
   FunnelIcon,
   HeartIcon,
-  StarIcon
 } from '@heroicons/react/24/outline';
 import { HeartIcon as HeartSolidIcon } from '@heroicons/react/24/solid';
 
@@ -26,89 +23,89 @@ export default function Projects() {
     setIsVisible(true);
   }, []);
 
-  // Projects data (updated with your actual projects — UI keys preserved)
-const projects = [
-  {
-    id: 1,
-    title: 'ThyroTrack – Thyroid Cancer Risk Prediction System',
-    description: 'Full-stack AI-powered web platform for thyroid cancer risk prediction and patient management.',
-    longDescription: `Developed a full-stack AI-powered web platform for thyroid cancer risk prediction and patient management. Integrated ML models (Random Forest) with SHAP explainability and clinical support tools. Key features include: risk prediction, patient record management, progress & trend tracking, SHAP-based explanations for predictions, and automated report generation.`,
-    image: '../../../public/ThyroTrack.png',
-    technologies: ['React.js', 'Express.js', 'Flask', 'MySQL', 'Random Forest', 'SHAP'],
-    category: 'Full-Stack',
-    liveUrl: '', // add if you have a live demo
-    githubUrl: '', // add repo link if available
-    featured: true,
-    date: '2025',
-    status: 'Completed',
-    likes: 100,
-    views: 2453
-  },
-  {
-    id: 2,
-    title: 'ModaLane E-Commerce Website',
-    description: 'Responsive e-commerce website built with TypeScript, CSS and modern frontend techniques.',
-    longDescription: `Developed a responsive e-commerce site with a modern UI and a clean TypeScript codebase. Key features: responsive navigation, hero CTA, testimonials, benefits and brand story sections, and integrated shopping CTA.`,
-    image: '../../../public/Modalane.png',
-    technologies: ['TypeScript', 'HTML', 'CSS', 'JavaScript'],
-    category: 'Frontend',
-    liveUrl: '',
-    githubUrl: '',
-    featured: false,
-    date: '2025',
-    status: 'Completed',
-    likes: 24,
-    views: 4570
-  },
-  {
-    id: 3,
-    title: 'MegaCityCab Service',
-    description: 'Java EE web application for cab booking and admin operations.',
-    longDescription: `Developed a Java EE web application for cab booking and administrative operations. Key features include user registration/login, chatbot, profile management, booking history and an admin dashboard.`,
-    image: '/api/placeholder/600/400',
-    technologies: ['Java EE', 'JSP/Servlets', 'MySQL'],
-    category: 'Full-Stack',
-    liveUrl: '',
-    githubUrl: '',
-    featured: false,
-    date: '2025',
-    status: 'Completed',
-    likes: 0,
-    views: 0
-  },
-  {
-    id: 4,
-    title: 'Pharmacy Management System',
-    description: 'Web application to manage medicine stock, prescriptions, and sales (group project).',
-    longDescription: `Developed a web application to manage medicine stock, prescriptions and sales. Key features: medicine tracking, billing system, prescription management and basic reports for pharmacy staff.`,
-    image: '../../../public/Pharmacy.jpg',
-    technologies: ['HTML', 'CSS', 'PHP', 'JavaScript', 'SQL'],
-    category: 'Web',
-    liveUrl: '',
-    githubUrl: '',
-    featured: false,
-    date: '2024',
-    status: 'Completed',
-    likes: 450,
-    views: 4908
+  // Projects data with correct image paths
+  const projects = [
+    {
+      id: 1,
+      title: 'ThyroTrack – Thyroid Cancer Risk Prediction System',
+      description: 'Full-stack AI-powered web platform for thyroid cancer risk prediction and patient management.',
+      longDescription: `Developed a full-stack AI-powered web platform for thyroid cancer risk prediction and patient management. Integrated ML models (Random Forest) with SHAP explainability and clinical support tools. Key features include: risk prediction, patient record management, progress & trend tracking, SHAP-based explanations for predictions, and automated report generation.`,
+      image: '/ThyroTrack.png',
+      technologies: ['React.js', 'Express.js', 'Flask', 'MySQL', 'Random Forest', 'SHAP'],
+      category: 'Full-Stack',
+      liveUrl: '',
+      githubUrl: '',
+      featured: true,
+      date: '2025',
+      status: 'Completed',
+      likes: 100,
+      views: 2453
     },
-  {
-    id: 5,
-    title: 'Portfolio – React.js Web Developer Showcase',
-    description: 'Modern and interactive portfolio built with React.js + Vite to highlight web development skills.',
-    longDescription: `A modern, interactive portfolio showcasing projects and skills. Key features: smooth animations (GSAP / Framer Motion), dynamic project showcase, responsive design, and an EmailJS contact form.`,
-    image: '../../../public/Portfolio.png',
-    technologies: ['React.js', 'Vite', 'Framer Motion', 'EmailJS', 'Tailwind CSS'],
-    category: 'Frontend',
-    liveUrl: '', // add your deployed portfolio URL if you want it shown
-    githubUrl: '', // add repo link if you want it shown
-    featured: true,
-    date: '2024',
-    status: 'Completed',
-    likes: 342,
-    views: 3456
-  }
-];
+    {
+      id: 2,
+      title: 'ModaLane E-Commerce Website',
+      description: 'Responsive e-commerce website built with TypeScript, CSS and modern frontend techniques.',
+      longDescription: `Developed a responsive e-commerce site with a modern UI and a clean TypeScript codebase. Key features: responsive navigation, hero CTA, testimonials, benefits and brand story sections, and integrated shopping CTA.`,
+      image: '/Modalane.png',
+      technologies: ['TypeScript', 'HTML', 'CSS', 'JavaScript'],
+      category: 'Frontend',
+      liveUrl: '',
+      githubUrl: '',
+      featured: false,
+      date: '2025',
+      status: 'Completed',
+      likes: 24,
+      views: 4570
+    },
+    {
+      id: 3,
+      title: 'MegaCityCab Service',
+      description: 'Java EE web application for cab booking and admin operations.',
+      longDescription: `Developed a Java EE web application for cab booking and administrative operations. Key features include user registration/login, chatbot, profile management, booking history and an admin dashboard.`,
+      image: '/placeholder.jpg',
+      technologies: ['Java EE', 'JSP/Servlets', 'MySQL'],
+      category: 'Full-Stack',
+      liveUrl: '',
+      githubUrl: '',
+      featured: false,
+      date: '2025',
+      status: 'Completed',
+      likes: 0,
+      views: 0
+    },
+    {
+      id: 4,
+      title: 'Pharmacy Management System',
+      description: 'Web application to manage medicine stock, prescriptions, and sales (group project).',
+      longDescription: `Developed a web application to manage medicine stock, prescriptions and sales. Key features: medicine tracking, billing system, prescription management and basic reports for pharmacy staff.`,
+      image: '/Pharmacy.jpg',
+      technologies: ['HTML', 'CSS', 'PHP', 'JavaScript', 'SQL'],
+      category: 'Web',
+      liveUrl: '',
+      githubUrl: '',
+      featured: false,
+      date: '2024',
+      status: 'Completed',
+      likes: 450,
+      views: 4908
+    },
+    {
+      id: 5,
+      title: 'Portfolio – React.js Web Developer Showcase',
+      description: 'Modern and interactive portfolio built with React.js + Vite to highlight web development skills.',
+      longDescription: `A modern, interactive portfolio showcasing projects and skills. Key features: smooth animations (GSAP / Framer Motion), dynamic project showcase, responsive design, and an EmailJS contact form.`,
+      image: '/Portfolio.png',
+      technologies: ['React.js', 'Vite', 'Framer Motion', 'EmailJS', 'Tailwind CSS'],
+      category: 'Frontend',
+      liveUrl: '',
+      githubUrl: '',
+      featured: true,
+      date: '2024',
+      status: 'Completed',
+      likes: 342,
+      views: 3456
+    }
+  ];
 
   const categories = ['All', 'Full-Stack', 'Frontend', 'Backend', 'Mobile', 'Blockchain'];
 
@@ -231,10 +228,22 @@ const projects = [
                   className={`group bg-white rounded-2xl sm:rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 border border-gray-100 hover:border-blue-200 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
                   style={{ transitionDelay: `${index * 200}ms` }}
                 >
-                  {/* Image */}
+                  {/* Image - FIXED */}
                   <div className="relative overflow-hidden">
-                    <div className="w-full h-48 sm:h-64 bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center">
-                      <div className="text-3xl sm:text-4xl">🚀</div>
+                    <div className="relative w-full h-48 sm:h-64 bg-gradient-to-br from-blue-100 to-blue-200">
+                      {project.image && !project.image.includes('placeholder') ? (
+                        <Image
+                          src={project.image}
+                          alt={project.title}
+                          fill
+                          className="object-cover"
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        />
+                      ) : (
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <div className="text-3xl sm:text-4xl">🚀</div>
+                        </div>
+                      )}
                     </div>
                     <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                     
@@ -297,25 +306,29 @@ const projects = [
                     </div>
                     
                     <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
-                      <a
-                        href={project.liveUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center justify-center bg-blue-600 hover:bg-blue-700 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-xl font-semibold text-sm transition-all duration-300 hover:shadow-lg hover:scale-105"
-                      >
-                        <EyeIcon className="w-4 h-4 mr-1.5 sm:mr-2" />
-                        Live Demo
-                      </a>
+                      {project.liveUrl && (
+                        <a
+                          href={project.liveUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center justify-center bg-blue-600 hover:bg-blue-700 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-xl font-semibold text-sm transition-all duration-300 hover:shadow-lg hover:scale-105"
+                        >
+                          <EyeIcon className="w-4 h-4 mr-1.5 sm:mr-2" />
+                          Live Demo
+                        </a>
+                      )}
                       
-                      <a
-                        href={project.githubUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center justify-center text-gray-700 hover:text-gray-900 px-4 sm:px-6 py-2 sm:py-3 rounded-xl font-semibold text-sm transition-all duration-300 border border-gray-200 hover:bg-gray-50"
-                      >
-                        <CodeBracketSquareIcon className="w-4 h-4 mr-1.5 sm:mr-2" />
-                        Source Code
-                      </a>
+                      {project.githubUrl && (
+                        <a
+                          href={project.githubUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center justify-center text-gray-700 hover:text-gray-900 px-4 sm:px-6 py-2 sm:py-3 rounded-xl font-semibold text-sm transition-all duration-300 border border-gray-200 hover:bg-gray-50"
+                        >
+                          <CodeBracketSquareIcon className="w-4 h-4 mr-1.5 sm:mr-2" />
+                          Source Code
+                        </a>
+                      )}
                     </div>
                   </div>
                 </article>
@@ -360,10 +373,22 @@ const projects = [
                   className={`group bg-white rounded-xl sm:rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 hover:border-blue-200 hover:scale-105 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
                   style={{ transitionDelay: `${index * 100}ms` }}
                 >
-                  {/* Image */}
+                  {/* Image - FIXED */}
                   <div className="relative">
-                    <div className="w-full h-40 sm:h-48 bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center">
-                      <div className="text-2xl sm:text-3xl">📱</div>
+                    <div className="relative w-full h-40 sm:h-48 bg-gradient-to-br from-blue-100 to-blue-200">
+                      {project.image && !project.image.includes('placeholder') ? (
+                        <Image
+                          src={project.image}
+                          alt={project.title}
+                          fill
+                          className="object-cover"
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        />
+                      ) : (
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <div className="text-2xl sm:text-3xl">📱</div>
+                        </div>
+                      )}
                     </div>
                     
                     {/* Category Badge */}
@@ -418,23 +443,29 @@ const projects = [
                     </div>
                     
                     <div className="flex items-center justify-between">
-                      <a
-                        href={project.liveUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-600 hover:text-blue-700 text-xs sm:text-sm font-semibold transition-colors duration-300"
-                      >
-                        View Project →
-                      </a>
+                      {project.liveUrl ? (
+                        <a
+                          href={project.liveUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-600 hover:text-blue-700 text-xs sm:text-sm font-semibold transition-colors duration-300"
+                        >
+                          View Project →
+                        </a>
+                      ) : (
+                        <span className="text-gray-400 text-xs sm:text-sm">Demo Coming Soon</span>
+                      )}
                       
-                      <a
-                        href={project.githubUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="p-1.5 sm:p-2 text-gray-400 hover:text-gray-600 transition-colors duration-300"
-                      >
-                        <CodeBracketSquareIcon className="w-4 h-4 sm:w-5 sm:h-5" />
-                      </a>
+                      {project.githubUrl && (
+                        <a
+                          href={project.githubUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="p-1.5 sm:p-2 text-gray-400 hover:text-gray-600 transition-colors duration-300"
+                        >
+                          <CodeBracketSquareIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+                        </a>
+                      )}
                     </div>
                   </div>
                 </article>
@@ -457,7 +488,7 @@ const projects = [
           
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 max-w-md sm:max-w-none mx-auto">
             <Link
-              href="#contact"
+              href="/contact"
               className="bg-blue-600 hover:bg-blue-700 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-full font-semibold text-base sm:text-lg transition-all duration-300 hover:shadow-lg hover:scale-105 w-full sm:w-auto text-center"
             >
               Start a Project
