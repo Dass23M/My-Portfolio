@@ -99,15 +99,15 @@ export default function Footer() {
               <div className="space-y-3 mb-6">
                 <div className="flex items-center space-x-3 text-gray-300">
                   <EnvelopeIcon className="h-5 w-5 text-blue-400" />
-                  <span>hello@methmal.dev</span>
+                  <span>dasunmethmal23@gmail.com</span>
                 </div>
                 <div className="flex items-center space-x-3 text-gray-300">
                   <PhoneIcon className="h-5 w-5 text-blue-400" />
-                  <span>+1 (555) 123-4567</span>
+                  <span>+94703056192</span>
                 </div>
                 <div className="flex items-center space-x-3 text-gray-300">
                   <MapPinIcon className="h-5 w-5 text-blue-400" />
-                  <span>San Francisco, CA</span>
+                  <span>Colombo, Sri Lanka</span>
                 </div>
               </div>
             </div>
@@ -164,7 +164,7 @@ export default function Footer() {
           {/* Copyright */}
           <div className="text-gray-400 text-sm text-center md:text-left">
             <p>&copy; {currentYear} Methmal. All rights reserved.</p>
-            <p className="mt-1">Built with ❤️ using Next.js & Tailwind CSS</p>
+            <p className="mt-1">Built with using Next.js & Tailwind CSS</p>
           </div>
 
           {/* Social Links */}
