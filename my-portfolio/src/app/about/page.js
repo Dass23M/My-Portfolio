@@ -63,7 +63,7 @@ export default function About() {
         "Developed e-commerce platforms and CRM systems. Improved application performance by 40% through optimization.",
       technologies: ["Next.js", "Python", "PostgreSQL", "Docker"],
     },
-        {
+    {
       title: "Frontend Developer",
       company: "DCode Ltd.",
       period: "2025 - Present",
@@ -73,32 +73,32 @@ export default function About() {
     },
   ];
 
-const education = [
-  {
-    degree: "BSc (Hons) in Software Engineering",
-    university: "Cardiff Metropolitan University (UK) – ICBT Campus, Nugegoda",
-    year: "2024 - 2025",
-    description: "Results Pending",
-  },
-  {
-    qualification: "Higher Diploma in Computing & Software Engineering",
-    university: "Cardiff Metropolitan University (UK) – ICBT Campus, Nugegoda",
-    year: "2022 - 2024",
-    description: "Completed",
-  },
-  {
-    qualification: "G.C.E. Advanced Level",
-    school: "Mahanama College (Colombo 03)",
-    year: "2020",
-    description: "Passed",
-  },
-  {
-    qualification: "G.C.E. Ordinary Level",
-    school: "Sri Rajasinghe Central College (Kotikawatta)",
-    year: "2017",
-    description: "Passed",
-  },
-];
+  const education = [
+    {
+      degree: "BSc (Hons) in Software Engineering",
+      institution: "Cardiff Metropolitan University (UK) – ICBT Campus, Nugegoda",
+      year: "2024 - 2025",
+      description: "Results Pending",
+    },
+    {
+      degree: "Higher Diploma in Computing & Software Engineering",
+      institution: "Cardiff Metropolitan University (UK) – ICBT Campus, Nugegoda",
+      year: "2022 - 2024",
+      description: "Completed",
+    },
+    {
+      degree: "G.C.E. Advanced Level",
+      institution: "Mahanama College (Colombo 03)",
+      year: "2020",
+      description: "Passed",
+    },
+    {
+      degree: "G.C.E. Ordinary Level",
+      institution: "Sri Rajasinghe Central College (Kotikawatta)",
+      year: "2017",
+      description: "Passed",
+    },
+  ];
 
   const interests = [
     {
@@ -135,6 +135,27 @@ const education = [
     { id: "experience", label: "Experience", icon: BriefcaseIcon },
     { id: "education", label: "Education", icon: AcademicCapIcon },
   ];
+
+  // Fixed CV download function
+  const handleDownloadCV = () => {
+    // Create a link element
+    const link = document.createElement('a');
+    
+    // Set the correct path to your CV file in the public folder
+    link.href = '/resume.pdf'; // Make sure your CV file is named 'resume.pdf' in public folder
+    
+    // Set the download attribute with the desired file name
+    link.download = 'Dasun_Methmal_CV.pdf';
+    
+    // Append to the document
+    document.body.appendChild(link);
+    
+    // Trigger the download
+    link.click();
+    
+    // Clean up
+    document.body.removeChild(link);
+  };
 
   return (
     <div className="bg-white">
@@ -482,17 +503,16 @@ const education = [
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 max-w-md sm:max-w-none mx-auto">
-            <a
-              href="../../pdf/cv.pdf"
-              download
+            <button
+              onClick={handleDownloadCV}
               className="inline-flex items-center bg-blue-600 hover:bg-blue-700 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-full font-semibold text-base sm:text-lg transition-all duration-300 hover:shadow-lg hover:scale-105 w-full sm:w-auto justify-center"
             >
               <DocumentArrowDownIcon className="w-4 h-4 sm:w-5 sm:h-5 mr-1.5 sm:mr-2" />
               Download CV
-            </a>
+            </button>
 
             <a
-              href="#contact"
+              href="/contact"
               className="inline-flex items-center text-blue-600 hover:text-blue-700 px-6 sm:px-8 py-3 sm:py-4 rounded-full font-semibold text-base sm:text-lg transition-all duration-300 border border-blue-200 hover:bg-blue-50 w-full sm:w-auto justify-center"
             >
               <EnvelopeIcon className="w-4 h-4 sm:w-5 sm:h-5 mr-1.5 sm:mr-2" />
