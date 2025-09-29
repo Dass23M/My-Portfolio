@@ -90,9 +90,9 @@ export default function Header() {
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-blue-700 rounded-lg flex items-center justify-center text-white font-bold text-sm">
-                    YN
+                    DC
                   </div>
-                  <span>Your Name</span>
+                  <span>DCode</span>
                 </a>
                 <button
                   type="button"

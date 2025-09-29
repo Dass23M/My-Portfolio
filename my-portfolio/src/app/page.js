@@ -14,6 +14,7 @@ import {
   StarIcon
 } from '@heroicons/react/24/outline';
 
+
 export default function Home() {
   const [isVisible, setIsVisible] = useState(false);
   const [typedText, setTypedText] = useState('');
@@ -359,6 +360,7 @@ export default function Home() {
           </div>
         </div>
       </section>
+ 
     </div>
   );
 }

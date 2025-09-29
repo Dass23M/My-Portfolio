@@ -56,28 +56,12 @@ export default function About() {
 
   const experience = [
     {
-      title: "Senior Full-Stack Developer",
-      company: "Tech Innovation Inc.",
-      period: "2022 - Present",
-      description:
-        "Led development of scalable web applications serving 100K+ users. Built microservices architecture and mentored junior developers.",
-      technologies: ["React", "Node.js", "AWS", "MongoDB"],
-    },
-    {
       title: "Full-Stack Developer",
-      company: "Digital Solutions Ltd.",
+      company: "DCode Ltd.",
       period: "2021 - 2022",
       description:
         "Developed e-commerce platforms and CRM systems. Improved application performance by 40% through optimization.",
       technologies: ["Next.js", "Python", "PostgreSQL", "Docker"],
-    },
-    {
-      title: "Frontend Developer",
-      company: "Creative Agency Co.",
-      period: "2020 - 2021",
-      description:
-        "Created responsive web interfaces and interactive user experiences for diverse clients across various industries.",
-      technologies: ["React", "TypeScript", "Tailwind", "Firebase"],
     },
   ];
 
