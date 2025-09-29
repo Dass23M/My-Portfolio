@@ -26,105 +26,89 @@ export default function Projects() {
     setIsVisible(true);
   }, []);
 
-  // Mock projects data - replace with your actual data
-  const projects = [
-    {
-      id: 1,
-      title: 'E-Commerce Platform',
-      description: 'A full-stack e-commerce solution built with Next.js, featuring user authentication, payment processing with Stripe, inventory management, and admin dashboard.',
-      longDescription: 'Complete e-commerce platform with advanced features including real-time inventory tracking, order management, customer analytics, and multi-vendor support.',
-      image: '/api/placeholder/600/400',
-      technologies: ['Next.js', 'React', 'Node.js', 'MongoDB', 'Stripe', 'Tailwind CSS'],
-      category: 'Full-Stack',
-      liveUrl: 'https://demo-ecommerce.vercel.app',
-      githubUrl: 'https://github.com/methmal/ecommerce-platform',
-      featured: true,
-      date: '2024-01-15',
-      status: 'Completed',
-      likes: 142,
-      views: 2856
+  // Projects data (updated with your actual projects — UI keys preserved)
+const projects = [
+  {
+    id: 1,
+    title: 'ThyroTrack – Thyroid Cancer Risk Prediction System',
+    description: 'Full-stack AI-powered web platform for thyroid cancer risk prediction and patient management.',
+    longDescription: `Developed a full-stack AI-powered web platform for thyroid cancer risk prediction and patient management. Integrated ML models (Random Forest) with SHAP explainability and clinical support tools. Key features include: risk prediction, patient record management, progress & trend tracking, SHAP-based explanations for predictions, and automated report generation.`,
+    image: '../../../public/ThyroTrack.png',
+    technologies: ['React.js', 'Express.js', 'Flask', 'MySQL', 'Random Forest', 'SHAP'],
+    category: 'Full-Stack',
+    liveUrl: '', // add if you have a live demo
+    githubUrl: '', // add repo link if available
+    featured: true,
+    date: '2025',
+    status: 'Completed',
+    likes: 100,
+    views: 2453
+  },
+  {
+    id: 2,
+    title: 'ModaLane E-Commerce Website',
+    description: 'Responsive e-commerce website built with TypeScript, CSS and modern frontend techniques.',
+    longDescription: `Developed a responsive e-commerce site with a modern UI and a clean TypeScript codebase. Key features: responsive navigation, hero CTA, testimonials, benefits and brand story sections, and integrated shopping CTA.`,
+    image: '../../../public/Modalane.png',
+    technologies: ['TypeScript', 'HTML', 'CSS', 'JavaScript'],
+    category: 'Frontend',
+    liveUrl: '',
+    githubUrl: '',
+    featured: false,
+    date: '2025',
+    status: 'Completed',
+    likes: 24,
+    views: 4570
+  },
+  {
+    id: 3,
+    title: 'MegaCityCab Service',
+    description: 'Java EE web application for cab booking and admin operations.',
+    longDescription: `Developed a Java EE web application for cab booking and administrative operations. Key features include user registration/login, chatbot, profile management, booking history and an admin dashboard.`,
+    image: '/api/placeholder/600/400',
+    technologies: ['Java EE', 'JSP/Servlets', 'MySQL'],
+    category: 'Full-Stack',
+    liveUrl: '',
+    githubUrl: '',
+    featured: false,
+    date: '2025',
+    status: 'Completed',
+    likes: 0,
+    views: 0
+  },
+  {
+    id: 4,
+    title: 'Pharmacy Management System',
+    description: 'Web application to manage medicine stock, prescriptions, and sales (group project).',
+    longDescription: `Developed a web application to manage medicine stock, prescriptions and sales. Key features: medicine tracking, billing system, prescription management and basic reports for pharmacy staff.`,
+    image: '../../../public/Pharmacy.jpg',
+    technologies: ['HTML', 'CSS', 'PHP', 'JavaScript', 'SQL'],
+    category: 'Web',
+    liveUrl: '',
+    githubUrl: '',
+    featured: false,
+    date: '2024',
+    status: 'Completed',
+    likes: 450,
+    views: 4908
     },
-    {
-      id: 2,
-      title: 'Task Management App',
-      description: 'Real-time collaborative task management application with drag-and-drop functionality, team collaboration, and progress tracking.',
-      longDescription: 'Comprehensive project management tool with Kanban boards, team chat, file sharing, time tracking, and detailed reporting features.',
-      image: '/api/placeholder/600/400',
-      technologies: ['React', 'Socket.io', 'Express', 'PostgreSQL', 'JWT', 'Material-UI'],
-      category: 'Frontend',
-      liveUrl: 'https://taskflow-demo.netlify.app',
-      githubUrl: 'https://github.com/methmal/task-manager',
-      featured: true,
-      date: '2023-12-10',
-      status: 'Completed',
-      likes: 89,
-      views: 1743
-    },
-    {
-      id: 3,
-      title: 'Weather Dashboard',
-      description: 'Modern weather application with location-based forecasts, interactive maps, and detailed weather analytics.',
-      longDescription: 'Advanced weather application featuring 7-day forecasts, weather alerts, historical data analysis, and beautiful data visualizations.',
-      image: '/api/placeholder/600/400',
-      technologies: ['Vue.js', 'TypeScript', 'Chart.js', 'OpenWeather API', 'Mapbox'],
-      category: 'Frontend',
-      liveUrl: 'https://weather-pro-dashboard.netlify.app',
-      githubUrl: 'https://github.com/methmal/weather-dashboard',
-      featured: false,
-      date: '2023-11-20',
-      status: 'Completed',
-      likes: 67,
-      views: 1234
-    },
-    {
-      id: 4,
-      title: 'AI Content Generator',
-      description: 'AI-powered content generation tool using OpenAI API for creating blog posts, social media content, and marketing copy.',
-      longDescription: 'Intelligent content creation platform with multiple templates, SEO optimization suggestions, and content scheduling features.',
-      image: '/api/placeholder/600/400',
-      technologies: ['Python', 'FastAPI', 'OpenAI API', 'React', 'Redis', 'Docker'],
-      category: 'Full-Stack',
-      liveUrl: 'https://ai-content-gen.vercel.app',
-      githubUrl: 'https://github.com/methmal/ai-content-generator',
-      featured: true,
-      date: '2023-10-05',
-      status: 'Completed',
-      likes: 198,
-      views: 3421
-    },
-    {
-      id: 5,
-      title: 'Portfolio Website',
-      description: 'Responsive portfolio website built with Next.js, featuring modern animations, contact forms, and CMS integration.',
-      longDescription: 'Professional portfolio website with blog functionality, project showcase, contact management, and admin panel for content updates.',
-      image: '/api/placeholder/600/400',
-      technologies: ['Next.js', 'Tailwind CSS', 'Framer Motion', 'Sanity CMS', 'Vercel'],
-      category: 'Frontend',
-      liveUrl: 'https://methmal-portfolio.vercel.app',
-      githubUrl: 'https://github.com/methmal/portfolio-v2',
-      featured: false,
-      date: '2023-09-15',
-      status: 'Completed',
-      likes: 134,
-      views: 2187
-    },
-    {
-      id: 6,
-      title: 'Blockchain Voting System',
-      description: 'Secure voting platform built on Ethereum blockchain ensuring transparency and immutability of voting records.',
-      longDescription: 'Decentralized voting application with smart contracts, voter verification, real-time results, and audit trail functionality.',
-      image: '/api/placeholder/600/400',
-      technologies: ['Solidity', 'React', 'Web3.js', 'Ethereum', 'MetaMask', 'IPFS'],
-      category: 'Blockchain',
-      liveUrl: 'https://blockchain-vote.netlify.app',
-      githubUrl: 'https://github.com/methmal/blockchain-voting',
-      featured: false,
-      date: '2023-08-20',
-      status: 'In Progress',
-      likes: 76,
-      views: 1456
-    }
-  ];
+  {
+    id: 5,
+    title: 'Portfolio – React.js Web Developer Showcase',
+    description: 'Modern and interactive portfolio built with React.js + Vite to highlight web development skills.',
+    longDescription: `A modern, interactive portfolio showcasing projects and skills. Key features: smooth animations (GSAP / Framer Motion), dynamic project showcase, responsive design, and an EmailJS contact form.`,
+    image: '../../../public/Portfolio.png',
+    technologies: ['React.js', 'Vite', 'Framer Motion', 'EmailJS', 'Tailwind CSS'],
+    category: 'Frontend',
+    liveUrl: '', // add your deployed portfolio URL if you want it shown
+    githubUrl: '', // add repo link if you want it shown
+    featured: true,
+    date: '2024',
+    status: 'Completed',
+    likes: 342,
+    views: 3456
+  }
+];
 
   const categories = ['All', 'Full-Stack', 'Frontend', 'Backend', 'Mobile', 'Blockchain'];
 

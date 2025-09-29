@@ -63,22 +63,42 @@ export default function About() {
         "Developed e-commerce platforms and CRM systems. Improved application performance by 40% through optimization.",
       technologies: ["Next.js", "Python", "PostgreSQL", "Docker"],
     },
+        {
+      title: "Frontend Developer",
+      company: "DCode Ltd.",
+      period: "2025 - Present",
+      description:
+        "Developed e-commerce platforms and CRM systems. Improved application performance by 40% through optimization.",
+      technologies: ["Next.js", "Python", "PostgreSQL", "Docker"],
+    },
   ];
 
-  const education = [
-    {
-      degree: "Bachelor of Computer Science",
-      institution: "University of Technology",
-      year: "2020",
-      description: "Specialized in Software Engineering and Database Systems",
-    },
-    {
-      degree: "Full-Stack Web Development Bootcamp",
-      institution: "Code Academy Pro",
-      year: "2019",
-      description: "Intensive 6-month program covering modern web technologies",
-    },
-  ];
+const education = [
+  {
+    degree: "BSc (Hons) in Software Engineering",
+    university: "Cardiff Metropolitan University (UK) – ICBT Campus, Nugegoda",
+    year: "2024 - 2025",
+    description: "Results Pending",
+  },
+  {
+    qualification: "Higher Diploma in Computing & Software Engineering",
+    university: "Cardiff Metropolitan University (UK) – ICBT Campus, Nugegoda",
+    year: "2022 - 2024",
+    description: "Completed",
+  },
+  {
+    qualification: "G.C.E. Advanced Level",
+    school: "Mahanama College (Colombo 03)",
+    year: "2020",
+    description: "Passed",
+  },
+  {
+    qualification: "G.C.E. Ordinary Level",
+    school: "Sri Rajasinghe Central College (Kotikawatta)",
+    year: "2017",
+    description: "Passed",
+  },
+];
 
   const interests = [
     {
@@ -463,7 +483,7 @@ export default function About() {
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 max-w-md sm:max-w-none mx-auto">
             <a
-              href="/resume.pdf"
+              href="../../pdf/cv.pdf"
               download
               className="inline-flex items-center bg-blue-600 hover:bg-blue-700 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-full font-semibold text-base sm:text-lg transition-all duration-300 hover:shadow-lg hover:scale-105 w-full sm:w-auto justify-center"
             >
