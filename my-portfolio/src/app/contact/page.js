@@ -66,7 +66,7 @@ export default function Contact() {
     {
       icon: EnvelopeIcon,
       label: 'Email',
-      value: 'hello@methmal.dev',
+      value: 'dasunmethmal23@gmail.com',
       description: 'Send me an email anytime',
       color: 'text-blue-600',
       bg: 'bg-blue-100'
@@ -74,7 +74,7 @@ export default function Contact() {
     {
       icon: PhoneIcon,
       label: 'Phone',
-      value: '+1 (555) 123-4567',
+      value: '0703056192',
       description: 'Mon-Fri from 8am to 6pm',
       color: 'text-green-600',
       bg: 'bg-green-100'

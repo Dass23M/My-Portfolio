@@ -15,6 +15,7 @@ module.exports = {
           700: '#1d4ed8',
         }
       }
+      
     },
   },
   plugins: [],
