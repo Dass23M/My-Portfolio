@@ -19,38 +19,36 @@ export default function About() {
   const [isVisible, setIsVisible] = useState(false);
   const [activeTab, setActiveTab] = useState("skills");
 
-  useEffect(() => {
-    setIsVisible(true);
-  }, []);
+  useEffect(() => { setIsVisible(true); }, []);
 
   const skills = {
     frontend: [
-      { name: "React", level: 95, color: "bg-blue-500" },
-      { name: "Next.js", level: 90, color: "bg-black" },
-      { name: "TypeScript", level: 85, color: "bg-blue-600" },
-      { name: "Tailwind CSS", level: 92, color: "bg-cyan-500" },
-      { name: "JavaScript", level: 95, color: "bg-yellow-500" },
-      { name: "HTML/CSS", level: 98, color: "bg-orange-500" },
+      { name: "React", level: 95 },
+      { name: "Next.js", level: 90 },
+      { name: "TypeScript", level: 85 },
+      { name: "Tailwind CSS", level: 92 },
+      { name: "JavaScript", level: 95 },
+      { name: "HTML/CSS", level: 98 },
     ],
     backend: [
-      { name: "Node.js", level: 88, color: "bg-green-600" },
-      { name: "Python", level: 85, color: "bg-blue-400" },
-      { name: "Express.js", level: 87, color: "bg-gray-600" },
-      { name: "FastAPI", level: 80, color: "bg-teal-600" },
-      { name: "REST APIs", level: 90, color: "bg-purple-600" },
-      { name: "GraphQL", level: 75, color: "bg-pink-500" },
+      { name: "Node.js", level: 88 },
+      { name: "Python", level: 85 },
+      { name: "Express.js", level: 87 },
+      { name: "FastAPI", level: 80 },
+      { name: "REST APIs", level: 90 },
+      { name: "GraphQL", level: 75 },
     ],
     database: [
-      { name: "MongoDB", level: 85, color: "bg-green-500" },
-      { name: "PostgreSQL", level: 82, color: "bg-blue-700" },
-      { name: "Redis", level: 78, color: "bg-red-600" },
-      { name: "Firebase", level: 80, color: "bg-yellow-600" },
+      { name: "MongoDB", level: 85 },
+      { name: "PostgreSQL", level: 82 },
+      { name: "Redis", level: 78 },
+      { name: "Firebase", level: 80 },
     ],
     tools: [
-      { name: "Git", level: 90, color: "bg-orange-600" },
-      { name: "Docker", level: 75, color: "bg-blue-500" },
-      { name: "AWS", level: 70, color: "bg-yellow-500" },
-      { name: "Vercel", level: 85, color: "bg-black" },
+      { name: "Git", level: 90 },
+      { name: "Docker", level: 75 },
+      { name: "AWS", level: 70 },
+      { name: "Vercel", level: 85 },
     ],
   };
 
@@ -58,18 +56,16 @@ export default function About() {
     {
       title: "Full-Stack Developer",
       company: "DCode Ltd.",
-      period: "2021 - 2022",
-      description:
-        "Developed e-commerce platforms and CRM systems. Improved application performance by 40% through optimization.",
+      period: "2021 – 2022",
+      description: "Developed e-commerce platforms and CRM systems. Improved application performance by 40% through optimization.",
       technologies: ["Next.js", "Python", "PostgreSQL", "Docker"],
     },
     {
       title: "Frontend Developer",
       company: "DCode Ltd.",
-      period: "2025 - Present",
-      description:
-        "Developed e-commerce platforms and CRM systems. Improved application performance by 40% through optimization.",
-      technologies: ["Next.js", "Python", "PostgreSQL", "Docker"],
+      period: "2025 – Present",
+      description: "Building modern frontend experiences and design systems for client-facing products.",
+      technologies: ["React", "Tailwind CSS", "TypeScript", "Vite"],
     },
   ];
 
@@ -77,13 +73,13 @@ export default function About() {
     {
       degree: "BSc (Hons) in Software Engineering",
       institution: "Cardiff Metropolitan University (UK) – ICBT Campus, Nugegoda",
-      year: "2024 - 2025",
+      year: "2024 – 2025",
       description: "Results Pending",
     },
     {
       degree: "Higher Diploma in Computing & Software Engineering",
       institution: "Cardiff Metropolitan University (UK) – ICBT Campus, Nugegoda",
-      year: "2022 - 2024",
+      year: "2022 – 2024",
       description: "Completed",
     },
     {
@@ -101,26 +97,10 @@ export default function About() {
   ];
 
   const interests = [
-    {
-      icon: CodeBracketIcon,
-      name: "Open Source",
-      description: "Contributing to developer tools",
-    },
-    {
-      icon: RocketLaunchIcon,
-      name: "Tech Innovation",
-      description: "Exploring AI and blockchain",
-    },
-    {
-      icon: AcademicCapIcon,
-      name: "Teaching",
-      description: "Mentoring aspiring developers",
-    },
-    {
-      icon: HeartIcon,
-      name: "Fitness",
-      description: "Running and yoga enthusiast",
-    },
+    { icon: CodeBracketIcon, name: "Open Source", description: "Contributing to developer tools" },
+    { icon: RocketLaunchIcon, name: "Tech Innovation", description: "Exploring AI and blockchain" },
+    { icon: AcademicCapIcon, name: "Teaching", description: "Mentoring aspiring developers" },
+    { icon: HeartIcon, name: "Fitness", description: "Running and yoga enthusiast" },
   ];
 
   const certifications = [
@@ -136,177 +116,128 @@ export default function About() {
     { id: "education", label: "Education", icon: AcademicCapIcon },
   ];
 
-  // Fixed CV download function
   const handleDownloadCV = () => {
-    // Create a link element
     const link = document.createElement('a');
-    
-    // Set the correct path to your CV file in the public folder
-    link.href = '/resume.pdf'; // Make sure your CV file is named 'resume.pdf' in public folder
-    
-    // Set the download attribute with the desired file name
+    link.href = '/resume.pdf';
     link.download = 'Dasun_Methmal_CV.pdf';
-    
-    // Append to the document
     document.body.appendChild(link);
-    
-    // Trigger the download
     link.click();
-    
-    // Clean up
     document.body.removeChild(link);
   };
 
   return (
-    <div className="bg-white">
-      {/* Hero Section */}
-      <section className="relative py-12 sm:py-16 md:py-20 bg-gradient-to-br from-blue-50 via-white to-blue-50 overflow-hidden">
-        <div className="absolute top-10 sm:top-20 right-4 sm:right-10 w-48 h-48 sm:w-64 sm:h-64 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob" />
-        <div className="absolute bottom-10 sm:bottom-20 left-4 sm:left-10 w-48 h-48 sm:w-64 sm:h-64 bg-blue-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-2000" />
+    <div className="bg-white dark:bg-[#0b0f19] transition-colors duration-300 pt-16 lg:pt-20">
 
-        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-8 sm:gap-12 lg:gap-16 items-center">
-            {/* Content */}
-            <div
-              className={`transition-all duration-1000 text-center lg:text-left ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}
-            >
-              <div className="mb-4 sm:mb-6">
-                <span className="inline-flex items-center px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-medium bg-blue-100 text-blue-800">
-                  <SparklesIcon className="w-3 h-3 sm:w-4 sm:h-4 mr-1.5 sm:mr-2" />
-                  About Methmal
-                </span>
-              </div>
+      {/* ── Hero ── */}
+      <section className="relative py-16 lg:py-24 bg-orange-50 dark:bg-[#0f1422] overflow-hidden transition-colors duration-300">
+        <div className="absolute top-0 right-0 w-72 h-72 rounded-full bg-orange-200/30 dark:bg-orange-500/8 filter blur-3xl" />
+        <div className="absolute bottom-0 left-0 w-72 h-72 rounded-full bg-orange-300/20 dark:bg-orange-600/6 filter blur-3xl" />
 
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-black mb-4 sm:mb-6 leading-tight">
-                Passionate Full-Stack Developer &
-                <span className="text-blue-600 block sm:inline"> Problem Solver</span>
+        <div className="relative mx-auto w-full px-6 sm:px-10 lg:px-16 xl:px-20">
+          <div className="grid lg:grid-cols-2 gap-12 xl:gap-20 items-center">
+
+            {/* Text */}
+            <div className={`transition-all duration-1000 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}>
+              <span className="inline-flex items-center px-4 py-2 rounded-full text-sm font-bold bg-orange-100 dark:bg-orange-500/15 text-orange-600 dark:text-orange-400 border border-orange-200 dark:border-orange-500/20 mb-6">
+                <SparklesIcon className="w-4 h-4 mr-2" />
+                About Methmal
+              </span>
+
+              <h1 className="text-4xl lg:text-5xl font-black text-gray-900 dark:text-white mb-6 leading-tight">
+                Passionate Full-Stack Developer &{" "}
+                <span className="text-orange-500">Problem Solver</span>
               </h1>
 
-              <div className="space-y-4 sm:space-y-6 text-base sm:text-lg text-gray-600 leading-relaxed">
+              <div className="space-y-4 text-lg text-gray-600 dark:text-gray-400 leading-relaxed mb-8">
                 <p>
                   I'm a passionate full-stack developer with{" "}
-                  <strong>3+ years</strong> of experience creating digital
-                  solutions that make a real difference. I specialize in
-                  building scalable web applications using modern technologies
-                  like React, Node.js, and Python.
+                  <strong className="text-gray-900 dark:text-white">3+ years</strong> of experience creating
+                  digital solutions that make a real difference. I specialize in building scalable web applications
+                  using modern technologies like React, Node.js, and Python.
                 </p>
                 <p>
-                  My journey started during university when I built my first web
-                  application - a student management system that helped
-                  streamline administrative processes. That moment sparked my
-                  love for creating technology that solves real-world problems.
-                </p>
-                <p>
-                  When I'm not coding, you can find me contributing to
-                  open-source projects, mentoring junior developers, exploring
-                  the latest tech trends, or staying active through running and
-                  yoga.
+                  My journey started during university when I built my first web application — a student management
+                  system that helped streamline administrative processes.
                 </p>
               </div>
 
-              {/* Quick Stats */}
-              <div className="grid grid-cols-3 gap-3 sm:gap-6 mt-6 sm:mt-8 p-4 sm:p-6 bg-white/60 backdrop-blur-sm rounded-2xl border border-gray-100">
-                <div className="text-center">
-                  <div className="text-xl sm:text-2xl font-bold text-blue-600">50+</div>
-                  <div className="text-xs sm:text-sm text-gray-600">Projects</div>
-                </div>
-                <div className="text-center border-x border-gray-200">
-                  <div className="text-xl sm:text-2xl font-bold text-blue-600">3+</div>
-                  <div className="text-xs sm:text-sm text-gray-600">Years Exp</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-xl sm:text-2xl font-bold text-blue-600">20+</div>
-                  <div className="text-xs sm:text-sm text-gray-600">Happy Clients</div>
-                </div>
+              {/* Stats row */}
+              <div className="grid grid-cols-3 gap-6 p-6 bg-white dark:bg-[#141928] rounded-2xl border border-gray-100 dark:border-white/5 shadow-sm mb-6">
+                {[["50+", "Projects"], ["3+", "Years Exp"], ["20+", "Clients"]].map(([num, label], i) => (
+                  <div key={label} className={`text-center ${i === 1 ? "border-x border-gray-200 dark:border-white/10" : ""}`}>
+                    <div className="text-2xl font-black text-orange-500">{num}</div>
+                    <div className="text-sm text-gray-500 mt-1">{label}</div>
+                  </div>
+                ))}
               </div>
 
-              {/* Contact Info */}
-              <div className="flex flex-col sm:flex-row sm:flex-wrap gap-2 sm:gap-4 mt-4 sm:mt-6 justify-center lg:justify-start">
-                <div className="flex items-center space-x-2 text-gray-600 text-sm sm:text-base">
-                  <MapPinIcon className="w-4 h-4 sm:w-5 sm:h-5 text-blue-500 flex-shrink-0" />
-                  <span>Colombo, Sri Lanka</span>
-                </div>
-                <div className="flex items-center space-x-2 text-gray-600 text-sm sm:text-base">
-                  <EnvelopeIcon className="w-4 h-4 sm:w-5 sm:h-5 text-blue-500 flex-shrink-0" />
-                  <span>hello@methmal.dev</span>
-                </div>
-                <div className="flex items-center space-x-2 text-gray-600 text-sm sm:text-base">
-                  <CalendarIcon className="w-4 h-4 sm:w-5 sm:h-5 text-blue-500 flex-shrink-0" />
-                  <span>Available for projects</span>
-                </div>
+              {/* Contact chips */}
+              <div className="flex flex-wrap gap-4">
+                {[
+                  { Icon: MapPinIcon, text: "Colombo, Sri Lanka" },
+                  { Icon: EnvelopeIcon, text: "dasunmethmal23@gmail.com" },
+                  { Icon: CalendarIcon, text: "Available for projects" },
+                ].map(({ Icon, text }) => (
+                  <div key={text} className="flex items-center gap-2 text-gray-600 dark:text-gray-400 text-sm">
+                    <Icon className="w-4 h-4 text-orange-500 flex-shrink-0" />
+                    <span>{text}</span>
+                  </div>
+                ))}
               </div>
             </div>
 
-            {/* Image Section */}
-            <div
-              className={`relative transition-all duration-1000 delay-300 mt-8 lg:mt-0 ${isVisible ? "opacity-100 translate-x-0" : "opacity-0 translate-x-10"}`}
-            >
-              <div className="relative">
-                {/* Main Image */}
-                <div className="aspect-square overflow-hidden rounded-2xl sm:rounded-3xl bg-gradient-to-br from-blue-100 to-blue-200 shadow-2xl">
-                  <div className="flex h-full items-center justify-center p-4 sm:p-8">
-                    <div className="text-center">
-                      <div className="mb-4">
-                        <div className="w-32 h-32 sm:w-40 sm:h-40 lg:w-48 lg:h-48 rounded-full overflow-hidden mb-4 mx-auto border-4 border-white shadow-lg">
-                          <Image
-                            src="/me.jpg" 
-                            alt="Methmal"
-                            width={192}
-                            height={192}
-                            className="object-cover w-full h-full"
-                          />
-                        </div>
-                      </div>
-                      <p className="text-gray-600 font-medium text-sm sm:text-base">
-                        Dasun Methmal
-                      </p>
-                    </div>
+            {/* Photo */}
+            <div className={`relative transition-all duration-1000 delay-300 ${isVisible ? "opacity-100 translate-x-0" : "opacity-0 translate-x-10"}`}>
+              <div className="aspect-square overflow-hidden rounded-3xl bg-gradient-to-br from-orange-100 to-orange-200 dark:from-orange-900/30 dark:to-orange-800/10 shadow-2xl flex items-center justify-center p-10">
+                <div className="text-center">
+                  <div className="w-48 h-48 rounded-full overflow-hidden border-4 border-white dark:border-white/10 shadow-xl mx-auto mb-4">
+                    <Image
+                      src="/methmal.jpg"
+                      alt="Methmal"
+                      width={192}
+                      height={192}
+                      className="object-cover object-[center_15%] w-full h-full"
+                    />
                   </div>
+                  <p className="text-gray-700 dark:text-gray-300 font-bold">Dasun Methmal</p>
+                  <p className="text-orange-500 text-sm font-semibold mt-1">Full-Stack Developer</p>
                 </div>
+              </div>
 
-                {/* Floating Cards */}
-                <div className="absolute -top-3 sm:-top-6 -right-3 sm:-right-6 bg-white rounded-xl sm:rounded-2xl p-2 sm:p-4 shadow-xl animate-float">
-                  <div className="flex items-center space-x-1.5 sm:space-x-2">
-                    <CheckBadgeIcon className="w-4 h-4 sm:w-6 sm:h-6 text-green-500" />
-                    <span className="text-xs sm:text-sm font-semibold text-gray-700">
-                      Available
-                    </span>
-                  </div>
-                </div>
-
-                <div className="absolute -bottom-3 sm:-bottom-6 -left-3 sm:-left-6 bg-white rounded-xl sm:rounded-2xl p-2 sm:p-4 shadow-xl animate-float animation-delay-1000">
-                  <div className="flex items-center space-x-1.5 sm:space-x-2">
-                    <CodeBracketIcon className="w-4 h-4 sm:w-6 sm:h-6 text-blue-500" />
-                    <span className="text-xs sm:text-sm font-semibold text-gray-700">
-                      Full-Stack Dev
-                    </span>
-                  </div>
-                </div>
+              {/* Floating chips */}
+              <div className="absolute -top-4 -right-4 bg-white dark:bg-[#141928] border border-gray-100 dark:border-white/10 rounded-2xl px-4 py-2.5 shadow-xl flex items-center gap-2">
+                <CheckBadgeIcon className="w-5 h-5 text-green-500" />
+                <span className="text-sm font-bold text-gray-900 dark:text-white">Available</span>
+              </div>
+              <div className="absolute -bottom-4 -left-4 bg-white dark:bg-[#141928] border border-gray-100 dark:border-white/10 rounded-2xl px-4 py-2.5 shadow-xl flex items-center gap-2">
+                <CodeBracketIcon className="w-5 h-5 text-orange-500" />
+                <span className="text-sm font-bold text-gray-900 dark:text-white">Full-Stack Dev</span>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Main Content Section */}
-      <section className="py-12 sm:py-16 lg:py-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          {/* Tab Navigation */}
-          <div className="flex justify-center mb-8 sm:mb-12">
-            <div className="bg-gray-100 rounded-2xl p-1.5 sm:p-2 inline-flex space-x-1 sm:space-x-2 w-full sm:w-auto overflow-x-auto">
+      {/* ── Skills / Experience / Education Tabs ── */}
+      <section className="py-16 lg:py-24 bg-white dark:bg-[#0b0f19] transition-colors duration-300">
+        <div className="mx-auto w-full px-6 sm:px-10 lg:px-16 xl:px-20">
+
+          {/* Tab bar */}
+          <div className="flex justify-center mb-12">
+            <div className="bg-gray-100 dark:bg-[#0f1422] border border-gray-100 dark:border-white/5 rounded-2xl p-2 inline-flex gap-2">
               {tabs.map((tab) => {
-                const IconComponent = tab.icon;
+                const Icon = tab.icon;
                 return (
                   <button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
-                    className={`flex items-center space-x-1.5 sm:space-x-2 px-3 sm:px-6 py-2 sm:py-3 rounded-xl font-semibold transition-all duration-300 whitespace-nowrap text-sm sm:text-base ${
+                    className={`flex items-center gap-2 px-6 py-3 rounded-xl font-bold transition-all duration-300 whitespace-nowrap text-sm ${
                       activeTab === tab.id
-                        ? "bg-white text-blue-600 shadow-sm"
-                        : "text-gray-600 hover:text-gray-800 hover:bg-gray-200/50"
+                        ? "bg-white dark:bg-[#141928] text-orange-500 shadow-sm"
+                        : "text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-white"
                     }`}
                   >
-                    <IconComponent className="w-4 h-4 sm:w-5 sm:h-5" />
+                    <Icon className="w-4 h-4" />
                     <span>{tab.label}</span>
                   </button>
                 );
@@ -316,35 +247,24 @@ export default function About() {
 
           {/* Skills Tab */}
           {activeTab === "skills" && (
-            <div className="space-y-8 sm:space-y-12">
+            <div className="space-y-12">
               {Object.entries(skills).map(([category, skillList]) => (
-                <div key={category} className="space-y-4 sm:space-y-6">
-                  <h3 className="text-xl sm:text-2xl font-bold text-black capitalize flex items-center space-x-2">
-                    <div className="w-6 h-6 sm:w-8 sm:h-8 bg-blue-100 rounded-lg flex items-center justify-center">
-                      <CodeBracketIcon className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" />
+                <div key={category}>
+                  <h3 className="text-xl font-black text-gray-900 dark:text-white capitalize flex items-center gap-3 mb-6">
+                    <div className="w-8 h-8 bg-orange-100 dark:bg-orange-500/15 rounded-lg flex items-center justify-center">
+                      <CodeBracketIcon className="w-4 h-4 text-orange-500" />
                     </div>
-                    <span>{category} Development</span>
+                    {category} Development
                   </h3>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                  <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
                     {skillList.map((skill) => (
-                      <div
-                        key={skill.name}
-                        className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-gray-100 hover:border-blue-200 hover:shadow-lg transition-all duration-300"
-                      >
-                        <div className="flex justify-between items-center mb-3 sm:mb-4">
-                          <span className="font-semibold text-gray-800 text-sm sm:text-base">
-                            {skill.name}
-                          </span>
-                          <span className="text-xs sm:text-sm text-gray-500">
-                            {skill.level}%
-                          </span>
+                      <div key={skill.name} className="bg-white dark:bg-[#0f1422] rounded-2xl p-5 border border-gray-100 dark:border-white/5 hover:border-orange-500/30 hover:shadow-lg hover:shadow-orange-500/5 transition-all duration-300">
+                        <div className="flex justify-between items-center mb-3">
+                          <span className="font-bold text-gray-800 dark:text-white">{skill.name}</span>
+                          <span className="text-sm text-orange-500 font-bold">{skill.level}%</span>
                         </div>
-                        <div className="w-full bg-gray-200 rounded-full h-1.5 sm:h-2">
-                          <div
-                            className={`h-1.5 sm:h-2 rounded-full ${skill.color} transition-all duration-1000 ease-out`}
-                            style={{ width: `${skill.level}%` }}
-                          />
+                        <div className="w-full bg-gray-100 dark:bg-white/5 rounded-full h-2">
+                          <div className="h-2 rounded-full bg-orange-500 transition-all duration-1000 ease-out" style={{ width: `${skill.level}%` }} />
                         </div>
                       </div>
                     ))}
@@ -353,16 +273,16 @@ export default function About() {
               ))}
 
               {/* Certifications */}
-              <div className="bg-gray-50 rounded-2xl sm:rounded-3xl p-6 sm:p-8">
-                <h3 className="text-xl sm:text-2xl font-bold text-black mb-4 sm:mb-6 flex items-center space-x-2">
-                  <CheckBadgeIcon className="w-6 h-6 sm:w-8 sm:h-8 text-green-500" />
-                  <span>Certifications</span>
+              <div className="bg-gray-50 dark:bg-[#0f1422] border border-gray-100 dark:border-white/5 rounded-3xl p-8">
+                <h3 className="text-xl font-black text-gray-900 dark:text-white mb-6 flex items-center gap-3">
+                  <CheckBadgeIcon className="w-6 h-6 text-orange-500" />
+                  Certifications
                 </h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                <div className="grid sm:grid-cols-2 gap-4">
                   {certifications.map((cert) => (
-                    <div key={cert} className="flex items-center space-x-2 sm:space-x-3">
-                      <CheckBadgeIcon className="w-4 h-4 sm:w-5 sm:h-5 text-green-500 flex-shrink-0" />
-                      <span className="text-gray-700 text-sm sm:text-base">{cert}</span>
+                    <div key={cert} className="flex items-center gap-3 p-4 bg-white dark:bg-[#141928] rounded-xl border border-gray-100 dark:border-white/5">
+                      <CheckBadgeIcon className="w-5 h-5 text-orange-500 flex-shrink-0" />
+                      <span className="text-gray-700 dark:text-gray-300 font-medium">{cert}</span>
                     </div>
                   ))}
                 </div>
@@ -372,51 +292,34 @@ export default function About() {
 
           {/* Experience Tab */}
           {activeTab === "experience" && (
-            <div className="space-y-6 sm:space-y-8">
-              <h3 className="text-xl sm:text-2xl font-bold text-black text-center mb-8 sm:mb-12">
-                Professional Experience
-              </h3>
-              <div className="space-y-6 sm:space-y-8">
+            <div>
+              <h3 className="text-2xl font-black text-gray-900 dark:text-white text-center mb-12">Professional Experience</h3>
+              <div className="space-y-8 max-w-3xl mx-auto">
                 {experience.map((job, index) => (
-                  <div key={job.title} className="relative">
+                  <div key={job.title} className="relative flex gap-6">
                     {index !== experience.length - 1 && (
-                      <div className="absolute left-4 sm:left-6 top-12 sm:top-16 w-px h-full bg-gradient-to-b from-blue-500 to-transparent" />
+                      <div className="absolute left-6 top-14 w-px h-full bg-gradient-to-b from-orange-500/40 to-transparent" />
                     )}
-
-                    <div className="flex space-x-3 sm:space-x-6">
-                      <div className="flex-shrink-0">
-                        <div className="w-8 h-8 sm:w-12 sm:h-12 bg-blue-600 rounded-lg sm:rounded-xl flex items-center justify-center">
-                          <BriefcaseIcon className="w-4 h-4 sm:w-6 sm:h-6 text-white" />
+                    <div className="flex-shrink-0 w-12 h-12 bg-orange-500 rounded-xl flex items-center justify-center shadow-lg shadow-orange-500/30">
+                      <BriefcaseIcon className="w-6 h-6 text-white" />
+                    </div>
+                    <div className="flex-1 bg-white dark:bg-[#0f1422] rounded-2xl p-6 lg:p-8 border border-gray-100 dark:border-white/5 hover:border-orange-500/30 hover:shadow-lg transition-all duration-300">
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
+                        <div>
+                          <h4 className="text-lg font-black text-gray-900 dark:text-white">{job.title}</h4>
+                          <p className="text-orange-500 font-semibold">{job.company}</p>
                         </div>
+                        <span className="text-sm text-gray-500 bg-gray-100 dark:bg-white/5 px-3 py-1 rounded-full border border-gray-200 dark:border-white/10 self-start sm:self-auto whitespace-nowrap">
+                          {job.period}
+                        </span>
                       </div>
-
-                      <div className="flex-1 bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-gray-100 hover:border-blue-200 hover:shadow-lg transition-all duration-300">
-                        <div className="flex flex-col space-y-3 sm:space-y-0 sm:flex-row sm:items-center sm:justify-between mb-3 sm:mb-4">
-                          <div>
-                            <h4 className="text-lg sm:text-xl font-semibold text-black">
-                              {job.title}
-                            </h4>
-                            <p className="text-blue-600 font-medium text-sm sm:text-base">
-                              {job.company}
-                            </p>
-                          </div>
-                          <span className="text-xs sm:text-sm text-gray-500 bg-gray-100 px-2 sm:px-3 py-1 rounded-full self-start sm:self-auto">
-                            {job.period}
+                      <p className="text-gray-600 dark:text-gray-400 leading-relaxed mb-4">{job.description}</p>
+                      <div className="flex flex-wrap gap-2">
+                        {job.technologies.map((tech) => (
+                          <span key={tech} className="px-3 py-1 bg-orange-500/10 text-orange-500 border border-orange-500/20 rounded-full text-sm font-bold">
+                            {tech}
                           </span>
-                        </div>
-
-                        <p className="text-gray-600 mb-3 sm:mb-4 text-sm sm:text-base">{job.description}</p>
-
-                        <div className="flex flex-wrap gap-1.5 sm:gap-2">
-                          {job.technologies.map((tech) => (
-                            <span
-                              key={tech}
-                              className="px-2 sm:px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-xs sm:text-sm font-medium"
-                            >
-                              {tech}
-                            </span>
-                          ))}
-                        </div>
+                        ))}
                       </div>
                     </div>
                   </div>
@@ -427,29 +330,20 @@ export default function About() {
 
           {/* Education Tab */}
           {activeTab === "education" && (
-            <div className="space-y-6 sm:space-y-8">
-              <h3 className="text-xl sm:text-2xl font-bold text-black text-center mb-8 sm:mb-12">
-                Education & Learning
-              </h3>
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
+            <div>
+              <h3 className="text-2xl font-black text-gray-900 dark:text-white text-center mb-12">Education & Learning</h3>
+              <div className="grid lg:grid-cols-2 gap-6 lg:gap-8">
                 {education.map((edu) => (
-                  <div
-                    key={edu.degree}
-                    className="bg-white rounded-xl sm:rounded-2xl p-6 sm:p-8 border border-gray-100 hover:border-blue-200 hover:shadow-lg transition-all duration-300"
-                  >
-                    <div className="flex items-start space-x-3 sm:space-x-4">
-                      <div className="w-10 h-10 sm:w-12 sm:h-12 bg-blue-100 rounded-lg sm:rounded-xl flex items-center justify-center flex-shrink-0">
-                        <AcademicCapIcon className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600" />
+                  <div key={edu.degree} className="bg-white dark:bg-[#0f1422] rounded-2xl p-6 lg:p-8 border border-gray-100 dark:border-white/5 hover:border-orange-500/30 hover:shadow-lg transition-all duration-300">
+                    <div className="flex gap-4">
+                      <div className="w-12 h-12 bg-orange-100 dark:bg-orange-500/15 rounded-xl flex items-center justify-center flex-shrink-0">
+                        <AcademicCapIcon className="w-6 h-6 text-orange-500" />
                       </div>
-                      <div className="flex-1 min-w-0">
-                        <h4 className="text-lg sm:text-xl font-semibold text-black mb-1 sm:mb-2">
-                          {edu.degree}
-                        </h4>
-                        <p className="text-blue-600 font-medium mb-1 sm:mb-2 text-sm sm:text-base">
-                          {edu.institution}
-                        </p>
-                        <p className="text-gray-500 text-xs sm:text-sm mb-2 sm:mb-3">{edu.year}</p>
-                        <p className="text-gray-600 text-sm sm:text-base">{edu.description}</p>
+                      <div>
+                        <h4 className="text-lg font-black text-gray-900 dark:text-white mb-1 leading-tight">{edu.degree}</h4>
+                        <p className="text-orange-500 font-semibold text-sm mb-1">{edu.institution}</p>
+                        <p className="text-gray-400 text-sm mb-2">{edu.year}</p>
+                        <p className="text-gray-600 dark:text-gray-400 text-sm">{edu.description}</p>
                       </div>
                     </div>
                   </div>
@@ -460,30 +354,23 @@ export default function About() {
         </div>
       </section>
 
-      {/* Interests Section */}
-      <section className="py-12 sm:py-16 lg:py-20 bg-gray-50">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <h2 className="text-2xl sm:text-3xl font-bold text-black text-center mb-8 sm:mb-12">
-            Beyond Coding
-          </h2>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+      {/* ── Interests ── */}
+      <section className="py-16 lg:py-24 bg-gray-50 dark:bg-[#0f1422] transition-colors duration-300">
+        <div className="mx-auto w-full px-6 sm:px-10 lg:px-16 xl:px-20">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-black text-gray-900 dark:text-white mb-3">Beyond Coding</h2>
+            <p className="text-gray-500 leading-relaxed">What keeps me inspired outside of work</p>
+          </div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {interests.map((interest) => {
-              const IconComponent = interest.icon;
+              const Icon = interest.icon;
               return (
-                <div
-                  key={interest.name}
-                  className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 text-center hover:shadow-lg transition-all duration-300 hover:scale-105"
-                >
-                  <div className="w-12 h-12 sm:w-16 sm:h-16 bg-blue-100 rounded-xl sm:rounded-2xl flex items-center justify-center mx-auto mb-3 sm:mb-4">
-                    <IconComponent className="w-6 h-6 sm:w-8 sm:h-8 text-blue-600" />
+                <div key={interest.name} className="bg-white dark:bg-[#141928] border border-gray-100 dark:border-white/5 rounded-2xl p-6 lg:p-8 text-center hover:shadow-lg hover:border-orange-500/30 hover:shadow-orange-500/5 hover:scale-105 transition-all duration-300">
+                  <div className="w-14 h-14 bg-orange-100 dark:bg-orange-500/15 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                    <Icon className="w-7 h-7 text-orange-500" />
                   </div>
-                  <h3 className="text-base sm:text-lg font-semibold text-black mb-1 sm:mb-2">
-                    {interest.name}
-                  </h3>
-                  <p className="text-gray-600 text-xs sm:text-sm">
-                    {interest.description}
-                  </p>
+                  <h3 className="text-lg font-black text-gray-900 dark:text-white mb-2">{interest.name}</h3>
+                  <p className="text-gray-500 text-sm leading-relaxed">{interest.description}</p>
                 </div>
               );
             })}
@@ -491,33 +378,24 @@ export default function About() {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-12 sm:py-16 lg:py-20">
-        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-2xl sm:text-3xl font-bold text-black mb-4 sm:mb-6">
-            Let's Work Together
-          </h2>
-          <p className="text-base sm:text-lg text-gray-600 mb-6 sm:mb-8">
-            Ready to bring your ideas to life? Download my CV or get in touch to
-            discuss your next project.
-          </p>
-
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 max-w-md sm:max-w-none mx-auto">
-            <button
-              onClick={handleDownloadCV}
-              className="inline-flex items-center bg-blue-600 hover:bg-blue-700 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-full font-semibold text-base sm:text-lg transition-all duration-300 hover:shadow-lg hover:scale-105 w-full sm:w-auto justify-center"
-            >
-              <DocumentArrowDownIcon className="w-4 h-4 sm:w-5 sm:h-5 mr-1.5 sm:mr-2" />
-              Download CV
-            </button>
-
-            <a
-              href="/contact"
-              className="inline-flex items-center text-blue-600 hover:text-blue-700 px-6 sm:px-8 py-3 sm:py-4 rounded-full font-semibold text-base sm:text-lg transition-all duration-300 border border-blue-200 hover:bg-blue-50 w-full sm:w-auto justify-center"
-            >
-              <EnvelopeIcon className="w-4 h-4 sm:w-5 sm:h-5 mr-1.5 sm:mr-2" />
-              Get In Touch
-            </a>
+      {/* ── CTA ── */}
+      <section className="py-16 lg:py-24 bg-white dark:bg-[#0b0f19] transition-colors duration-300">
+        <div className="mx-auto w-full px-6 sm:px-10 lg:px-16 xl:px-20">
+          <div className="max-w-2xl mx-auto text-center">
+            <h2 className="text-3xl font-black text-gray-900 dark:text-white mb-4">Let's Work Together</h2>
+            <p className="text-lg text-gray-500 leading-relaxed mb-8">
+              Ready to bring your ideas to life? Download my CV or get in touch to discuss your next project.
+            </p>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              <button onClick={handleDownloadCV} className="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-400 text-white px-8 py-4 rounded-full font-bold text-base transition-all duration-300 hover:shadow-xl hover:shadow-orange-500/30 hover:scale-105 w-full sm:w-auto justify-center">
+                <DocumentArrowDownIcon className="w-5 h-5" />
+                Download CV
+              </button>
+              <a href="/contact" className="inline-flex items-center gap-2 text-orange-500 hover:text-orange-400 px-8 py-4 rounded-full font-bold text-base transition-all duration-300 border border-orange-200 dark:border-orange-500/30 hover:bg-orange-500/5 w-full sm:w-auto justify-center">
+                <EnvelopeIcon className="w-5 h-5" />
+                Get In Touch
+              </a>
+            </div>
           </div>
         </div>
       </section>

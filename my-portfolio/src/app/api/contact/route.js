@@ -1,36 +1,42 @@
-import { NextResponse } from 'next/server';
+﻿import { NextResponse } from 'next/server';
+
+const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
 
 export async function POST(request) {
   try {
-    const { name, email, message } = await request.json();
+    const body = await request.json();
+    const { name, email, message } = body;
 
-    // SendGrid configuration
-    const sgMail = require('@sendgrid/mail');
-    sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+    // Basic validation
+    if (!name || !email || !message) {
+      return NextResponse.json(
+        { success: false, error: 'Name, email, and message are required.' },
+        { status: 400 }
+      );
+    }
 
-    const msg = {
-      to: process.env.CONTACT_EMAIL, // Your email
-      from: process.env.FROM_EMAIL, // Verified sender in SendGrid
-      subject: `Portfolio Contact: ${name}`,
-      text: `
-        Name: ${name}
-        Email: ${email}
-        Message: ${message}
-      `,
-      html: `
-        <h3>New Contact Form Submission</h3>
-        <p><strong>Name:</strong> ${name}</p>
-        <p><strong>Email:</strong> ${email}</p>
-        <p><strong>Message:</strong></p>
-        <p>${message}</p>
-      `,
-    };
+    // Forward to the Express backend which saves to MongoDB Atlas
+    const backendResponse = await fetch(`${BACKEND_URL}/api/contact`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, email, message }),
+    });
 
-    await sgMail.send(msg);
+    const data = await backendResponse.json();
 
-    return NextResponse.json({ success: true }, { status: 200 });
+    if (!backendResponse.ok) {
+      return NextResponse.json(
+        { success: false, error: data.message || 'Failed to send message.' },
+        { status: backendResponse.status }
+      );
+    }
+
+    return NextResponse.json({ success: true, message: data.message }, { status: 200 });
   } catch (error) {
     console.error('Contact form error:', error);
-    return NextResponse.json({ error: 'Failed to send message' }, { status: 500 });
+    return NextResponse.json(
+      { success: false, error: 'Failed to send message. Please try again.' },
+      { status: 500 }
+    );
   }
 }

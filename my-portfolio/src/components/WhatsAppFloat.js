@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 import { useState, useEffect } from 'react';
 import { 
   ChatBubbleOvalLeftEllipsisIcon,
@@ -20,27 +20,27 @@ export default function WhatsAppFloat() {
   const quickMessages = [
     {
       text: "I need a website for my business",
-      icon: "🌐",
+      icon: "ðŸŒ",
       category: "Business"
     },
     {
       text: "Can we schedule a call to discuss my project?",
-      icon: "📞",
+      icon: "ðŸ“ž",
       category: "Consultation"
     },
     {
       text: "I need help with a programming assignment",
-      icon: "💻",
+      icon: "ðŸ’»",
       category: "Assignment"
     },
     {
       text: "Please share your pricing and timeline",
-      icon: "💰",
+      icon: "ðŸ’°",
       category: "Pricing"
     },
     {
       text: "I have a custom project requirement",
-      icon: "🎯",
+      icon: "ðŸŽ¯",
       category: "Custom"
     }
   ];
@@ -203,7 +203,7 @@ export default function WhatsAppFloat() {
               {/* Footer */}
               <div className="mt-2 sm:mt-3 text-center">
                 <p className="text-xs text-gray-500">
-                  Powered by WhatsApp • End-to-end encrypted
+                  Powered by WhatsApp â€¢ End-to-end encrypted
                 </p>
               </div>
             </div>

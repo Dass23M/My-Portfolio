@@ -1,21 +1,42 @@
-'use client';
-import { useTheme } from '@/context/ThemeContext';
-import { SunIcon, MoonIcon } from '@heroicons/react/24/outline';
+﻿"use client";
+import { createContext, useContext, useEffect, useState } from "react";
 
-export default function ThemeToggle() {
-  const { theme, toggleTheme } = useTheme();
+const ThemeContext = createContext({ theme: "dark", toggleTheme: () => {} });
+
+export function ThemeProvider({ children }) {
+  const [theme, setTheme] = useState("dark");
+
+  /* read saved preference on first load */
+  useEffect(() => {
+    const saved = localStorage.getItem("theme");
+    const preferred =
+      saved ||
+      (window.matchMedia("(prefers-color-scheme: dark)").matches
+        ? "dark"
+        : "light");
+    setTheme(preferred);
+    document.documentElement.classList.toggle("dark", preferred === "dark");
+  }, []);
+
+  const toggleTheme = () => {
+    setTheme((prev) => {
+      const next = prev === "dark" ? "light" : "dark";
+      localStorage.setItem("theme", next);
+      document.documentElement.classList.toggle("dark", next === "dark");
+      return next;
+    });
+  };
 
   return (
-    <button
-      onClick={toggleTheme}
-      className="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-300"
-      aria-label="Toggle theme"
-    >
-      {theme === 'light' ? (
-        <MoonIcon className="w-5 h-5 text-gray-700 dark:text-gray-300" />
-      ) : (
-        <SunIcon className="w-5 h-5 text-gray-700 dark:text-gray-300" />
-      )}
-    </button>
+    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+      {children}
+    </ThemeContext.Provider>
   );
 }
+
+export function useTheme() {
+  const ctx = useContext(ThemeContext);
+  if (!ctx) throw new Error("useTheme must be used inside <ThemeProvider>");
+  return ctx;
+}
+
