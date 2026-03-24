@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 import { useState, useEffect } from 'react';
 import { Bars3Icon, XMarkIcon, SunIcon, MoonIcon } from '@heroicons/react/24/outline';
 import Navigation from './Navigation';
@@ -25,7 +25,7 @@ export default function Header() {
             : 'bg-white dark:bg-gray-950 border-b border-transparent'
           }`}
       >
-        <nav className="mx-auto w-full px-4 sm:px-6 lg:px-8">
+        <nav className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 lg:h-20">
 
             {/* Logo */}

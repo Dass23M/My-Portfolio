@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 import { useState } from 'react';
 import Link from 'next/link';
 import {
@@ -92,7 +92,7 @@ export default function Footer() {
         <div className="absolute top-0 right-1/4 w-[400px] h-[200px] rounded-full bg-orange-600/4 blur-2xl" />
       </div>
 
-      <div className="relative mx-auto w-full px-4 sm:px-6 lg:px-8">
+      <div className="relative mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
 
         {/* â”€â”€ top divider line with orange accent â”€â”€ */}
         <div className="relative h-px bg-gradient-to-r from-transparent via-orange-500/40 to-transparent mb-0" />
