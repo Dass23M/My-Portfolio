@@ -340,9 +340,9 @@ export default function Home() {
   ];
 
   const stats = [
-    { number: '50', suffix: '+', label: 'Projects Done' },
+    { number: '12', suffix: '+', label: 'Projects Done' },
     { number: '3', suffix: '+', label: 'Years Exp.' },
-    { number: '20', suffix: '+', label: 'Happy Clients' },
+    { number: '10', suffix: '+', label: 'Happy Clients' },
     { number: '100', suffix: '%', label: 'Success Rate' },
   ];
 
