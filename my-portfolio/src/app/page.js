@@ -41,6 +41,247 @@ function Counter({ target, suffix = '' }) {
   return <span ref={ref}>{count}{suffix}</span>;
 }
 
+/* ─────────────────────────────────────────────
+   3D TILT CARD HOOK
+───────────────────────────────────────────── */
+function useTilt() {
+  const ref = useRef(null);
+  const handleMove = (e) => {
+    const el = ref.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const cx = rect.width / 2;
+    const cy = rect.height / 2;
+    const rotateX = ((y - cy) / cy) * -10;
+    const rotateY = ((x - cx) / cx) * 10;
+    el.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.04,1.04,1.04)`;
+  };
+  const handleLeave = () => {
+    if (ref.current)
+      ref.current.style.transform = 'perspective(800px) rotateX(0deg) rotateY(0deg) scale3d(1,1,1)';
+  };
+  return { ref, handleMove, handleLeave };
+}
+
+/* ─────────────────────────────────────────────
+   TECH STACK SECTION  (3D redesign)
+───────────────────────────────────────────── */
+const techCategories = [
+  {
+    name: 'Frontend',
+    icon: DevicePhoneMobileIcon,
+    color: '#f97316',
+    glow: 'rgba(249,115,22,0.35)',
+    gradient: 'from-orange-500/20 to-amber-500/10',
+    border: 'border-orange-500/30',
+    items: [
+      { name: 'React',       level: 95 },
+      { name: 'Next.js',     level: 92 },
+      { name: 'TypeScript',  level: 88 },
+      { name: 'Tailwind CSS',level: 96 },
+    ],
+  },
+  {
+    name: 'Backend',
+    icon: CommandLineIcon,
+    color: '#3b82f6',
+    glow: 'rgba(59,130,246,0.35)',
+    gradient: 'from-blue-500/20 to-indigo-500/10',
+    border: 'border-blue-500/30',
+    items: [
+      { name: 'Node.js',  level: 90 },
+      { name: 'Python',   level: 85 },
+      { name: 'Express',  level: 88 },
+      { name: 'FastAPI',  level: 80 },
+    ],
+  },
+  {
+    name: 'Database',
+    icon: CpuChipIcon,
+    color: '#10b981',
+    glow: 'rgba(16,185,129,0.35)',
+    gradient: 'from-emerald-500/20 to-teal-500/10',
+    border: 'border-emerald-500/30',
+    items: [
+      { name: 'MongoDB',    level: 92 },
+      { name: 'PostgreSQL', level: 87 },
+      { name: 'Redis',      level: 78 },
+      { name: 'Prisma',     level: 84 },
+    ],
+  },
+  {
+    name: 'Cloud & DevOps',
+    icon: CloudIcon,
+    color: '#8b5cf6',
+    glow: 'rgba(139,92,246,0.35)',
+    gradient: 'from-violet-500/20 to-purple-500/10',
+    border: 'border-violet-500/30',
+    items: [
+      { name: 'AWS',    level: 82 },
+      { name: 'Vercel', level: 94 },
+      { name: 'Docker', level: 80 },
+      { name: 'CI/CD',  level: 78 },
+    ],
+  },
+];
+
+function TechCard({ tech, index, inView }) {
+  const { ref, handleMove, handleLeave } = useTilt();
+  const [hovered, setHovered] = useState(false);
+  const Icon = tech.icon;
+
+  return (
+    <div
+      className={`transition-all duration-700 ${inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-16'}`}
+      style={{ transitionDelay: `${index * 120}ms` }}
+    >
+      <div
+        ref={ref}
+        onMouseMove={handleMove}
+        onMouseLeave={() => { handleLeave(); setHovered(false); }}
+        onMouseEnter={() => setHovered(true)}
+        style={{ transition: 'transform 0.15s ease', willChange: 'transform' }}
+        className="relative rounded-2xl overflow-hidden cursor-default"
+      >
+        {/* card bg */}
+        <div className={`relative bg-white dark:bg-[#0d1120] border ${tech.border} rounded-2xl p-7 h-full`}
+          style={{ boxShadow: hovered ? `0 24px 60px -8px ${tech.glow}, 0 0 0 1px ${tech.glow}` : '0 4px 24px rgba(0,0,0,0.06)' }}>
+
+          {/* gradient bg blob */}
+          <div className={`absolute inset-0 bg-gradient-to-br ${tech.gradient} opacity-0 transition-opacity duration-300 rounded-2xl pointer-events-none`}
+            style={{ opacity: hovered ? 1 : 0 }} />
+
+          {/* glowing top line */}
+          <div className="absolute top-0 left-8 right-8 h-px rounded-full transition-opacity duration-300"
+            style={{ background: `linear-gradient(90deg, transparent, ${tech.color}, transparent)`, opacity: hovered ? 1 : 0.3 }} />
+
+          {/* icon */}
+          <div className="relative z-10 mb-5">
+            <div className="w-14 h-14 rounded-2xl flex items-center justify-center transition-all duration-300"
+              style={{
+                background: hovered ? tech.color : `${tech.color}18`,
+                boxShadow: hovered ? `0 0 24px ${tech.glow}` : 'none',
+              }}>
+              <Icon className="w-7 h-7 transition-colors duration-300"
+                style={{ color: hovered ? '#fff' : tech.color }} />
+            </div>
+          </div>
+
+          {/* title */}
+          <h3 className="relative z-10 font-[family-name:var(--font-display)] text-xl tracking-wider text-gray-900 dark:text-white mb-5">
+            {tech.name}
+          </h3>
+
+          {/* skill bars */}
+          <ul className="relative z-10 space-y-3.5">
+            {tech.items.map((item, j) => (
+              <li key={item.name}>
+                <div className="flex justify-between items-center mb-1.5">
+                  <span className="text-sm font-semibold text-gray-600 dark:text-gray-300">{item.name}</span>
+                  <span className="text-xs font-bold tabular-nums" style={{ color: tech.color }}>{item.level}%</span>
+                </div>
+                <div className="h-1.5 rounded-full bg-gray-100 dark:bg-white/5 overflow-hidden">
+                  <div
+                    className="h-full rounded-full transition-all duration-1000"
+                    style={{
+                      width: inView ? `${item.level}%` : '0%',
+                      background: `linear-gradient(90deg, ${tech.color}, ${tech.color}aa)`,
+                      transitionDelay: `${index * 120 + j * 80 + 300}ms`,
+                      boxShadow: `0 0 8px ${tech.glow}`,
+                    }}
+                  />
+                </div>
+              </li>
+            ))}
+          </ul>
+
+          {/* bottom reflection line */}
+          <div className="absolute bottom-0 left-8 right-8 h-px rounded-full"
+            style={{ background: `linear-gradient(90deg, transparent, ${tech.color}55, transparent)` }} />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function TechStackSection() {
+  const [sectionRef, inView] = useInView(0.1);
+
+  return (
+    <>
+      <style>{`
+        @keyframes floatIcon { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-6px)} }
+        .float-icon { animation: floatIcon 3s ease-in-out infinite; }
+        @keyframes scanLine {
+          0%   { transform: translateY(-100%); opacity: 0; }
+          10%  { opacity: 1; }
+          90%  { opacity: 1; }
+          100% { transform: translateY(400%); opacity: 0; }
+        }
+        .scan-line { animation: scanLine 3s ease-in-out infinite; }
+      `}</style>
+
+      <section ref={sectionRef} className="py-20 lg:py-32 bg-white dark:bg-[#080c18] relative overflow-hidden transition-colors duration-300">
+
+        {/* background grid */}
+        <div className="pointer-events-none absolute inset-0 opacity-30 dark:opacity-100"
+          style={{ backgroundImage: 'radial-gradient(circle at 20% 50%, rgba(249,115,22,0.06) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(139,92,246,0.06) 0%, transparent 50%), radial-gradient(circle at 60% 80%, rgba(16,185,129,0.06) 0%, transparent 50%)' }} />
+
+        <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-10 lg:px-16 xl:px-20">
+
+          {/* ── heading ── */}
+          <div className={`text-center mb-16 transition-all duration-700 ${inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-orange-50 dark:bg-orange-500/10 border border-orange-200 dark:border-orange-500/20 mb-5">
+              <span className="w-1.5 h-1.5 rounded-full bg-orange-500 animate-pulse" />
+              <span className="text-[11px] font-black font-[family-name:var(--font-mono)] uppercase tracking-[0.25em] text-orange-500">
+                Tech Stack
+              </span>
+            </div>
+            <h2 className="font-[family-name:var(--font-display)] text-4xl lg:text-6xl text-gray-900 dark:text-white mb-4" style={{ letterSpacing: '0.02em' }}>
+              TECHNOLOGIES<br />
+              <span className="text-transparent bg-clip-text" style={{ backgroundImage: 'linear-gradient(90deg,#f97316,#fb923c,#fde68a,#fb923c,#f97316)', backgroundSize: '200% auto', animation: 'shimmer 3.5s linear infinite' }}>
+                I MASTER
+              </span>
+            </h2>
+            <p className="text-gray-500 dark:text-gray-400 leading-relaxed max-w-lg mx-auto text-base lg:text-lg">
+              Hover each card to see depth — every skill level is real.
+            </p>
+          </div>
+
+          {/* ── 4 cards ── */}
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-7">
+            {techCategories.map((tech, i) => (
+              <TechCard key={tech.name} tech={tech} index={i} inView={inView} />
+            ))}
+          </div>
+
+          {/* ── bottom summary strip ── */}
+          <div className={`mt-14 transition-all duration-700 delay-500 ${inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+            <div className="rounded-2xl border border-gray-100 dark:border-white/5 bg-gray-50 dark:bg-[#0d1120] px-6 py-5 flex flex-wrap items-center justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                <span className="text-sm font-semibold text-gray-600 dark:text-gray-300">
+                  <span className="text-gray-900 dark:text-white font-black">16+</span> technologies in active use
+                </span>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {['React','Next.js','Node.js','Python','TypeScript','MongoDB','PostgreSQL','AWS','Docker','Redis'].map(tag => (
+                  <span key={tag} className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-white dark:bg-white/5 border border-gray-200 dark:border-white/8 text-gray-500 dark:text-gray-400 hover:border-orange-500/40 hover:text-orange-500 transition-all duration-200 cursor-default">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+    </>
+  );
+}
+
 export default function Home() {
   const [mounted, setMounted] = useState(false);
   const [typedText, setTypedText] = useState('');
@@ -105,7 +346,6 @@ export default function Home() {
     { number: '100', suffix: '%', label: 'Success Rate' },
   ];
 
-  const [techRef, techInView] = useInView();
   const [projRef, projInView] = useInView();
 
   return (
@@ -393,49 +633,9 @@ export default function Home() {
         </section>
 
         {/* ══════════════════════════════════════════
-              TECHNOLOGIES
+              TECHNOLOGIES  – 3D redesign
         ══════════════════════════════════════════ */}
-        <section ref={techRef} className="py-16 lg:py-24 bg-white dark:bg-[#080c18] transition-colors duration-300">
-          <div className="w-full max-w-7xl mx-auto px-4 sm:px-10 lg:px-16 xl:px-20">
-            <div className={`text-center mb-12 lg:mb-16 transition-all duration-700 ${techInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-              <span className="inline-block text-[11px] font-black font-[family-name:var(--font-mono)] uppercase tracking-[0.25em] text-orange-500 mb-3">
-                Tech Stack
-              </span>
-              <h2 className="font-[family-name:var(--font-display)] text-4xl lg:text-5xl text-gray-900 dark:text-white mb-3" style={{ letterSpacing: '0.02em' }}>
-                TECHNOLOGIES I USE
-              </h2>
-              <p className="text-gray-500 dark:text-gray-400 leading-relaxed max-w-xl mx-auto">
-                Cutting-edge tools to build scalable, performant applications
-              </p>
-            </div>
-
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
-              {technologies.map((tech, i) => {
-                const Icon = tech.icon;
-                return (
-                  <div
-                    key={tech.name}
-                    className={`card-lift bg-gray-50 dark:bg-[#0d1120] border border-gray-100 dark:border-white/5 hover:border-orange-500/30 rounded-2xl p-6 lg:p-8 group transition-all duration-700 ${techInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
-                    style={{ transitionDelay: `${i * 80}ms` }}
-                  >
-                    <div className="w-12 h-12 bg-orange-100 dark:bg-orange-500/10 border border-orange-200 dark:border-orange-500/20 rounded-xl flex items-center justify-center mb-5 group-hover:bg-orange-500 transition-all duration-300">
-                      <Icon className="w-6 h-6 text-orange-500 group-hover:text-white transition-colors duration-300" />
-                    </div>
-                    <h3 className="font-[family-name:var(--font-display)] text-xl text-gray-900 dark:text-white mb-4 tracking-wider">{tech.name}</h3>
-                    <ul className="space-y-2.5">
-                      {tech.items.map(item => (
-                        <li key={item} className="flex items-center gap-2.5">
-                          <CheckIcon className="w-3.5 h-3.5 text-orange-500 flex-shrink-0" />
-                          <span className="text-gray-500 dark:text-gray-400 text-sm">{item}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </section>
+        <TechStackSection />
 
         {/* ══════════════════════════════════════════
               FEATURED PROJECTS
