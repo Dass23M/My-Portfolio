@@ -68,9 +68,9 @@ export default function Services() {
   }, []);
 
   const services = [
-    { title: 'Full-Stack Web Development', description: 'Complete web applications with modern React, Next.js, and Node.js technologies built with scalability in mind.', icon: CodeBracketIcon, category: 'development', features: ['React & Next.js', 'Node.js & Express', 'Database Integration', 'API Development'], pricing: 'From $2,500', timeline: '4–8 weeks' },
-    { title: 'UI/UX Design & Development', description: 'User-centered design that creates engaging and intuitive digital experiences with smooth interactions.', icon: PaintBrushIcon, category: 'design', features: ['Wireframing & Prototyping', 'Responsive Design', 'User Testing', 'Design Systems'], pricing: 'From $1,500', timeline: '2–4 weeks' },
-    { title: 'E-Commerce Solutions', description: 'Custom online stores with payment integration and powerful inventory management.', icon: DevicePhoneMobileIcon, category: 'development', features: ['Payment Integration', 'Inventory Management', 'Admin Dashboard', 'Mobile Responsive'], pricing: 'From $3,000', timeline: '6–10 weeks' },
+    { title: 'Full-Stack Web Development', description: 'Complete web applications with modern React, Next.js, and Node.js technologies built with scalability in mind.', icon: CodeBracketIcon, category: 'development', features: ['React & Next.js', 'Node.js & Express', 'Database Integration', 'API Development'], pricing: 'From $4,00', timeline: '4–8 weeks' },
+    { title: 'UI/UX Design & Development', description: 'User-centered design that creates engaging and intuitive digital experiences with smooth interactions.', icon: PaintBrushIcon, category: 'design', features: ['Wireframing & Prototyping', 'Responsive Design', 'User Testing', 'Design Systems'], pricing: 'From $2,00', timeline: '2–4 weeks' },
+    { title: 'E-Commerce Solutions', description: 'Custom online stores with payment integration and powerful inventory management.', icon: DevicePhoneMobileIcon, category: 'development', features: ['Payment Integration', 'Inventory Management', 'Admin Dashboard', 'Mobile Responsive'], pricing: 'From $3,00', timeline: '6–10 weeks' },
   ];
 
   const assignmentServices = [
@@ -133,8 +133,8 @@ export default function Services() {
                 key={cat.id}
                 onClick={() => setSelectedCategory(cat.id)}
                 className={`px-6 py-2.5 rounded-full font-bold text-sm transition-all duration-300 ${selectedCategory === cat.id
-                    ? 'bg-orange-500 text-white shadow-lg shadow-orange-500/30'
-                    : 'bg-gray-100 dark:bg-white/5 text-gray-700 dark:text-gray-400 hover:bg-orange-100 dark:hover:bg-orange-500/10 hover:text-orange-500'
+                  ? 'bg-orange-500 text-white shadow-lg shadow-orange-500/30'
+                  : 'bg-gray-100 dark:bg-white/5 text-gray-700 dark:text-gray-400 hover:bg-orange-100 dark:hover:bg-orange-500/10 hover:text-orange-500'
                   }`}
               >
                 {cat.label}
