@@ -7,13 +7,65 @@ import {
   CheckCircleIcon, ArrowRightIcon, StarIcon, SparklesIcon,
   DocumentTextIcon, LightBulbIcon, ShieldCheckIcon
 } from '@heroicons/react/24/outline';
+import { StarIcon as StarSolid } from '@heroicons/react/24/solid';
+
+const TYPE_COLORS = {
+  'Web Development':  'bg-orange-100 dark:bg-orange-500/10 text-orange-600 dark:text-orange-400 border-orange-200 dark:border-orange-500/20',
+  'UI/UX Design':     'bg-purple-100 dark:bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-200 dark:border-purple-500/20',
+  'API/Backend':      'bg-green-100 dark:bg-green-500/10 text-green-600 dark:text-green-400 border-green-200 dark:border-green-500/20',
+  'E-Commerce':       'bg-blue-100 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-200 dark:border-blue-500/20',
+  'Consultation':     'bg-yellow-100 dark:bg-yellow-500/10 text-yellow-600 dark:text-yellow-400 border-yellow-200 dark:border-yellow-500/20',
+  'Assignment Help':  'bg-pink-100 dark:bg-pink-500/10 text-pink-600 dark:text-pink-400 border-pink-200 dark:border-pink-500/20',
+};
+
+const AVATAR_COLORS = ['bg-orange-400', 'bg-blue-500', 'bg-purple-500', 'bg-green-500', 'bg-pink-500'];
+
+function ClientAvatar({ name, image, size = 'md' }) {
+  const [imgError, setImgError] = useState(false);
+  const initials = name ? name.split(' ').map(n => n[0]).slice(0, 2).join('').toUpperCase() : '?';
+  const color = AVATAR_COLORS[(name?.charCodeAt(0) || 0) % AVATAR_COLORS.length];
+  const sz = size === 'lg' ? 'w-14 h-14 text-base' : 'w-12 h-12 text-sm';
+
+  if (image && !imgError) {
+    return (
+      <img
+        src={image}
+        alt={name}
+        onError={() => setImgError(true)}
+        className={`${sz} rounded-full object-cover border-2 border-orange-200 dark:border-orange-500/30 flex-shrink-0`}
+      />
+    );
+  }
+  return (
+    <div className={`${sz} ${color} rounded-full flex items-center justify-center font-bold text-white flex-shrink-0`}>
+      {initials}
+    </div>
+  );
+}
 
 export default function Services() {
   const [isVisible, setIsVisible] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [hoveredService, setHoveredService] = useState(null);
+  const [testimonials, setTestimonials] = useState([]);
+  const [reviewsLoading, setReviewsLoading] = useState(true);
 
   useEffect(() => { setIsVisible(true); }, []);
+
+  useEffect(() => {
+    async function loadReviews() {
+      try {
+        const res = await fetch('/api/reviews?isPublished=true');
+        const data = await res.json();
+        setTestimonials(data.data || []);
+      } catch (err) {
+        console.error('Failed to load reviews:', err);
+      } finally {
+        setReviewsLoading(false);
+      }
+    }
+    loadReviews();
+  }, []);
 
   const services = [
     { title: 'Full-Stack Web Development', description: 'Complete web applications with modern React, Next.js, and Node.js technologies built with scalability in mind.', icon: CodeBracketIcon, category: 'development', features: ['React & Next.js', 'Node.js & Express', 'Database Integration', 'API Development'], pricing: 'From $2,500', timeline: '4–8 weeks' },
@@ -42,11 +94,7 @@ export default function Services() {
   const filteredServices = selectedCategory === 'all' ? services : services.filter(s => s.category === selectedCategory);
   const showAssignments = selectedCategory === 'all' || selectedCategory === 'assignments';
 
-  const testimonials = [
-    { name: 'Sarah Johnson', role: 'Startup Founder', comment: 'Methmal delivered an exceptional e-commerce platform. Professional, timely, and great communication throughout.', rating: 5 },
-    { name: 'Michael Chen', role: 'CS Student', comment: 'Got excellent help with my React assignment. Clear explanations and high-quality code. Highly recommended!', rating: 5 },
-    { name: 'Lisa Rodriguez', role: 'Product Manager', comment: 'The API integration was flawless. Great attention to detail and excellent documentation provided.', rating: 5 },
-  ];
+
 
   return (
     <div className="bg-white dark:bg-[#0b0f19] transition-colors duration-300 pt-16 lg:pt-20">
@@ -244,22 +292,89 @@ export default function Services() {
             <h2 className="text-3xl font-black text-gray-900 dark:text-white mb-3">What Clients Say</h2>
             <p className="text-gray-500 leading-relaxed">Trusted by businesses and students worldwide</p>
           </div>
-          <div className="grid lg:grid-cols-3 gap-6 lg:gap-8">
-            {testimonials.map((t) => (
-              <div key={t.name} className="bg-white dark:bg-[#141928] border border-gray-100 dark:border-white/5 rounded-2xl p-6 lg:p-8 hover:border-orange-500/30 hover:shadow-xl hover:shadow-orange-500/10 transition-all duration-300">
-                <div className="flex mb-4">
-                  {[...Array(t.rating)].map((_, i) => <StarIcon key={i} className="w-5 h-5 text-orange-400 fill-current" />)}
+
+          {/* Loading skeletons */}
+          {reviewsLoading && (
+            <div className="grid lg:grid-cols-3 gap-6 lg:gap-8">
+              {[1, 2, 3].map((i) => (
+                <div key={i} className="bg-white dark:bg-[#141928] border border-gray-100 dark:border-white/5 rounded-2xl p-6 lg:p-8 animate-pulse">
+                  <div className="flex items-center gap-3 mb-5">
+                    <div className="w-12 h-12 bg-gray-200 dark:bg-gray-700 rounded-full" />
+                    <div className="flex-1">
+                      <div className="h-3.5 bg-gray-200 dark:bg-gray-700 rounded w-28 mb-2" />
+                      <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-20" />
+                    </div>
+                  </div>
+                  <div className="flex gap-1 mb-4">
+                    {[...Array(5)].map((_, j) => <div key={j} className="w-4 h-4 bg-gray-200 dark:bg-gray-700 rounded" />)}
+                  </div>
+                  <div className="space-y-2">
+                    <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-full" />
+                    <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-5/6" />
+                    <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-4/6" />
+                  </div>
                 </div>
-                <p className="text-gray-600 dark:text-gray-400 leading-relaxed mb-6 italic">"{t.comment}"</p>
-                <div>
-                  <div className="font-bold text-gray-900 dark:text-white">{t.name}</div>
-                  <div className="text-sm text-orange-500">{t.role}</div>
+              ))}
+            </div>
+          )}
+
+          {/* Empty state */}
+          {!reviewsLoading && testimonials.length === 0 && (
+            <div className="text-center py-12">
+              <StarIcon className="w-12 h-12 text-gray-300 dark:text-gray-700 mx-auto mb-4" />
+              <p className="text-gray-400">Client reviews coming soon.</p>
+            </div>
+          )}
+
+          {/* Reviews grid */}
+          {!reviewsLoading && testimonials.length > 0 && (
+            <div className="grid lg:grid-cols-3 gap-6 lg:gap-8">
+              {testimonials.map((t, index) => (
+                <div
+                  key={t._id || t.name}
+                  className={`group relative bg-white dark:bg-[#141928] border border-gray-100 dark:border-white/5 rounded-2xl p-6 lg:p-8 hover:border-orange-500/40 hover:shadow-2xl hover:shadow-orange-500/10 hover:-translate-y-1 transition-all duration-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+                  style={{ transitionDelay: `${index * 80}ms` }}
+                >
+                  {/* Quote decoration */}
+                  <div className="absolute top-5 right-6 text-5xl font-black text-orange-100 dark:text-orange-500/10 leading-none select-none">"</div>
+
+                  {/* Stars */}
+                  <div className="flex gap-0.5 mb-4">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <StarSolid
+                        key={star}
+                        className={`w-4 h-4 ${star <= (t.rating || 5) ? 'text-orange-400' : 'text-gray-200 dark:text-gray-700'}`}
+                      />
+                    ))}
+                  </div>
+
+                  {/* Comment */}
+                  <p className="text-gray-600 dark:text-gray-400 leading-relaxed mb-6 italic text-sm relative z-10">
+                    &ldquo;{t.comment}&rdquo;
+                  </p>
+
+                  {/* Client info */}
+                  <div className="flex items-center gap-3 pt-5 border-t border-gray-100 dark:border-white/5">
+                    <ClientAvatar name={t.name} image={t.image} />
+                    <div className="min-w-0 flex-1">
+                      <div className="font-bold text-gray-900 dark:text-white text-sm truncate">{t.name}</div>
+                      <div className="text-xs text-gray-500 truncate">
+                        {t.role}{t.company ? ` · ${t.company}` : ''}
+                      </div>
+                    </div>
+                    {t.reviewType && (
+                      <span className={`flex-shrink-0 text-[10px] font-bold px-2 py-1 rounded-full border ${TYPE_COLORS[t.reviewType] || 'bg-gray-100 dark:bg-white/5 text-gray-500 border-gray-200 dark:border-white/10'}`}>
+                        {t.reviewType}
+                      </span>
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
+
 
       {/* ── CTA ── */}
       <section className="py-16 lg:py-24 bg-white dark:bg-[#0b0f19] transition-colors duration-300">
