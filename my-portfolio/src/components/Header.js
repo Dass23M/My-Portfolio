@@ -57,7 +57,7 @@ export default function Header() {
                 <div className="absolute inset-0 bg-gradient-to-br from-orange-400 to-orange-600" />
                 <div className="absolute inset-0 flex items-center justify-center">
                   <span className="font-[family-name:var(--font-display)] text-white text-xl lg:text-2xl leading-none tracking-wider">
-
+                    M
                   </span>
                 </div>
                 {/* shine on hover */}
