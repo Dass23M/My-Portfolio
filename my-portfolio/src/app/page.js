@@ -196,7 +196,7 @@ export default function Home() {
         {/* ══════════════════════════════════════════
               HERO
         ══════════════════════════════════════════ */}
-        <section className="relative min-h-screen flex flex-col overflow-hidden bg-white dark:bg-[#080c18] transition-colors duration-300 pt-16 lg:pt-20">
+        <section className="relative min-h-screen flex flex-col bg-white dark:bg-[#080c18] transition-colors duration-300 pt-16 lg:pt-20" style={{ overflowX: 'hidden' }}>
 
           {/* background layers */}
           <div className="pointer-events-none absolute inset-0 dot-grid-light dark:dot-grid-dark" />
@@ -208,10 +208,10 @@ export default function Home() {
           {/* hero content */}
           <div className="relative z-10 flex-1 flex items-center">
             <div className="w-full max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 xl:px-20 py-8 sm:py-10 lg:py-0">
-              <div className="flex flex-col lg:grid lg:grid-cols-[1fr_420px] xl:grid-cols-[1fr_460px] gap-6 lg:gap-12 xl:gap-20 items-center min-h-[calc(100vh-140px)]">
+              <div className="flex flex-col lg:grid lg:grid-cols-[minmax(0,1fr)_420px] xl:grid-cols-[minmax(0,1fr)_460px] 2xl:grid-cols-[minmax(0,1fr)_500px] gap-6 lg:gap-10 xl:gap-16 items-center w-full">
 
                 {/* ── LEFT copy ── */}
-                <div className="flex flex-col justify-center order-2 lg:order-1 text-center lg:text-left">
+                <div className="flex flex-col justify-center order-2 lg:order-1 text-center lg:text-left min-w-0 overflow-hidden">
 
                   {/* availability badge */}
                   <div className="anim-fadeup d1 inline-flex items-center gap-2.5 self-center lg:self-start mb-6 sm:mb-8 px-4 py-2 rounded-full bg-green-50 dark:bg-green-500/10 border border-green-200 dark:border-green-500/25">
@@ -228,30 +228,30 @@ export default function Home() {
                   <div className="anim-fadeup d2 mb-4 sm:mb-6">
                     <div
                       className="font-[family-name:var(--font-display)] text-gray-300 dark:text-white/12 tracking-wider select-none"
-                      style={{ fontSize: 'clamp(1.8rem,5vw,5.5rem)', lineHeight: 1 }}
+                      style={{ fontSize: 'clamp(1.5rem,3.5vw,4rem)', lineHeight: 1 }}
                     >
                       HI, I'M
                     </div>
                     <h1
                       className="font-[family-name:var(--font-display)] shimmer-orange tracking-tight select-none"
-                      style={{ fontSize: 'clamp(3.5rem,10vw,9.5rem)', lineHeight: 0.88 }}
+                      style={{ fontSize: 'clamp(3rem,7vw,8rem)', lineHeight: 0.88 }}
                     >
                       METHMAL
                     </h1>
                     <div
                       className="font-[family-name:var(--font-display)] text-gray-800 dark:text-white tracking-wider"
-                      style={{ fontSize: 'clamp(1.6rem,4.5vw,5rem)', lineHeight: 1.05 }}
+                      style={{ fontSize: 'clamp(1.4rem,3vw,3.8rem)', lineHeight: 1.05 }}
                     >
                       BUILDING THE
                     </div>
                     <div className="flex items-baseline gap-2 sm:gap-3 flex-wrap justify-center lg:justify-start">
                       <span
                         className="font-[family-name:var(--font-display)] text-orange-500"
-                        style={{ fontSize: 'clamp(1.6rem,4.5vw,5rem)', lineHeight: 1.05 }}
+                        style={{ fontSize: 'clamp(1.4rem,3vw,3.8rem)', lineHeight: 1.05 }}
                       >DIGITAL</span>
                       <span
                         className="font-[family-name:var(--font-display)] text-gray-800 dark:text-white"
-                        style={{ fontSize: 'clamp(1.6rem,4.5vw,5rem)', lineHeight: 1.05 }}
+                        style={{ fontSize: 'clamp(1.4rem,3vw,3.8rem)', lineHeight: 1.05 }}
                       >FUTURE.</span>
                     </div>
                   </div>
@@ -298,22 +298,21 @@ export default function Home() {
                 </div>
 
                 {/* ── RIGHT photo ── */}
-                <div className="relative order-1 lg:order-2 flex items-center justify-center py-8 lg:py-0 w-full max-h-[380px] lg:max-h-none">
-                  {/* spinning rings — clipped so they don't bleed on mobile */}
-                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden rounded-full">
-                    <div className="spin-cw absolute rounded-full border border-dashed border-orange-400/25 dark:border-orange-500/20" style={{ width: '320px', height: '320px' }} />
-                    <div className="spin-ccw absolute rounded-full border border-dashed border-orange-300/20 dark:border-orange-500/15" style={{ width: '240px', height: '240px' }} />
+                <div className="relative order-1 lg:order-2 flex items-center justify-center py-8 lg:py-12 w-full lg:w-[420px] xl:w-[460px] 2xl:w-[500px] flex-shrink-0">
+                  {/* spinning rings */}
+                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                    <div className="spin-cw absolute rounded-full border border-dashed border-orange-400/25 dark:border-orange-500/20" style={{ width: '420px', height: '420px' }} />
+                    <div className="spin-ccw absolute rounded-full border border-dashed border-orange-300/20 dark:border-orange-500/15" style={{ width: '320px', height: '320px' }} />
                   </div>
 
                   {/* photo + badges */}
                   <div className="relative flex items-center justify-center" style={{ animation: 'floatY 6s ease-in-out infinite' }}>
 
-                    {/* ── FIXED: use Next.js <Image> with explicit width/height ── */}
                     <div
                       className="photo-circle"
                       style={{
-                        width: 'clamp(160px, 28vw, 340px)',
-                        height: 'clamp(160px, 28vw, 340px)',
+                        width: 'clamp(160px, 45vw, 400px)',
+                        height: 'clamp(160px, 45vw, 400px)',
                         boxShadow: '0 0 0 4px rgba(249,115,22,.35), 0 0 60px 12px rgba(249,115,22,.15)',
                       }}
                     >
@@ -322,7 +321,7 @@ export default function Home() {
                         alt="Dasun Methmal"
                         fill
                         priority
-                        sizes="(max-width: 640px) 160px, (max-width: 1024px) 28vw, 340px"
+                        sizes="(max-width: 640px) 160px, (max-width: 1024px) 45vw, 400px"
                         style={{
                           objectFit: 'cover',
                           objectPosition: 'center top',
@@ -331,16 +330,16 @@ export default function Home() {
                       />
                     </div>
 
-                    {/* badge: Available — inside circle bounds, no negative offset on mobile */}
-                    <div className="absolute top-1 right-1 sm:-top-2 sm:-right-4 bg-white dark:bg-[#141c30] border border-gray-100 dark:border-white/10 rounded-xl px-2.5 py-1.5 shadow-xl flex items-center gap-1.5 z-10">
+                    {/* badge: Available */}
+                    <div className="absolute -top-3 -right-3 lg:-top-4 lg:-right-6 bg-white dark:bg-[#141c30] border border-gray-100 dark:border-white/10 rounded-xl px-3 py-2 shadow-xl flex items-center gap-2 z-10">
                       <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse flex-shrink-0" />
-                      <span className="text-[11px] font-bold text-gray-900 dark:text-white whitespace-nowrap">Available</span>
+                      <span className="text-xs font-bold text-gray-900 dark:text-white whitespace-nowrap">Available</span>
                     </div>
 
-                    {/* badge: Full-Stack — inside circle bounds, no negative offset on mobile */}
-                    <div className="absolute bottom-1 left-1 sm:-bottom-2 sm:-left-4 bg-white dark:bg-[#141c30] border border-gray-100 dark:border-white/10 rounded-xl px-2.5 py-1.5 shadow-xl flex items-center gap-1.5 z-10">
-                      <CodeBracketIcon className="w-3.5 h-3.5 text-orange-500 flex-shrink-0" />
-                      <span className="text-[11px] font-bold text-gray-900 dark:text-white whitespace-nowrap">Full-Stack Dev</span>
+                    {/* badge: Full-Stack */}
+                    <div className="absolute -bottom-3 -left-3 lg:-bottom-4 lg:-left-6 bg-white dark:bg-[#141c30] border border-gray-100 dark:border-white/10 rounded-xl px-3 py-2 shadow-xl flex items-center gap-2 z-10">
+                      <CodeBracketIcon className="w-4 h-4 text-orange-500 flex-shrink-0" />
+                      <span className="text-xs font-bold text-gray-900 dark:text-white whitespace-nowrap">Full-Stack Dev</span>
                     </div>
                   </div>
                 </div>
