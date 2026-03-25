@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -77,10 +77,10 @@ const techCategories = [
     gradient: 'from-orange-500/20 to-amber-500/10',
     border: 'border-orange-500/30',
     items: [
-      { name: 'React',       level: 95 },
-      { name: 'Next.js',     level: 92 },
-      { name: 'TypeScript',  level: 88 },
-      { name: 'Tailwind CSS',level: 96 },
+      { name: 'React', level: 95 },
+      { name: 'Next.js', level: 92 },
+      { name: 'TypeScript', level: 88 },
+      { name: 'Tailwind CSS', level: 96 },
     ],
   },
   {
@@ -91,10 +91,10 @@ const techCategories = [
     gradient: 'from-blue-500/20 to-indigo-500/10',
     border: 'border-blue-500/30',
     items: [
-      { name: 'Node.js',  level: 90 },
-      { name: 'Python',   level: 85 },
-      { name: 'Express',  level: 88 },
-      { name: 'FastAPI',  level: 80 },
+      { name: 'Node.js', level: 90 },
+      { name: 'Python', level: 85 },
+      { name: 'Express', level: 88 },
+      { name: 'FastAPI', level: 80 },
     ],
   },
   {
@@ -105,10 +105,10 @@ const techCategories = [
     gradient: 'from-emerald-500/20 to-teal-500/10',
     border: 'border-emerald-500/30',
     items: [
-      { name: 'MongoDB',    level: 92 },
+      { name: 'MongoDB', level: 92 },
       { name: 'PostgreSQL', level: 87 },
-      { name: 'Redis',      level: 78 },
-      { name: 'Prisma',     level: 84 },
+      { name: 'Redis', level: 78 },
+      { name: 'Prisma', level: 84 },
     ],
   },
   {
@@ -119,10 +119,10 @@ const techCategories = [
     gradient: 'from-violet-500/20 to-purple-500/10',
     border: 'border-violet-500/30',
     items: [
-      { name: 'AWS',    level: 82 },
+      { name: 'AWS', level: 82 },
       { name: 'Vercel', level: 94 },
       { name: 'Docker', level: 80 },
-      { name: 'CI/CD',  level: 78 },
+      { name: 'CI/CD', level: 78 },
     ],
   },
 ];
@@ -267,7 +267,7 @@ function TechStackSection() {
                 </span>
               </div>
               <div className="flex flex-wrap gap-2">
-                {['React','Next.js','Node.js','Python','TypeScript','MongoDB','PostgreSQL','AWS','Docker','Redis'].map(tag => (
+                {['React', 'Next.js', 'Node.js', 'Python', 'TypeScript', 'MongoDB', 'PostgreSQL', 'AWS', 'Docker', 'Redis'].map(tag => (
                   <span key={tag} className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-white dark:bg-white/5 border border-gray-200 dark:border-white/8 text-gray-500 dark:text-gray-400 hover:border-orange-500/40 hover:text-orange-500 transition-all duration-200 cursor-default">
                     {tag}
                   </span>
@@ -410,7 +410,7 @@ export default function Home() {
           background-size: 28px 28px;
         }
         .dot-grid-dark {
-          background-image: radial-gradient(circle, rgba(249,115,22,.18) 1px, transparent 1px);
+          background-image: radial-gradient(circle, rgba(255,255,255,0.06) 1px, transparent 1px);
           background-size: 28px 28px;
         }
 
@@ -441,8 +441,8 @@ export default function Home() {
           {/* background layers */}
           <div className="pointer-events-none absolute inset-0 dot-grid-light dark:dot-grid-dark" />
           <div className="pointer-events-none absolute inset-0">
-            <div className="absolute -top-40 right-0 w-[500px] h-[500px] sm:w-[700px] sm:h-[700px] rounded-full bg-orange-100 dark:bg-orange-500/10 blur-[120px]" />
-            <div className="absolute top-1/2 left-0 w-[300px] h-[300px] rounded-full bg-orange-50 dark:bg-orange-600/6 blur-[90px]" />
+            <div className="absolute -top-40 right-0 w-[500px] h-[500px] sm:w-[700px] sm:h-[700px] rounded-full bg-orange-100 dark:bg-orange-500/8 blur-[140px]" />
+            <div className="absolute top-1/2 left-0 w-[300px] h-[300px] rounded-full bg-orange-50 dark:bg-transparent blur-[90px]" />
           </div>
 
           {/* hero content */}
@@ -467,7 +467,7 @@ export default function Home() {
                   {/* headline */}
                   <div className="anim-fadeup d2 mb-3 sm:mb-5">
                     <div
-                      className="font-[family-name:var(--font-display)] text-gray-300 dark:text-white/12 tracking-wider select-none"
+                      className="font-[family-name:var(--font-display)] text-gray-300 dark:text-white/30 tracking-wider select-none"
                       style={{ fontSize: 'clamp(1.5rem,3.5vw,4rem)', lineHeight: 1 }}
                     >
                       HI, I'M
@@ -480,7 +480,7 @@ export default function Home() {
                     </h1>
                     <div
                       className="font-[family-name:var(--font-display)] text-gray-800 dark:text-white tracking-wider"
-                      style={{ fontSize: 'clamp(1.4rem,3vw,3.8rem)', lineHeight: 1.05 }}
+                      style={{ fontSize: 'clamp(1.4rem,3vw,3.8rem)', lineHeight: 1.05, textShadow: 'none' }}
                     >
                       BUILDING THE
                     </div>
@@ -505,7 +505,7 @@ export default function Home() {
                   </div>
 
                   {/* bio */}
-                  <p className="anim-fadeup d4 text-sm sm:text-base lg:text-lg text-gray-500 dark:text-gray-400 leading-relaxed w-full lg:max-w-[500px] mx-auto lg:mx-0 mb-6 sm:mb-8">
+                  <p className="anim-fadeup d4 text-sm sm:text-base lg:text-lg text-gray-500 dark:text-gray-300 leading-relaxed w-full lg:max-w-[500px] mx-auto lg:mx-0 mb-6 sm:mb-8">
                     A full-stack developer with a sharp eye for scalable systems and user-centered design.
                     I craft <strong className="text-gray-800 dark:text-white font-semibold">high-performance web apps</strong> from
                     idea to production.
@@ -517,7 +517,7 @@ export default function Home() {
                       View My Work
                       <ArrowRightIcon className="w-4 h-4" />
                     </Link>
-                    <Link href="/contact" className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full font-bold text-sm border-2 border-gray-200 dark:border-white/15 text-gray-700 dark:text-white hover:border-orange-500/50 hover:text-orange-500 dark:hover:text-orange-400 transition-all duration-300 w-full sm:w-auto">
+                    <Link href="/contact" className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full font-bold text-sm border-2 border-gray-200 dark:border-white/30 text-gray-700 dark:text-white hover:border-orange-500/50 hover:text-orange-500 dark:hover:text-orange-400 transition-all duration-300 w-full sm:w-auto">
                       <EnvelopeIcon className="w-4 h-4" />
                       Hire Me
                     </Link>
