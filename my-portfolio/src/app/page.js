@@ -447,14 +447,14 @@ export default function Home() {
 
           {/* hero content */}
           <div className="relative z-10 flex-1 flex items-center">
-            <div className="w-full max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 xl:px-20 py-8 sm:py-10 lg:py-0">
+            <div className="w-full max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 xl:px-20 py-6 sm:py-8 lg:py-0">
               <div className="flex flex-col lg:grid lg:grid-cols-[minmax(0,1fr)_420px] xl:grid-cols-[minmax(0,1fr)_460px] 2xl:grid-cols-[minmax(0,1fr)_500px] gap-6 lg:gap-10 xl:gap-16 items-center w-full">
 
                 {/* ── LEFT copy ── */}
-                <div className="flex flex-col justify-center order-2 lg:order-1 text-center lg:text-left min-w-0 overflow-hidden">
+                <div className="flex flex-col justify-center order-2 lg:order-1 text-center lg:text-left min-w-0 w-full px-2 sm:px-4 lg:px-0">
 
                   {/* availability badge */}
-                  <div className="anim-fadeup d1 inline-flex items-center gap-2.5 self-center lg:self-start mb-6 sm:mb-8 px-4 py-2 rounded-full bg-green-50 dark:bg-green-500/10 border border-green-200 dark:border-green-500/25">
+                  <div className="anim-fadeup d1 inline-flex items-center gap-2.5 self-center lg:self-start mb-4 sm:mb-6 px-4 py-2 rounded-full bg-green-50 dark:bg-green-500/10 border border-green-200 dark:border-green-500/25">
                     <span className="relative flex h-2.5 w-2.5">
                       <span className="absolute inset-0 rounded-full bg-green-500 opacity-70" style={{ animation: 'ping 1.4s cubic-bezier(0,0,.2,1) infinite' }} />
                       <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-green-500" />
@@ -465,7 +465,7 @@ export default function Home() {
                   </div>
 
                   {/* headline */}
-                  <div className="anim-fadeup d2 mb-4 sm:mb-6">
+                  <div className="anim-fadeup d2 mb-3 sm:mb-5">
                     <div
                       className="font-[family-name:var(--font-display)] text-gray-300 dark:text-white/12 tracking-wider select-none"
                       style={{ fontSize: 'clamp(1.5rem,3.5vw,4rem)', lineHeight: 1 }}
@@ -497,7 +497,7 @@ export default function Home() {
                   </div>
 
                   {/* typewriter */}
-                  <div className="anim-fadeup d3 flex items-center gap-1 h-8 mb-6 justify-center lg:justify-start">
+                  <div className="anim-fadeup d3 flex items-center gap-1 h-7 mb-4 sm:mb-5 justify-center lg:justify-start">
                     <span className="font-[family-name:var(--font-mono)] text-sm text-orange-500 tracking-wider">
                       {typedText}
                     </span>
@@ -505,30 +505,30 @@ export default function Home() {
                   </div>
 
                   {/* bio */}
-                  <p className="anim-fadeup d4 text-sm sm:text-base lg:text-lg text-gray-500 dark:text-gray-400 leading-relaxed max-w-[500px] mx-auto lg:mx-0 mb-8 sm:mb-10">
+                  <p className="anim-fadeup d4 text-sm sm:text-base lg:text-lg text-gray-500 dark:text-gray-400 leading-relaxed w-full lg:max-w-[500px] mx-auto lg:mx-0 mb-6 sm:mb-8">
                     A full-stack developer with a sharp eye for scalable systems and user-centered design.
                     I craft <strong className="text-gray-800 dark:text-white font-semibold">high-performance web apps</strong> from
                     idea to production.
                   </p>
 
                   {/* CTA row */}
-                  <div className="anim-fadeup d5 flex flex-wrap gap-3 sm:gap-4 mb-8 sm:mb-10 justify-center lg:justify-start">
-                    <Link href="/projects" className="btn-glow inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-400 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-full font-bold text-sm sm:text-base shadow-lg shadow-orange-500/30">
+                  <div className="anim-fadeup d5 flex flex-col sm:flex-row gap-3 mb-6 sm:mb-8 w-full sm:justify-center lg:justify-start">
+                    <Link href="/projects" className="btn-glow inline-flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-400 text-white px-6 py-3.5 rounded-full font-bold text-sm shadow-lg shadow-orange-500/30 w-full sm:w-auto">
                       View My Work
                       <ArrowRightIcon className="w-4 h-4" />
                     </Link>
-                    <Link href="/contact" className="inline-flex items-center gap-2 px-6 sm:px-8 py-3 sm:py-4 rounded-full font-bold text-sm sm:text-base border-2 border-gray-200 dark:border-white/15 text-gray-700 dark:text-white hover:border-orange-500/50 hover:text-orange-500 dark:hover:text-orange-400 transition-all duration-300">
+                    <Link href="/contact" className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full font-bold text-sm border-2 border-gray-200 dark:border-white/15 text-gray-700 dark:text-white hover:border-orange-500/50 hover:text-orange-500 dark:hover:text-orange-400 transition-all duration-300 w-full sm:w-auto">
                       <EnvelopeIcon className="w-4 h-4" />
                       Hire Me
                     </Link>
                   </div>
 
                   {/* skill chips marquee */}
-                  <div className="anim-fadeup d6 overflow-hidden w-full">
-                    <div className="flex gap-2 sm:gap-3" style={{ width: 'max-content' }}>
-                      <div className="marquee-track flex gap-2 sm:gap-3">
+                  <div className="anim-fadeup d6 overflow-hidden w-full max-w-full">
+                    <div className="flex gap-2" style={{ width: 'max-content' }}>
+                      <div className="marquee-track flex gap-2">
                         {[...skills, ...skills].map((s, i) => (
-                          <span key={i} className="shrink-0 px-3 sm:px-4 py-1 sm:py-1.5 rounded-full text-[10px] sm:text-xs font-bold font-[family-name:var(--font-mono)] tracking-wider bg-orange-50 dark:bg-orange-500/10 text-orange-600 dark:text-orange-400 border border-orange-200 dark:border-orange-500/25">
+                          <span key={i} className="shrink-0 px-3 py-1.5 rounded-full text-[10px] font-bold font-[family-name:var(--font-mono)] tracking-wider bg-orange-50 dark:bg-orange-500/10 text-orange-600 dark:text-orange-400 border border-orange-200 dark:border-orange-500/25">
                             {s}
                           </span>
                         ))}
@@ -538,9 +538,14 @@ export default function Home() {
                 </div>
 
                 {/* ── RIGHT photo ── */}
-                <div className="relative order-1 lg:order-2 flex items-center justify-center py-8 lg:py-12 w-full lg:w-[420px] xl:w-[460px] 2xl:w-[500px] flex-shrink-0">
-                  {/* spinning rings */}
-                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                <div className="relative order-1 lg:order-2 flex items-center justify-center py-6 sm:py-8 lg:py-12 w-full lg:w-[420px] xl:w-[460px] 2xl:w-[500px] flex-shrink-0">
+                  {/* spinning rings — hidden on small mobile to avoid overflow */}
+                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none hidden sm:flex">
+                    <div className="spin-cw absolute rounded-full border border-dashed border-orange-400/25 dark:border-orange-500/20" style={{ width: '300px', height: '300px' }} />
+                    <div className="spin-ccw absolute rounded-full border border-dashed border-orange-300/20 dark:border-orange-500/15" style={{ width: '220px', height: '220px' }} />
+                  </div>
+                  {/* desktop rings */}
+                  <div className="absolute inset-0 items-center justify-center pointer-events-none hidden lg:flex">
                     <div className="spin-cw absolute rounded-full border border-dashed border-orange-400/25 dark:border-orange-500/20" style={{ width: '420px', height: '420px' }} />
                     <div className="spin-ccw absolute rounded-full border border-dashed border-orange-300/20 dark:border-orange-500/15" style={{ width: '320px', height: '320px' }} />
                   </div>
@@ -551,8 +556,8 @@ export default function Home() {
                     <div
                       className="photo-circle"
                       style={{
-                        width: 'clamp(160px, 45vw, 400px)',
-                        height: 'clamp(160px, 45vw, 400px)',
+                        width: 'clamp(140px, 38vw, 400px)',
+                        height: 'clamp(140px, 38vw, 400px)',
                         boxShadow: '0 0 0 4px rgba(249,115,22,.35), 0 0 60px 12px rgba(249,115,22,.15)',
                       }}
                     >
