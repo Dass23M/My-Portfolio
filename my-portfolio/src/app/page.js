@@ -173,6 +173,22 @@ export default function Home() {
           background-image: radial-gradient(circle, rgba(249,115,22,.18) 1px, transparent 1px);
           background-size: 28px 28px;
         }
+
+        /* ── FIX: photo circle wrapper ── */
+        .photo-circle {
+          position: relative;
+          border-radius: 9999px;
+          overflow: hidden;
+          border: 4px solid white;
+          flex-shrink: 0;
+        }
+        .dark .photo-circle {
+          border-color: #141c30;
+        }
+        /* Ensure Next.js Image fills the circle correctly */
+        .photo-circle img {
+          border-radius: 9999px !important;
+        }
       `}</style>
 
       <div className="overflow-x-hidden bg-white dark:bg-[#080c18] text-gray-900 dark:text-white transition-colors duration-300">
@@ -192,13 +208,13 @@ export default function Home() {
           {/* hero content */}
           <div className="relative z-10 flex-1 flex items-center">
             <div className="w-full max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 xl:px-20 py-8 sm:py-10 lg:py-0">
-              <div className="grid lg:grid-cols-[1fr_440px] xl:grid-cols-[1fr_480px] gap-8 lg:gap-12 xl:gap-20 items-center min-h-[calc(100vh-120px)]">
+              <div className="flex flex-col lg:grid lg:grid-cols-[1fr_420px] xl:grid-cols-[1fr_460px] gap-6 lg:gap-12 xl:gap-20 items-center min-h-[calc(100vh-140px)]">
 
                 {/* ── LEFT copy ── */}
-                <div className="flex flex-col justify-center order-2 lg:order-1 text-center sm:text-left">
+                <div className="flex flex-col justify-center order-2 lg:order-1 text-center lg:text-left">
 
                   {/* availability badge */}
-                  <div className="anim-fadeup d1 inline-flex items-center gap-2.5 self-center sm:self-start mb-6 sm:mb-8 px-4 py-2 rounded-full bg-green-50 dark:bg-green-500/10 border border-green-200 dark:border-green-500/25">
+                  <div className="anim-fadeup d1 inline-flex items-center gap-2.5 self-center lg:self-start mb-6 sm:mb-8 px-4 py-2 rounded-full bg-green-50 dark:bg-green-500/10 border border-green-200 dark:border-green-500/25">
                     <span className="relative flex h-2.5 w-2.5">
                       <span className="absolute inset-0 rounded-full bg-green-500 opacity-70" style={{ animation: 'ping 1.4s cubic-bezier(0,0,.2,1) infinite' }} />
                       <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-green-500" />
@@ -228,7 +244,7 @@ export default function Home() {
                     >
                       BUILDING THE
                     </div>
-                    <div className="flex items-baseline gap-2 sm:gap-3 flex-wrap justify-center sm:justify-start">
+                    <div className="flex items-baseline gap-2 sm:gap-3 flex-wrap justify-center lg:justify-start">
                       <span
                         className="font-[family-name:var(--font-display)] text-orange-500"
                         style={{ fontSize: 'clamp(1.6rem,4.5vw,5rem)', lineHeight: 1.05 }}
@@ -241,7 +257,7 @@ export default function Home() {
                   </div>
 
                   {/* typewriter */}
-                  <div className="anim-fadeup d3 flex items-center gap-1 h-8 mb-6">
+                  <div className="anim-fadeup d3 flex items-center gap-1 h-8 mb-6 justify-center lg:justify-start">
                     <span className="font-[family-name:var(--font-mono)] text-sm text-orange-500 tracking-wider">
                       {typedText}
                     </span>
@@ -249,14 +265,14 @@ export default function Home() {
                   </div>
 
                   {/* bio */}
-                  <p className="anim-fadeup d4 text-sm sm:text-base lg:text-lg text-gray-500 dark:text-gray-400 leading-relaxed max-w-[500px] mx-auto sm:mx-0 mb-8 sm:mb-10">
+                  <p className="anim-fadeup d4 text-sm sm:text-base lg:text-lg text-gray-500 dark:text-gray-400 leading-relaxed max-w-[500px] mx-auto lg:mx-0 mb-8 sm:mb-10">
                     A full-stack developer with a sharp eye for scalable systems and user-centered design.
                     I craft <strong className="text-gray-800 dark:text-white font-semibold">high-performance web apps</strong> from
                     idea to production.
                   </p>
 
                   {/* CTA row */}
-                  <div className="anim-fadeup d5 flex flex-wrap gap-3 sm:gap-4 mb-8 sm:mb-10 justify-center sm:justify-start">
+                  <div className="anim-fadeup d5 flex flex-wrap gap-3 sm:gap-4 mb-8 sm:mb-10 justify-center lg:justify-start">
                     <Link href="/projects" className="btn-glow inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-400 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-full font-bold text-sm sm:text-base shadow-lg shadow-orange-500/30">
                       View My Work
                       <ArrowRightIcon className="w-4 h-4" />
@@ -282,47 +298,49 @@ export default function Home() {
                 </div>
 
                 {/* ── RIGHT photo ── */}
-                <div className="relative order-1 lg:order-2 flex items-center justify-center py-10 lg:py-0 w-full min-h-[400px]">
-                  {/* spinning rings */}
-                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden">
-                    <div className="spin-cw absolute rounded-full border border-dashed border-orange-400/25 dark:border-orange-500/20" style={{ width: '280px', height: '280px' }} />
-                    <div className="spin-ccw absolute rounded-full border border-dashed border-orange-300/20 dark:border-orange-500/15" style={{ width: '210px', height: '210px' }} />
+                <div className="relative order-1 lg:order-2 flex items-center justify-center py-8 lg:py-0 w-full max-h-[380px] lg:max-h-none">
+                  {/* spinning rings — clipped so they don't bleed on mobile */}
+                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden rounded-full">
+                    <div className="spin-cw absolute rounded-full border border-dashed border-orange-400/25 dark:border-orange-500/20" style={{ width: '320px', height: '320px' }} />
+                    <div className="spin-ccw absolute rounded-full border border-dashed border-orange-300/20 dark:border-orange-500/15" style={{ width: '240px', height: '240px' }} />
                   </div>
 
                   {/* photo + badges */}
                   <div className="relative flex items-center justify-center" style={{ animation: 'floatY 6s ease-in-out infinite' }}>
-                    {/* circle */}
+
+                    {/* ── FIXED: use Next.js <Image> with explicit width/height ── */}
                     <div
-                      className="rounded-full overflow-hidden border-4 border-white dark:border-[#141c30]"
+                      className="photo-circle"
                       style={{
-                        width: 'clamp(176px, 30vw, 360px)',
-                        height: 'clamp(176px, 30vw, 360px)',
+                        width: 'clamp(160px, 28vw, 340px)',
+                        height: 'clamp(160px, 28vw, 340px)',
                         boxShadow: '0 0 0 4px rgba(249,115,22,.35), 0 0 60px 12px rgba(249,115,22,.15)',
                       }}
                     >
-                      <img
+                      <Image
                         src="/methmal.jpg"
                         alt="Dasun Methmal"
+                        fill
+                        priority
+                        sizes="(max-width: 640px) 160px, (max-width: 1024px) 28vw, 340px"
                         style={{
-                          width: '100%',
-                          height: '100%',
                           objectFit: 'cover',
-                          objectPosition: 'center 8%',
-                          display: 'block',
+                          objectPosition: 'center top',
+                          borderRadius: '9999px',
                         }}
                       />
                     </div>
 
-                    {/* badge: Available */}
-                    <div className="absolute -top-3 -right-3 sm:-right-6 bg-white dark:bg-[#141c30] border border-gray-100 dark:border-white/10 rounded-xl px-3 py-2 shadow-xl flex items-center gap-2 z-10">
+                    {/* badge: Available — inside circle bounds, no negative offset on mobile */}
+                    <div className="absolute top-1 right-1 sm:-top-2 sm:-right-4 bg-white dark:bg-[#141c30] border border-gray-100 dark:border-white/10 rounded-xl px-2.5 py-1.5 shadow-xl flex items-center gap-1.5 z-10">
                       <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse flex-shrink-0" />
-                      <span className="text-xs font-bold text-gray-900 dark:text-white whitespace-nowrap">Available</span>
+                      <span className="text-[11px] font-bold text-gray-900 dark:text-white whitespace-nowrap">Available</span>
                     </div>
 
-                    {/* badge: Full-Stack */}
-                    <div className="absolute -bottom-3 -left-3 sm:-left-6 bg-white dark:bg-[#141c30] border border-gray-100 dark:border-white/10 rounded-xl px-3 py-2 shadow-xl flex items-center gap-2 z-10">
-                      <CodeBracketIcon className="w-4 h-4 text-orange-500 flex-shrink-0" />
-                      <span className="text-xs font-bold text-gray-900 dark:text-white whitespace-nowrap">Full-Stack Dev</span>
+                    {/* badge: Full-Stack — inside circle bounds, no negative offset on mobile */}
+                    <div className="absolute bottom-1 left-1 sm:-bottom-2 sm:-left-4 bg-white dark:bg-[#141c30] border border-gray-100 dark:border-white/10 rounded-xl px-2.5 py-1.5 shadow-xl flex items-center gap-1.5 z-10">
+                      <CodeBracketIcon className="w-3.5 h-3.5 text-orange-500 flex-shrink-0" />
+                      <span className="text-[11px] font-bold text-gray-900 dark:text-white whitespace-nowrap">Full-Stack Dev</span>
                     </div>
                   </div>
                 </div>
@@ -333,8 +351,8 @@ export default function Home() {
 
           {/* bottom info bar */}
           <div className="relative z-10 border-t border-gray-100 dark:border-white/5 bg-gray-50/80 dark:bg-white/[0.02] backdrop-blur-sm">
-            <div className="w-full max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 xl:px-20 py-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-              <div className="flex items-center gap-6 sm:gap-10 flex-wrap">
+            <div className="w-full max-w-7xl mx-auto px-4 sm:px-10 lg:px-16 xl:px-20 py-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <div className="flex items-center gap-4 sm:gap-10 flex-wrap">
                 {[
                   { label: 'Stack', value: 'React · Next.js · Node.js · PostgreSQL' },
                   { label: 'Based in', value: 'Sri Lanka 🇱🇰' },
@@ -342,7 +360,7 @@ export default function Home() {
                 ].map(({ label, value }) => (
                   <div key={label}>
                     <p className="text-[10px] text-gray-400 dark:text-gray-600 uppercase tracking-widest font-bold mb-0.5">{label}</p>
-                    <p className="text-sm text-gray-700 dark:text-gray-300 font-semibold">{value}</p>
+                    <p className="text-xs sm:text-sm text-gray-700 dark:text-gray-300 font-semibold">{value}</p>
                   </div>
                 ))}
               </div>
@@ -358,7 +376,7 @@ export default function Home() {
               STATS
         ══════════════════════════════════════════ */}
         <section className="py-16 bg-gray-50 dark:bg-[#0d1120] border-y border-gray-100 dark:border-white/5 transition-colors duration-300">
-          <div className="w-full max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 xl:px-20">
+          <div className="w-full max-w-7xl mx-auto px-4 sm:px-10 lg:px-16 xl:px-20">
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
               {stats.map((s, i) => (
                 <div key={s.label} className="text-center">
@@ -379,7 +397,7 @@ export default function Home() {
               TECHNOLOGIES
         ══════════════════════════════════════════ */}
         <section ref={techRef} className="py-16 lg:py-24 bg-white dark:bg-[#080c18] transition-colors duration-300">
-          <div className="w-full max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 xl:px-20">
+          <div className="w-full max-w-7xl mx-auto px-4 sm:px-10 lg:px-16 xl:px-20">
             <div className={`text-center mb-12 lg:mb-16 transition-all duration-700 ${techInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
               <span className="inline-block text-[11px] font-black font-[family-name:var(--font-mono)] uppercase tracking-[0.25em] text-orange-500 mb-3">
                 Tech Stack
@@ -424,7 +442,7 @@ export default function Home() {
               FEATURED PROJECTS
         ══════════════════════════════════════════ */}
         <section ref={projRef} id="projects" className="py-16 lg:py-24 bg-gray-50 dark:bg-[#0d1120] transition-colors duration-300">
-          <div className="w-full max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 xl:px-20">
+          <div className="w-full max-w-7xl mx-auto px-4 sm:px-10 lg:px-16 xl:px-20">
             <div className={`text-center mb-12 lg:mb-16 transition-all duration-700 ${projInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
               <span className="inline-block text-[11px] font-black font-[family-name:var(--font-mono)] uppercase tracking-[0.25em] text-orange-500 mb-3">
                 Portfolio
@@ -463,7 +481,7 @@ export default function Home() {
                   >
                     <div className="relative h-48 bg-gradient-to-br from-orange-100 to-orange-50 dark:from-orange-900/30 dark:to-orange-800/10 overflow-hidden">
                       {project.image && !project.image.includes('placeholder') ? (
-                        <Image src={project.image} alt={project.title} fill className="object-cover group-hover:scale-105 transition-transform duration-500" sizes="33vw" />
+                        <Image src={project.image} alt={project.title} fill className="object-cover group-hover:scale-105 transition-transform duration-500" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" />
                       ) : (
                         <div className="absolute inset-0 flex items-center justify-center text-5xl">🚀</div>
                       )}
@@ -508,7 +526,7 @@ export default function Home() {
             <div className="absolute w-[200px] h-[200px] rounded-full bg-orange-100 dark:bg-orange-500/8 blur-3xl" />
           </div>
 
-          <div className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 xl:px-20">
+          <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-10 lg:px-16 xl:px-20">
             <div className="max-w-3xl mx-auto text-center">
               <span className="inline-block font-[family-name:var(--font-mono)] text-[11px] font-bold uppercase tracking-[0.25em] text-orange-500 mb-5">
                 Let's Work Together
