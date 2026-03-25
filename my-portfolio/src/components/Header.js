@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { SunIcon, MoonIcon } from '@heroicons/react/24/outline';
@@ -7,8 +7,8 @@ import { useTheme } from '@/context/ThemeContext';
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [scrolled, setScrolled]             = useState(false);
-  const { theme, toggleTheme }              = useTheme();
+  const [scrolled, setScrolled] = useState(false);
+  const { theme, toggleTheme } = useTheme();
 
   /* lock body scroll when mobile menu open */
   useEffect(() => {
@@ -57,7 +57,7 @@ export default function Header() {
                 <div className="absolute inset-0 bg-gradient-to-br from-orange-400 to-orange-600" />
                 <div className="absolute inset-0 flex items-center justify-center">
                   <span className="font-[family-name:var(--font-display)] text-white text-xl lg:text-2xl leading-none tracking-wider">
-                    M
+
                   </span>
                 </div>
                 {/* shine on hover */}
@@ -90,7 +90,7 @@ export default function Header() {
               >
                 {theme === 'light'
                   ? <MoonIcon className="w-[18px] h-[18px] text-gray-600" />
-                  : <SunIcon  className="w-[18px] h-[18px] text-orange-400" />}
+                  : <SunIcon className="w-[18px] h-[18px] text-orange-400" />}
               </button>
 
               {/* CTA */}
@@ -114,7 +114,7 @@ export default function Header() {
               >
                 {theme === 'light'
                   ? <MoonIcon className="w-4 h-4 text-gray-600" />
-                  : <SunIcon  className="w-4 h-4 text-orange-400" />}
+                  : <SunIcon className="w-4 h-4 text-orange-400" />}
               </button>
 
               {/* hamburger button */}
