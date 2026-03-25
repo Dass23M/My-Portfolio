@@ -10,12 +10,12 @@ import {
 import { StarIcon as StarSolid } from '@heroicons/react/24/solid';
 
 const TYPE_COLORS = {
-  'Web Development':  'bg-orange-100 dark:bg-orange-500/10 text-orange-600 dark:text-orange-400 border-orange-200 dark:border-orange-500/20',
-  'UI/UX Design':     'bg-purple-100 dark:bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-200 dark:border-purple-500/20',
-  'API/Backend':      'bg-green-100 dark:bg-green-500/10 text-green-600 dark:text-green-400 border-green-200 dark:border-green-500/20',
-  'E-Commerce':       'bg-blue-100 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-200 dark:border-blue-500/20',
-  'Consultation':     'bg-yellow-100 dark:bg-yellow-500/10 text-yellow-600 dark:text-yellow-400 border-yellow-200 dark:border-yellow-500/20',
-  'Assignment Help':  'bg-pink-100 dark:bg-pink-500/10 text-pink-600 dark:text-pink-400 border-pink-200 dark:border-pink-500/20',
+  'Web Development': 'bg-orange-100 dark:bg-orange-500/10 text-orange-600 dark:text-orange-400 border-orange-200 dark:border-orange-500/20',
+  'UI/UX Design': 'bg-purple-100 dark:bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-200 dark:border-purple-500/20',
+  'API/Backend': 'bg-green-100 dark:bg-green-500/10 text-green-600 dark:text-green-400 border-green-200 dark:border-green-500/20',
+  'E-Commerce': 'bg-blue-100 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-200 dark:border-blue-500/20',
+  'Consultation': 'bg-yellow-100 dark:bg-yellow-500/10 text-yellow-600 dark:text-yellow-400 border-yellow-200 dark:border-yellow-500/20',
+  'Assignment Help': 'bg-pink-100 dark:bg-pink-500/10 text-pink-600 dark:text-pink-400 border-pink-200 dark:border-pink-500/20',
 };
 
 const AVATAR_COLORS = ['bg-orange-400', 'bg-blue-500', 'bg-purple-500', 'bg-green-500', 'bg-pink-500'];
@@ -71,9 +71,6 @@ export default function Services() {
     { title: 'Full-Stack Web Development', description: 'Complete web applications with modern React, Next.js, and Node.js technologies built with scalability in mind.', icon: CodeBracketIcon, category: 'development', features: ['React & Next.js', 'Node.js & Express', 'Database Integration', 'API Development'], pricing: 'From $2,500', timeline: '4–8 weeks' },
     { title: 'UI/UX Design & Development', description: 'User-centered design that creates engaging and intuitive digital experiences with smooth interactions.', icon: PaintBrushIcon, category: 'design', features: ['Wireframing & Prototyping', 'Responsive Design', 'User Testing', 'Design Systems'], pricing: 'From $1,500', timeline: '2–4 weeks' },
     { title: 'E-Commerce Solutions', description: 'Custom online stores with payment integration and powerful inventory management.', icon: DevicePhoneMobileIcon, category: 'development', features: ['Payment Integration', 'Inventory Management', 'Admin Dashboard', 'Mobile Responsive'], pricing: 'From $3,000', timeline: '6–10 weeks' },
-    { title: 'API Development & Integration', description: 'RESTful APIs and third-party service integrations for seamless data connectivity.', icon: CogIcon, category: 'development', features: ['REST API Development', 'Third-party Integration', 'Authentication', 'Documentation'], pricing: 'From $1,000', timeline: '2–4 weeks' },
-    { title: 'Database Design & Optimization', description: 'Efficient database architecture and optimization for maximum performance.', icon: ChartBarIcon, category: 'development', features: ['Database Design', 'Query Optimization', 'Data Migration', 'Performance Tuning'], pricing: 'From $800', timeline: '1–3 weeks' },
-    { title: 'Cloud Deployment & DevOps', description: 'Professional deployment on AWS, Vercel, and other cloud platforms with CI/CD pipelines.', icon: CloudIcon, category: 'devops', features: ['AWS Deployment', 'CI/CD Pipeline', 'Docker Containerization', 'Monitoring'], pricing: 'From $500', timeline: '1–2 weeks' },
   ];
 
   const assignmentServices = [
@@ -135,11 +132,10 @@ export default function Services() {
               <button
                 key={cat.id}
                 onClick={() => setSelectedCategory(cat.id)}
-                className={`px-6 py-2.5 rounded-full font-bold text-sm transition-all duration-300 ${
-                  selectedCategory === cat.id
+                className={`px-6 py-2.5 rounded-full font-bold text-sm transition-all duration-300 ${selectedCategory === cat.id
                     ? 'bg-orange-500 text-white shadow-lg shadow-orange-500/30'
                     : 'bg-gray-100 dark:bg-white/5 text-gray-700 dark:text-gray-400 hover:bg-orange-100 dark:hover:bg-orange-500/10 hover:text-orange-500'
-                }`}
+                  }`}
               >
                 {cat.label}
               </button>
