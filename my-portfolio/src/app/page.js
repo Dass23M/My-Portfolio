@@ -332,7 +332,7 @@ function ClientReviewsSection() {
   if (!loading && reviews.length === 0) return null;
 
   return (
-    <section ref={sectionRef} className="py-20 lg:py-32 bg-gray-50 dark:bg-[#080c18] relative overflow-hidden transition-colors duration-300">
+    <section ref={sectionRef} className="py-16 lg:py-32 bg-gray-50 dark:bg-[#080c18] relative overflow-hidden transition-colors duration-300">
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-10 lg:px-16 xl:px-20 relative z-10">
         
         <div className={`text-center mb-16 transition-all duration-700 ${inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
@@ -351,20 +351,20 @@ function ClientReviewsSection() {
           ref={containerRef}
           className="relative w-full max-w-6xl mx-auto overflow-hidden py-4 rounded-3xl"
           style={{
-             maskImage: 'linear-gradient(to right, transparent, black 10%, black 90%, transparent)',
-             WebkitMaskImage: 'linear-gradient(to right, transparent, black 10%, black 90%, transparent)'
+             maskImage: 'linear-gradient(to right, transparent, black 5%, black 95%, transparent)',
+             WebkitMaskImage: 'linear-gradient(to right, transparent, black 5%, black 95%, transparent)'
           }}
         >
           {loading ? (
-             <div className="flex gap-6 animate-pulse w-max">
+             <div className="flex gap-4 sm:gap-6 animate-pulse w-max">
                {[1,2,3].map(i => (
-                 <div key={i} className="bg-white dark:bg-white/5 rounded-2xl w-[320px] md:w-[400px] h-48 shrink-0" />
+                 <div key={i} className="bg-white dark:bg-white/5 rounded-2xl w-[280px] sm:w-[320px] md:w-[400px] h-48 shrink-0" />
                ))}
              </div>
           ) : (
-            <div ref={scrollRef} className="flex gap-6 w-max" style={{ willChange: 'transform' }}>
+            <div ref={scrollRef} className="flex gap-4 sm:gap-6 w-max" style={{ willChange: 'transform' }}>
               {[...reviews, ...reviews].map((review, i) => (
-                <div key={`${review._id}-${i}`} className="bg-white dark:bg-[#0d1120] border border-gray-100 dark:border-white/5 rounded-2xl p-6 lg:p-8 shadow-sm hover:border-orange-500/30 transition-colors duration-300 w-[300px] md:w-[400px] shrink-0 flex flex-col">
+                <div key={`${review._id}-${i}`} className="bg-white dark:bg-[#0d1120] border border-gray-100 dark:border-white/5 rounded-2xl p-5 sm:p-6 lg:p-8 shadow-sm hover:border-orange-500/30 transition-colors duration-300 w-[280px] sm:w-[320px] md:w-[400px] shrink-0 flex flex-col">
                   <div className="flex gap-1 mb-4 text-orange-500">
                      {[...Array(5)].map((_, idx) => (
                        <svg key={idx} className={`w-4 h-4 ${idx < review.rating ? 'text-orange-500 fill-current' : 'text-gray-300 dark:text-gray-700'}`} viewBox="0 0 20 20">
@@ -372,7 +372,7 @@ function ClientReviewsSection() {
                        </svg>
                      ))}
                   </div>
-                  <p className="text-gray-700 dark:text-gray-300 italic mb-6 leading-relaxed relative flex-1">
+                  <p className="text-gray-700 dark:text-gray-300 italic mb-4 sm:mb-6 leading-relaxed relative flex-1 text-sm sm:text-base">
                     <span className="absolute -top-3 -left-2 text-4xl text-gray-200 dark:text-gray-800 opacity-50 select-none">"</span>
                     <span className="relative z-10">{review.comment}</span>
                     <span className="absolute -bottom-4 right-0 text-4xl text-gray-200 dark:text-gray-800 opacity-50 select-none">"</span>
