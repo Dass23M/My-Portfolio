@@ -1,7 +1,8 @@
-﻿'use client';
+'use client';
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import gsap from 'gsap';
 import {
   CodeBracketIcon, CommandLineIcon, CpuChipIcon, CloudIcon,
   DevicePhoneMobileIcon, ArrowRightIcon, CheckIcon, EnvelopeIcon,
@@ -279,6 +280,130 @@ function TechStackSection() {
         </div>
       </section>
     </>
+  );
+}
+
+/* ─────────────────────────────────────────────
+   CLIENT REVIEWS SECTION (GSAP Vertical Scroll)
+───────────────────────────────────────────── */
+function ClientReviewsSection() {
+  const [reviews, setReviews] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const containerRef = useRef(null);
+  const scrollRef = useRef(null);
+  const [sectionRef, inView] = useInView();
+
+  useEffect(() => {
+    const fetchReviews = async () => {
+      try {
+        const base = process.env.NEXT_PUBLIC_API_URL || '';
+        const res = await fetch(`${base}/api/reviews`);
+        if (!res.ok) throw new Error('Failed');
+        const data = await res.json();
+        const items = data.data || [];
+        setReviews(items.filter(r => r.isPublished));
+      } catch {
+        // silent fail
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchReviews();
+  }, []);
+
+  useEffect(() => {
+    if (loading || reviews.length === 0 || !scrollRef.current) return;
+    
+    let ctx = gsap.context(() => {
+      const content = scrollRef.current;
+      gsap.to(content, {
+        xPercent: -50,
+        repeat: -1,
+        duration: reviews.length * 6,
+        ease: "none",
+      });
+      content.addEventListener('mouseenter', () => gsap.getTweensOf(content).forEach(t => t.pause()));
+      content.addEventListener('mouseleave', () => gsap.getTweensOf(content).forEach(t => t.play()));
+    }, containerRef);
+    
+    return () => ctx.revert();
+  }, [loading, reviews]);
+
+  if (!loading && reviews.length === 0) return null;
+
+  return (
+    <section ref={sectionRef} className="py-20 lg:py-32 bg-gray-50 dark:bg-[#080c18] relative overflow-hidden transition-colors duration-300">
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-10 lg:px-16 xl:px-20 relative z-10">
+        
+        <div className={`text-center mb-16 transition-all duration-700 ${inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+          <span className="inline-block text-[11px] font-black font-[family-name:var(--font-mono)] uppercase tracking-[0.25em] text-orange-500 mb-3">
+            Client Feedback
+          </span>
+          <h2 className="font-[family-name:var(--font-display)] text-4xl lg:text-5xl text-gray-900 dark:text-white mb-3" style={{ letterSpacing: '0.02em' }}>
+            WHAT THEY SAY
+          </h2>
+          <p className="text-gray-500 dark:text-gray-400 leading-relaxed max-w-xl mx-auto">
+            Trusted by clients worldwide. Here's what they think about my work.
+          </p>
+        </div>
+
+        <div 
+          ref={containerRef}
+          className="relative w-full max-w-6xl mx-auto overflow-hidden py-4 rounded-3xl"
+          style={{
+             maskImage: 'linear-gradient(to right, transparent, black 10%, black 90%, transparent)',
+             WebkitMaskImage: 'linear-gradient(to right, transparent, black 10%, black 90%, transparent)'
+          }}
+        >
+          {loading ? (
+             <div className="flex gap-6 animate-pulse w-max">
+               {[1,2,3].map(i => (
+                 <div key={i} className="bg-white dark:bg-white/5 rounded-2xl w-[320px] md:w-[400px] h-48 shrink-0" />
+               ))}
+             </div>
+          ) : (
+            <div ref={scrollRef} className="flex gap-6 w-max" style={{ willChange: 'transform' }}>
+              {[...reviews, ...reviews].map((review, i) => (
+                <div key={`${review._id}-${i}`} className="bg-white dark:bg-[#0d1120] border border-gray-100 dark:border-white/5 rounded-2xl p-6 lg:p-8 shadow-sm hover:border-orange-500/30 transition-colors duration-300 w-[300px] md:w-[400px] shrink-0 flex flex-col">
+                  <div className="flex gap-1 mb-4 text-orange-500">
+                     {[...Array(5)].map((_, idx) => (
+                       <svg key={idx} className={`w-4 h-4 ${idx < review.rating ? 'text-orange-500 fill-current' : 'text-gray-300 dark:text-gray-700'}`} viewBox="0 0 20 20">
+                         <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                       </svg>
+                     ))}
+                  </div>
+                  <p className="text-gray-700 dark:text-gray-300 italic mb-6 leading-relaxed relative flex-1">
+                    <span className="absolute -top-3 -left-2 text-4xl text-gray-200 dark:text-gray-800 opacity-50 select-none">"</span>
+                    <span className="relative z-10">{review.comment}</span>
+                    <span className="absolute -bottom-4 right-0 text-4xl text-gray-200 dark:text-gray-800 opacity-50 select-none">"</span>
+                  </p>
+                  <div className="flex items-center gap-4 mt-auto">
+                    <div className="w-12 h-12 rounded-full overflow-hidden bg-orange-100 dark:bg-orange-500/20 flex-shrink-0 relative">
+                       {review.image && !review.image.includes('placeholder') ? (
+                         <Image src={review.image} alt={review.name} fill sizes="48px" className="object-cover" />
+                       ) : (
+                         <div className="w-full h-full flex items-center justify-center font-bold text-orange-600 dark:text-orange-400">
+                           {review.name.charAt(0)}
+                         </div>
+                       )}
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-gray-900 dark:text-white text-sm">{review.name}</h4>
+                      <p className="text-xs text-gray-500 dark:text-gray-400 line-clamp-1">{review.role} {review.company ? `at ${review.company}` : ''}</p>
+                    </div>
+                    <div className="ml-auto">
+                      <span className="text-[10px] font-bold px-2 py-1 rounded bg-gray-100 dark:bg-white/5 text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-white/10 hidden sm:inline-block whitespace-nowrap">
+                        {review.reviewType}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    </section>
   );
 }
 
@@ -718,6 +843,11 @@ export default function Home() {
             </div>
           </div>
         </section>
+
+        {/* ══════════════════════════════════════════
+              CLIENT REVIEWS
+        ══════════════════════════════════════════ */}
+        <ClientReviewsSection />
 
         {/* ══════════════════════════════════════════
               CTA BANNER
