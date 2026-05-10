@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAdminAuth } from '@/context/AdminAuthContext';
@@ -11,6 +11,7 @@ export default function AdminLoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+  const [validationErrors, setValidationErrors] = useState({});
 
   // Already logged in â†’ redirect to dashboard
   useEffect(() => {
@@ -19,9 +20,35 @@ export default function AdminLoginPage() {
     }
   }, [admin, loading, router]);
 
+  const validateForm = () => {
+    const errors = {};
+    if (!form.username.trim()) {
+      errors.username = 'Username or Email is required.';
+    } else if (form.username.includes('@')) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(form.username)) {
+        errors.username = 'Please enter a valid email address.';
+      }
+    }
+
+    if (!form.password) {
+      errors.password = 'Password is required.';
+    } else if (form.password.length < 6) {
+      errors.password = 'Password must be at least 6 characters.';
+    }
+
+    setValidationErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    
+    if (!validateForm()) {
+      return;
+    }
+
     setIsLoading(true);
     try {
       await login(form.username, form.password);
@@ -76,6 +103,9 @@ export default function AdminLoginPage() {
                 placeholder="admin"
                 autoComplete="username"
               />
+              {validationErrors.username && (
+                <p className="text-red-400 text-xs mt-1">{validationErrors.username}</p>
+              )}
             </div>
 
             {/* Password */}
@@ -101,6 +131,9 @@ export default function AdminLoginPage() {
                   {showPassword ? <EyeSlashIcon className="w-5 h-5" /> : <EyeIcon className="w-5 h-5" />}
                 </button>
               </div>
+              {validationErrors.password && (
+                <p className="text-red-400 text-xs mt-1">{validationErrors.password}</p>
+              )}
             </div>
 
             {/* Submit Button */}
