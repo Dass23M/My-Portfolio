@@ -7,8 +7,8 @@ import { useTheme } from '@/context/ThemeContext';
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [scrolled, setScrolled]             = useState(false);
-  const { theme, toggleTheme }              = useTheme();
+  const [scrolled, setScrolled] = useState(false);
+  const { theme, toggleTheme } = useTheme();
 
   /* lock body scroll when mobile menu open */
   useEffect(() => {
@@ -52,8 +52,8 @@ export default function Header() {
 
             {/* ── LOGO ── */}
             <Link href="/" className="group flex items-center gap-3 shrink-0">
-              {/* icon block */}
-              <div className="relative w-9 h-9 lg:w-10 lg:h-10 rounded-xl overflow-hidden shrink-0">
+              {/* icon block - hidden on mobile */}
+              <div className="hidden sm:block relative w-9 h-9 lg:w-10 lg:h-10 rounded-xl overflow-hidden shrink-0">
                 <div className="absolute inset-0 bg-gradient-to-br from-orange-400 to-orange-600" />
                 <div className="absolute inset-0 flex items-center justify-center">
                   <span className="font-[family-name:var(--font-display)] text-white text-xl lg:text-2xl leading-none tracking-wider">
@@ -64,8 +64,8 @@ export default function Header() {
                 <div className="absolute inset-0 bg-white/0 group-hover:bg-white/15 transition-all duration-300" />
               </div>
 
-              {/* wordmark */}
-              <div className="hidden sm:flex flex-col leading-none">
+              {/* wordmark - visible on all screens */}
+              <div className="flex flex-col leading-none">
                 <span className="font-[family-name:var(--font-display)] text-2xl lg:text-3xl tracking-[0.08em] text-gray-900 dark:text-white group-hover:text-orange-500 transition-colors duration-300">
                   METHMAL
                 </span>
@@ -90,7 +90,7 @@ export default function Header() {
               >
                 {theme === 'light'
                   ? <MoonIcon className="w-[18px] h-[18px] text-gray-600" />
-                  : <SunIcon  className="w-[18px] h-[18px] text-orange-400" />}
+                  : <SunIcon className="w-[18px] h-[18px] text-orange-400" />}
               </button>
 
               {/* CTA */}
@@ -114,7 +114,7 @@ export default function Header() {
               >
                 {theme === 'light'
                   ? <MoonIcon className="w-4 h-4 text-gray-600" />
-                  : <SunIcon  className="w-4 h-4 text-orange-400" />}
+                  : <SunIcon className="w-4 h-4 text-orange-400" />}
               </button>
 
               {/* hamburger button */}

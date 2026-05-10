@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 import { useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
@@ -10,6 +10,7 @@ import {
   ArrowLeftOnRectangleIcon,
   UserCircleIcon,
   ChartBarIcon,
+  StarIcon,
 } from '@heroicons/react/24/outline';
 
 function AdminLayoutInner({ children }) {
@@ -51,6 +52,7 @@ function AdminLayoutInner({ children }) {
     { href: '/admin/projects', label: 'Projects', icon: FolderIcon },
     { href: '/admin/blog', label: 'Blog Posts', icon: DocumentTextIcon },
     { href: '/admin/contacts', label: 'Messages', icon: EnvelopeIcon },
+    { href: '/admin/reviews', label: 'Reviews', icon: StarIcon },
   ];
 
   return (
