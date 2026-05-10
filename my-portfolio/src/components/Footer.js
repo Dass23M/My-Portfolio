@@ -191,7 +191,7 @@ export default function Footer() {
               <div className="space-y-3">
                 {[
                   { Icon: EnvelopeIcon, text: 'dasunmethmal23@gmail.com', href: 'mailto:dasunmethmal23@gmail.com' },
-                  { Icon: PhoneIcon,    text: '+94 703 056 192',          href: 'tel:+94703056192' },
+                  { Icon: PhoneIcon,    text: '+94 72 155 1878',          href: 'tel:+94721551878' },
                   { Icon: MapPinIcon,   text: 'Colombo, Sri Lanka 🇱🇰',   href: null },
                 ].map(({ Icon, text, href }) => {
                   const inner = (

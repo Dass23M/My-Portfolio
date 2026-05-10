@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 import { useState, useEffect } from 'react';
 import { 
   ChatBubbleOvalLeftEllipsisIcon,
@@ -14,7 +14,7 @@ export default function WhatsAppFloat() {
   const [lastScrollY, setLastScrollY] = useState(0);
   const [showPulse, setShowPulse] = useState(true);
   
-  const phoneNumber = "94703056192"; // Your Sri Lankan number with country code
+  const phoneNumber = "94721551878"; // Your Sri Lankan number with country code
   const defaultMessage = "Hi Methmal! I saw your portfolio and would like to discuss a project.";
 
   const quickMessages = [
