@@ -5,6 +5,8 @@ import Footer from '../components/Footer';
 import WhatsAppFloat from '../components/WhatsAppFloat';
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { ThemeProvider } from '../context/ThemeContext';
+import SmoothScroll from '../components/SmoothScroll';
+import GrainOverlay from '../components/GrainOverlay';
 
 const outfit = Outfit({
   subsets: ['latin'],
@@ -27,43 +29,35 @@ const bebasNeue = Bebas_Neue({
 });
 
 export const metadata = {
-  title: 'Methmal | Full-Stack Developer',
-  description: 'Portfolio of Dasun Methmal – Full-Stack Developer',
+  title: 'Dasun Methmal | Full-Stack Developer & Designer',
+  description: 'Portfolio of Dasun Methmal – Full-Stack Developer & UI/UX Designer based in Sri Lanka. Building sleek digital products.',
 };
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className="scroll-smooth">
+    <html lang="en">
+      {/* No "scroll-smooth" class here on purpose — Lenis now owns smooth
+          scrolling, and native CSS scroll-behavior fights Lenis/ScrollTrigger
+          the same way your globals.css comment already flags for the old setup. */}
       <head>
         <link rel="icon" href="/favicon.ico" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        {/* Prevent flash of wrong theme */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              (function() {
-                try {
-                  var saved = localStorage.getItem('theme');
-                  var system = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-                  var theme = saved || system;
-                  if (theme === 'dark') document.documentElement.classList.add('dark');
-                } catch(e) {}
-              })();
-            `,
-          }}
-        />
       </head>
-      <body className={`${outfit.variable} ${spaceMono.variable} ${bebasNeue.variable} font-[family-name:var(--font-outfit)] antialiased bg-white dark:bg-[#080c18] text-gray-900 dark:text-white transition-colors duration-300`}>
+      <body className={`${outfit.variable} ${spaceMono.variable} ${bebasNeue.variable} font-[family-name:var(--font-outfit)] antialiased`}
+        style={{ background: '#F5F0E8', color: '#1a1a1a' }}>
         <ThemeProvider>
-          <div className="min-h-screen flex flex-col bg-white dark:bg-[#080c18] transition-colors duration-300">
-            <Header />
-            <main className="flex-grow">
-              {children}
-            </main>
-            <Footer />
-            <WhatsAppFloat />
-            <SpeedInsights />
-          </div>
+          <SmoothScroll>
+            <div className="min-h-screen flex flex-col">
+              <Header />
+              <main className="flex-grow">
+                {children}
+              </main>
+              <Footer />
+              <WhatsAppFloat />
+              <SpeedInsights />
+            </div>
+            <GrainOverlay />
+          </SmoothScroll>
         </ThemeProvider>
       </body>
     </html>

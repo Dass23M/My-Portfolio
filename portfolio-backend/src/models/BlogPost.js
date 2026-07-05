@@ -71,7 +71,6 @@ const blogPostSchema = new mongoose.Schema(
 );
 
 // Index for slug lookups and category filtering
-blogPostSchema.index({ slug: 1 });
 blogPostSchema.index({ category: 1 });
 blogPostSchema.index({ featured: 1 });
 

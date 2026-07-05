@@ -3,853 +3,841 @@ import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import gsap from 'gsap';
-import {
-  CodeBracketIcon, CommandLineIcon, CpuChipIcon, CloudIcon,
-  DevicePhoneMobileIcon, ArrowRightIcon, CheckIcon, EnvelopeIcon,
-  SparklesIcon,
-} from '@heroicons/react/24/outline';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { ArrowRightIcon, EnvelopeIcon } from '@heroicons/react/24/outline';
+import { CarvedDefs, CarvedSpiral, CarvedDivider } from '../components/CarvedMotifs';
+import Magnetic from '../components/Magnetic';
 
-/* ── in-view observer ── */
-function useInView(threshold = 0.15) {
+/* ─────────────────────────────────────────
+   GSAP registration (client-side only)
+───────────────────────────────────────── */
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger);
+}
+
+const prefersReducedMotion = () =>
+  typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ─────────────────────────────────────────
+   ANIMATED COUNTER
+───────────────────────────────────────── */
+function Counter({ target, suffix = '' }) {
+  const [count, setCount] = useState(0);
   const ref = useRef(null);
-  const [inView, setInView] = useState(false);
+  const done = useRef(false);
+
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) setInView(true); }, { threshold });
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, [threshold]);
-  return [ref, inView];
-}
+    const io = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting && !done.current) {
+        done.current = true;
+        const n = parseInt(target, 10);
+        if (prefersReducedMotion()) { setCount(n); return; }
+        const step = Math.max(1, Math.ceil(n / 60));
+        let cur = 0;
+        const t = setInterval(() => {
+          cur = Math.min(cur + step, n);
+          setCount(cur);
+          if (cur >= n) clearInterval(t);
+        }, 25);
+      }
+    }, { threshold: 0.6 });
+    io.observe(el);
+    return () => io.disconnect();
+  }, [target]);
 
-/* ── animated number counter ── */
-function Counter({ target, suffix = '' }) {
-  const [count, setCount] = useState(0);
-  const [ref, inView] = useInView(0.5);
-  useEffect(() => {
-    if (!inView) return;
-    const num = parseInt(target);
-    let start = 0;
-    const step = Math.ceil(num / 55);
-    const id = setInterval(() => {
-      start = Math.min(start + step, num);
-      setCount(start);
-      if (start >= num) clearInterval(id);
-    }, 28);
-    return () => clearInterval(id);
-  }, [inView, target]);
   return <span ref={ref}>{count}{suffix}</span>;
 }
 
-/* ─────────────────────────────────────────────
-   3D TILT CARD HOOK
-───────────────────────────────────────────── */
-function useTilt() {
-  const ref = useRef(null);
-  const handleMove = (e) => {
-    const el = ref.current;
-    if (!el) return;
-    const rect = el.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    const cx = rect.width / 2;
-    const cy = rect.height / 2;
-    const rotateX = ((y - cy) / cy) * -2;
-    const rotateY = ((x - cx) / cx) * 2;
-    el.style.transform = `perspective(1200px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.01,1.01,1.01)`;
+/* ─────────────────────────────────────────
+   GOLD 3-D SHAPE
+───────────────────────────────────────── */
+function GShape({ type = 'sphere', size = 100, style = {}, className = '' }) {
+  const base = {
+    position: 'absolute',
+    width: size,
+    height: type === 'capsule' ? size * 2.8 : size,
+    willChange: 'transform',
+    ...style,
   };
-  const handleLeave = () => {
-    if (ref.current)
-      ref.current.style.transform = 'perspective(1200px) rotateX(0deg) rotateY(0deg) scale3d(1,1,1)';
-  };
-  return { ref, handleMove, handleLeave };
-}
-
-/* ─────────────────────────────────────────────
-   TECH STACK SECTION  (3D redesign)
-───────────────────────────────────────────── */
-const techCategories = [
-  {
-    name: 'Frontend',
-    icon: DevicePhoneMobileIcon,
-    color: '#f97316',
-    glow: 'rgba(249,115,22,0.35)',
-    gradient: 'from-orange-500/20 to-amber-500/10',
-    border: 'border-orange-500/30',
-    items: [
-      { name: 'React', level: 95 },
-      { name: 'Next.js', level: 92 },
-      { name: 'TypeScript', level: 88 },
-      { name: 'Tailwind CSS', level: 96 },
-    ],
-  },
-  {
-    name: 'Backend',
-    icon: CommandLineIcon,
-    color: '#3b82f6',
-    glow: 'rgba(59,130,246,0.35)',
-    gradient: 'from-blue-500/20 to-indigo-500/10',
-    border: 'border-blue-500/30',
-    items: [
-      { name: 'Node.js', level: 90 },
-      { name: 'Python', level: 85 },
-      { name: 'Express', level: 88 },
-      { name: 'FastAPI', level: 80 },
-    ],
-  },
-  {
-    name: 'Database',
-    icon: CpuChipIcon,
-    color: '#10b981',
-    glow: 'rgba(16,185,129,0.35)',
-    gradient: 'from-emerald-500/20 to-teal-500/10',
-    border: 'border-emerald-500/30',
-    items: [
-      { name: 'MongoDB', level: 92 },
-      { name: 'PostgreSQL', level: 87 },
-      { name: 'Redis', level: 78 },
-      { name: 'Prisma', level: 84 },
-    ],
-  },
-  {
-    name: 'Cloud & DevOps',
-    icon: CloudIcon,
-    color: '#8b5cf6',
-    glow: 'rgba(139,92,246,0.35)',
-    gradient: 'from-violet-500/20 to-purple-500/10',
-    border: 'border-violet-500/30',
-    items: [
-      { name: 'AWS', level: 82 },
-      { name: 'Vercel', level: 94 },
-      { name: 'Docker', level: 80 },
-      { name: 'CI/CD', level: 78 },
-    ],
-  },
-];
-
-function TechCard({ tech, index, inView }) {
-  const { ref, handleMove, handleLeave } = useTilt();
-  const [hovered, setHovered] = useState(false);
-  const Icon = tech.icon;
-
-  return (
-    <div
-      className={`transition-all duration-1000 ${inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}
-      style={{ transitionDelay: `${index * 100}ms` }}
-    >
-      <div
-        ref={ref}
-        onMouseMove={handleMove}
-        onMouseLeave={() => { handleLeave(); setHovered(false); }}
-        onMouseEnter={() => setHovered(true)}
-        style={{ transition: 'transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1)', willChange: 'transform' }}
-        className="relative rounded-2xl overflow-hidden cursor-default h-full"
-      >
-        {/* glass card bg */}
-        <div className="relative glass-panel rounded-2xl p-7 h-full group transition-all duration-500 hover:bg-white/80 dark:hover:bg-[#0d1326]/80">
-          
-          {/* subtle gradient glow behind icon */}
-          <div className="absolute -top-10 -right-10 w-32 h-32 rounded-full blur-3xl opacity-0 group-hover:opacity-20 transition-opacity duration-500"
-               style={{ background: tech.color }} />
-
-          {/* icon */}
-          <div className="relative z-10 mb-6 flex items-center justify-between">
-            <div className="w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-500 bg-white dark:bg-white/5 border border-gray-100 dark:border-white/10 group-hover:scale-110 shadow-sm"
-              style={{
-                boxShadow: hovered ? `0 8px 20px -4px ${tech.glow}` : 'none',
-              }}>
-              <Icon className="w-6 h-6 transition-colors duration-300"
-                style={{ color: tech.color }} />
-            </div>
-            <span className="text-sm font-bold opacity-30 group-hover:opacity-100 transition-opacity duration-300" style={{ color: tech.color }}>0{index + 1}</span>
-          </div>
-
-          {/* title */}
-          <h3 className="relative z-10 font-[family-name:var(--font-display)] text-xl tracking-wide text-gray-900 dark:text-gray-100 mb-6">
-            {tech.name}
-          </h3>
-
-          {/* skill bars */}
-          <ul className="relative z-10 space-y-4">
-            {tech.items.map((item, j) => (
-              <li key={item.name}>
-                <div className="flex justify-between items-center mb-2">
-                  <span className="text-xs font-semibold text-gray-500 dark:text-gray-400 group-hover:text-gray-700 dark:group-hover:text-gray-300 transition-colors duration-300">{item.name}</span>
-                  <span className={`text-[11px] font-bold tabular-nums transition-colors duration-300 ${hovered ? '' : 'text-gray-400 dark:text-gray-500'}`} style={{ color: hovered ? tech.color : undefined }}>{item.level}%</span>
-                </div>
-                <div className="h-1 rounded-full bg-gray-100 dark:bg-white/5 overflow-hidden">
-                  <div
-                    className="h-full rounded-full transition-all duration-1000 ease-out"
-                    style={{
-                      width: inView ? `${item.level}%` : '0%',
-                      background: tech.color,
-                      opacity: hovered ? 1 : 0.6,
-                      transitionDelay: `${index * 100 + j * 50 + 200}ms`,
-                    }}
-                  />
-                </div>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
-    </div>
+  if (type === 'sphere') return (
+    <div className={className} style={{
+      ...base, borderRadius: '50%',
+      background: 'radial-gradient(circle at 33% 33%, #f5c842, #c8a135 55%, #7a5c10)',
+      boxShadow: '0 20px 60px rgba(200,161,53,.4), inset 0 -10px 25px rgba(0,0,0,.25)'
+    }} />
   );
-}
-
-function TechStackSection() {
-  const [sectionRef, inView] = useInView(0.1);
-
-  return (
-    <>
-      <style>{`
-        @keyframes floatIcon { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-6px)} }
-        .float-icon { animation: floatIcon 3s ease-in-out infinite; }
-        @keyframes scanLine {
-          0%   { transform: translateY(-100%); opacity: 0; }
-          10%  { opacity: 1; }
-          90%  { opacity: 1; }
-          100% { transform: translateY(400%); opacity: 0; }
-        }
-        .scan-line { animation: scanLine 3s ease-in-out infinite; }
-      `}</style>
-
-      <section ref={sectionRef} className="py-20 lg:py-32 bg-white dark:bg-[#080c18] relative overflow-hidden transition-colors duration-300">
-
-        {/* background grid */}
-        <div className="pointer-events-none absolute inset-0 opacity-30 dark:opacity-100"
-          style={{ backgroundImage: 'radial-gradient(circle at 20% 50%, rgba(249,115,22,0.06) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(139,92,246,0.06) 0%, transparent 50%), radial-gradient(circle at 60% 80%, rgba(16,185,129,0.06) 0%, transparent 50%)' }} />
-
-        <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-10 lg:px-16 xl:px-20">
-
-          {/* ── heading ── */}
-          <div className={`text-center mb-16 transition-all duration-700 ${inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-orange-50 dark:bg-orange-500/10 border border-orange-200 dark:border-orange-500/20 mb-5">
-              <span className="w-1.5 h-1.5 rounded-full bg-orange-500 animate-pulse" />
-              <span className="text-[11px] font-black font-[family-name:var(--font-mono)] uppercase tracking-[0.25em] text-orange-500">
-                Tech Stack
-              </span>
-            </div>
-            <h2 className="font-[family-name:var(--font-display)] text-4xl lg:text-6xl text-gray-900 dark:text-white mb-4" style={{ letterSpacing: '0.02em' }}>
-              TECHNOLOGIES<br />
-              <span className="text-transparent bg-clip-text" style={{ backgroundImage: 'linear-gradient(90deg,#f97316,#fb923c,#fde68a,#fb923c,#f97316)', backgroundSize: '200% auto', animation: 'shimmer 3.5s linear infinite' }}>
-                I MASTER
-              </span>
-            </h2>
-            <p className="text-gray-500 dark:text-gray-400 leading-relaxed max-w-lg mx-auto text-base lg:text-lg">
-              Hover each card to see depth — every skill level is real.
-            </p>
-          </div>
-
-          {/* ── 4 cards ── */}
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-7">
-            {techCategories.map((tech, i) => (
-              <TechCard key={tech.name} tech={tech} index={i} inView={inView} />
-            ))}
-          </div>
-
-          {/* ── bottom summary strip ── */}
-          <div className={`mt-14 transition-all duration-700 delay-500 ${inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-            <div className="rounded-2xl border border-gray-100 dark:border-white/5 bg-gray-50 dark:bg-[#0d1120] px-6 py-5 flex flex-wrap items-center justify-between gap-4">
-              <div className="flex items-center gap-3">
-                <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                <span className="text-sm font-semibold text-gray-600 dark:text-gray-300">
-                  <span className="text-gray-900 dark:text-white font-black">16+</span> technologies in active use
-                </span>
-              </div>
-              <div className="flex flex-wrap gap-2">
-                {['React', 'Next.js', 'Node.js', 'Python', 'TypeScript', 'MongoDB', 'PostgreSQL', 'AWS', 'Docker', 'Redis'].map(tag => (
-                  <span key={tag} className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-white dark:bg-white/5 border border-gray-200 dark:border-white/8 text-gray-500 dark:text-gray-400 hover:border-orange-500/40 hover:text-orange-500 transition-all duration-200 cursor-default">
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </section>
-    </>
+  if (type === 'hex') return (
+    <div className={className} style={{
+      ...base, height: size,
+      background: 'linear-gradient(135deg,#f5c842,#c8a135 50%,#8a6b0c)',
+      clipPath: 'polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%)'
+    }} />
   );
+  if (type === 'capsule') return (
+    <div className={className} style={{
+      ...base, borderRadius: 9999,
+      background: 'linear-gradient(135deg,#f5c842,#c8a135 60%,#7a5c10)',
+      boxShadow: '0 10px 40px rgba(200,161,53,.3)'
+    }} />
+  );
+  if (type === 'ring') return (
+    <div className={className} style={{
+      ...base, height: size, borderRadius: '50%',
+      border: `${Math.max(8, size * 0.14)}px solid #c8a135`,
+      boxShadow: '0 10px 35px rgba(200,161,53,.35)'
+    }} />
+  );
+  if (type === 'dot') return (
+    <div className={className} style={{ ...base, height: size, borderRadius: '50%', background: '#f5c842' }} />
+  );
+  return null;
 }
 
-/* ─────────────────────────────────────────────
-   CLIENT REVIEWS SECTION (GSAP Vertical Scroll)
-───────────────────────────────────────────── */
-function ClientReviewsSection() {
+/* ─────────────────────────────────────────
+   REVIEWS  (infinite GSAP marquee)
+───────────────────────────────────────── */
+function ReviewsSection() {
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
-  const containerRef = useRef(null);
-  const scrollRef = useRef(null);
-  const [sectionRef, inView] = useInView();
+  const sectionEl = useRef(null);
+  const trackEl = useRef(null);
+  const wrapEl = useRef(null);
 
   useEffect(() => {
-    const fetchReviews = async () => {
+    (async () => {
       try {
-        const base = process.env.NEXT_PUBLIC_API_URL || '';
-        const res = await fetch(`${base}/api/reviews`);
-        if (!res.ok) throw new Error('Failed');
-        const data = await res.json();
-        const items = data.data || [];
-        setReviews(items.filter(r => r.isPublished));
-      } catch {
-        // silent fail
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchReviews();
+        const r = await fetch(`${process.env.NEXT_PUBLIC_API_URL || ''}/api/reviews`);
+        const d = await r.json();
+        setReviews((d.data || []).filter(x => x.isPublished));
+      } catch { }
+      setLoading(false);
+    })();
   }, []);
 
+  /* infinite marquee */
   useEffect(() => {
-    if (loading || reviews.length === 0 || !scrollRef.current) return;
-    
-    let ctx = gsap.context(() => {
-      const content = scrollRef.current;
-      gsap.to(content, {
-        xPercent: -50,
-        repeat: -1,
-        duration: reviews.length * 6,
-        ease: "none",
-      });
-      content.addEventListener('mouseenter', () => gsap.getTweensOf(content).forEach(t => t.pause()));
-      content.addEventListener('mouseleave', () => gsap.getTweensOf(content).forEach(t => t.play()));
-    }, containerRef);
-    
+    if (loading || !reviews.length || !trackEl.current) return;
+    if (prefersReducedMotion()) return;
+    const ctx = gsap.context(() => {
+      const el = trackEl.current;
+      const tween = gsap.to(el, { xPercent: -50, duration: reviews.length * 7, ease: 'none', repeat: -1 });
+      el.addEventListener('mouseenter', () => tween.pause());
+      el.addEventListener('mouseleave', () => tween.play());
+    }, wrapEl);
     return () => ctx.revert();
   }, [loading, reviews]);
 
-  if (!loading && reviews.length === 0) return null;
+  /* scroll reveal */
+  useEffect(() => {
+    if (!sectionEl.current || prefersReducedMotion()) return;
+    const ctx = gsap.context(() => {
+      gsap.from('[data-rev="reviews"]', {
+        y: 60, opacity: 0, duration: 1, ease: 'power3.out',
+        scrollTrigger: { trigger: sectionEl.current, start: 'top 82%' },
+      });
+    }, sectionEl);
+    return () => ctx.revert();
+  }, []);
+
+  if (!loading && !reviews.length) return null;
 
   return (
-    <section ref={sectionRef} className="py-16 lg:py-32 bg-gray-50 dark:bg-[#080c18] relative overflow-hidden transition-colors duration-300">
-      <div className="w-full max-w-7xl mx-auto px-4 sm:px-10 lg:px-16 xl:px-20 relative z-10">
-        
-        <div className={`text-center mb-16 transition-all duration-700 ${inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-          <span className="inline-block text-[11px] font-black font-[family-name:var(--font-mono)] uppercase tracking-[0.25em] text-orange-500 mb-3">
-            Client Feedback
-          </span>
-          <h2 className="font-[family-name:var(--font-display)] text-4xl lg:text-5xl text-gray-900 dark:text-white mb-3" style={{ letterSpacing: '0.02em' }}>
-            WHAT THEY SAY
-          </h2>
-          <p className="text-gray-500 dark:text-gray-400 leading-relaxed max-w-xl mx-auto">
-            Trusted by clients worldwide. Here's what they think about my work.
-          </p>
+    <section ref={sectionEl} style={{ background: '#F5F0E8', padding: 'clamp(80px,10vw,140px) 0', overflow: 'hidden' }}>
+      <div style={{ padding: '0 clamp(24px,5vw,80px)' }}>
+        <div data-rev="reviews" style={{ textAlign: 'center', marginBottom: 56 }}>
+          <span className="s-label">Client Feedback</span>
+          <h2 className="s-display" style={{ color: '#2c2c2c', fontSize: 'clamp(2.8rem,6vw,7rem)' }}>WHAT THEY SAY</h2>
         </div>
+      </div>
 
-        <div 
-          ref={containerRef}
-          className="relative w-full max-w-6xl mx-auto overflow-hidden py-4 rounded-3xl"
-          style={{
-             maskImage: 'linear-gradient(to right, transparent, black 5%, black 95%, transparent)',
-             WebkitMaskImage: 'linear-gradient(to right, transparent, black 5%, black 95%, transparent)'
-          }}
-        >
-          {loading ? (
-             <div className="flex gap-4 sm:gap-6 animate-pulse w-max">
-               {[1,2,3].map(i => (
-                 <div key={i} className="bg-white dark:bg-white/5 rounded-2xl w-[280px] sm:w-[320px] md:w-[400px] h-48 shrink-0" />
-               ))}
-             </div>
-          ) : (
-            <div ref={scrollRef} className="flex gap-4 sm:gap-6 w-max" style={{ willChange: 'transform' }}>
-              {[...reviews, ...reviews].map((review, i) => (
-                <div key={`${review._id}-${i}`} className="bg-white dark:bg-[#0d1120] border border-gray-100 dark:border-white/5 rounded-2xl p-5 sm:p-6 lg:p-8 shadow-sm hover:border-orange-500/30 transition-colors duration-300 w-[280px] sm:w-[320px] md:w-[400px] shrink-0 flex flex-col">
-                  <div className="flex gap-1 mb-4 text-orange-500">
-                     {[...Array(5)].map((_, idx) => (
-                       <svg key={idx} className={`w-4 h-4 ${idx < review.rating ? 'text-orange-500 fill-current' : 'text-gray-300 dark:text-gray-700'}`} viewBox="0 0 20 20">
-                         <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                       </svg>
-                     ))}
+      <div ref={wrapEl} style={{
+        overflow: 'hidden',
+        maskImage: 'linear-gradient(to right, transparent, black 6%, black 94%, transparent)',
+        WebkitMaskImage: 'linear-gradient(to right, transparent, black 6%, black 94%, transparent)'
+      }}>
+        {loading ? (
+          <div style={{ display: 'flex', gap: 24, padding: '0 40px' }}>
+            {[0, 1, 2].map(i => <div key={i} style={{ width: 340, height: 180, borderRadius: 16, background: 'rgba(0,0,0,.06)', flexShrink: 0 }} />)}
+          </div>
+        ) : (
+          <div ref={trackEl} style={{ display: 'inline-flex', gap: 24, willChange: 'transform' }}>
+            {[...reviews, ...reviews].map((r, i) => (
+              <div key={`${r._id}-${i}`} style={{
+                width: 360, flexShrink: 0, borderRadius: 20, padding: '28px 28px 24px',
+                background: 'white', border: '1px solid rgba(200,161,53,.12)',
+                boxShadow: '0 4px 24px rgba(0,0,0,.05)',
+                transition: 'transform .3s', cursor: 'default',
+              }}
+                onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-4px)'; }}
+                onMouseLeave={e => { e.currentTarget.style.transform = ''; }}>
+                <div style={{ display: 'flex', gap: 3, marginBottom: 12 }}>
+                  {[...Array(5)].map((_, k) => (
+                    <svg key={k} width={16} height={16} viewBox="0 0 20 20" fill={k < r.rating ? '#c8a135' : '#e5e7eb'}>
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                    </svg>
+                  ))}
+                </div>
+                <p style={{ color: '#555', fontSize: 14, lineHeight: 1.7, fontStyle: 'italic', marginBottom: 20 }}>&ldquo;{r.comment}&rdquo;</p>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                  <div style={{
+                    width: 40, height: 40, borderRadius: '50%', flexShrink: 0, overflow: 'hidden', position: 'relative',
+                    background: 'rgba(200,161,53,.12)', color: '#c8a135', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700
+                  }}>
+                    {r.image && !r.image.includes('placeholder') ? <Image src={r.image} alt={r.name} fill sizes="40px" style={{ objectFit: 'cover' }} /> : r.name.charAt(0)}
                   </div>
-                  <p className="text-gray-700 dark:text-gray-300 italic mb-4 sm:mb-6 leading-relaxed relative flex-1 text-sm sm:text-base">
-                    <span className="absolute -top-3 -left-2 text-4xl text-gray-200 dark:text-gray-800 opacity-50 select-none">"</span>
-                    <span className="relative z-10">{review.comment}</span>
-                    <span className="absolute -bottom-4 right-0 text-4xl text-gray-200 dark:text-gray-800 opacity-50 select-none">"</span>
-                  </p>
-                  <div className="flex items-center gap-4 mt-auto">
-                    <div className="w-12 h-12 rounded-full overflow-hidden bg-orange-100 dark:bg-orange-500/20 flex-shrink-0 relative">
-                       {review.image && !review.image.includes('placeholder') ? (
-                         <Image src={review.image} alt={review.name} fill sizes="48px" className="object-cover" />
-                       ) : (
-                         <div className="w-full h-full flex items-center justify-center font-bold text-orange-600 dark:text-orange-400">
-                           {review.name.charAt(0)}
-                         </div>
-                       )}
-                    </div>
-                    <div>
-                      <h4 className="font-bold text-gray-900 dark:text-white text-sm">{review.name}</h4>
-                      <p className="text-xs text-gray-500 dark:text-gray-400 line-clamp-1">{review.role} {review.company ? `at ${review.company}` : ''}</p>
-                    </div>
-                    <div className="ml-auto">
-                      <span className="text-[10px] font-bold px-2 py-1 rounded bg-gray-100 dark:bg-white/5 text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-white/10 hidden sm:inline-block whitespace-nowrap">
-                        {review.reviewType}
-                      </span>
-                    </div>
+                  <div>
+                    <p style={{ fontWeight: 700, fontSize: 14, color: '#1a1a1a' }}>{r.name}</p>
+                    <p style={{ fontSize: 12, color: '#999' }}>{r.role}{r.company ? ` · ${r.company}` : ''}</p>
                   </div>
                 </div>
-              ))}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </section>
+  );
+}
+
+/* ─────────────────────────────────────────
+   FEATURED PROJECTS
+───────────────────────────────────────── */
+function ProjectsSection() {
+  const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const sectionEl = useRef(null);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const base = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+        const r = await fetch(`${base}/api/projects?featured=true`);
+        const d = await r.json();
+        let list = d.data || [];
+        if (list.length < 3) {
+          const r2 = await fetch(`${base}/api/projects`);
+          const d2 = await r2.json();
+          const ids = new Set(list.map(p => p._id));
+          list = [...list, ...(d2.data || []).filter(p => !ids.has(p._id))].slice(0, 3);
+        } else { list = list.slice(0, 3); }
+        setProjects(list);
+      } catch { }
+      setLoading(false);
+    })();
+  }, []);
+
+  /* scroll reveals */
+  useEffect(() => {
+    if (loading || !sectionEl.current || prefersReducedMotion()) return;
+    const ctx = gsap.context(() => {
+      gsap.from('[data-rev="proj-head"]', {
+        y: 50, opacity: 0, duration: 0.9, ease: 'power3.out',
+        scrollTrigger: { trigger: '[data-rev="proj-head"]', start: 'top 86%' },
+      });
+      gsap.utils.toArray('[data-rev="proj-card"]').forEach((el, i) => {
+        gsap.from(el, {
+          y: 80, opacity: 0, duration: 0.85, delay: i * 0.13, ease: 'power3.out',
+          scrollTrigger: { trigger: el, start: 'top 90%' },
+        });
+      });
+    }, sectionEl);
+    return () => ctx.revert();
+  }, [loading]);
+
+  return (
+    <section ref={sectionEl} style={{ background: 'white', padding: 'clamp(80px,10vw,140px) 0', overflow: 'hidden' }}>
+      <div style={{ padding: '0 clamp(24px,5vw,80px)' }}>
+        <div data-rev="proj-head" style={{ marginBottom: 56 }}>
+          <span className="s-label">Portfolio</span>
+          <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'flex-end', justifyContent: 'space-between', gap: 20 }}>
+            <h2 className="s-display" style={{ fontSize: 'clamp(2.8rem,6vw,7rem)', lineHeight: 1 }}>
+              SELECTED<br /><span style={{ color: '#c8a135' }}>WORKS</span>
+            </h2>
+            <p style={{ maxWidth: 280, fontSize: 15, lineHeight: 1.7, color: '#777' }}>A curated selection of my recent full-stack development work.</p>
+          </div>
+        </div>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+          {loading ? [...Array(3)].map((_, i) => (
+            <div key={i} style={{ height: 160, borderRadius: 20, background: '#F5F0E8', animation: 'pulse 1.5s ease infinite' }} />
+          )) : projects.length === 0 ? (
+            <div style={{ textAlign: 'center', padding: '80px 0', color: '#aaa' }}>
+              <div style={{ fontSize: 56, marginBottom: 16 }}>🚀</div>
+              <p style={{ fontSize: 18, fontWeight: 600 }}>Projects coming soon!</p>
             </div>
-          )}
+          ) : projects.map((p, i) => (
+            <div key={p._id} data-rev="proj-card"
+              style={{
+                display: 'flex', flexDirection: 'row', flexWrap: 'wrap', gap: '24px 40px', alignItems: 'center',
+                background: i % 2 === 0 ? '#F5F0E8' : 'white', border: '1px solid rgba(200,161,53,.1)',
+                borderRadius: 20, padding: '28px 32px', cursor: 'pointer',
+                transition: 'transform .4s cubic-bezier(.16,1,.3,1), box-shadow .4s ease'
+              }}
+              onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-5px)'; e.currentTarget.style.boxShadow = '0 20px 50px rgba(0,0,0,.08)'; }}
+              onMouseLeave={e => { e.currentTarget.style.transform = ''; e.currentTarget.style.boxShadow = ''; }}>
+
+              {/* Image */}
+              <div style={{ position: 'relative', width: 260, height: 156, borderRadius: 14, overflow: 'hidden', flexShrink: 0 }}>
+                {p.image && !p.image.includes('placeholder')
+                  ? <Image src={p.image} alt={p.title} fill sizes="260px" style={{ objectFit: 'cover', transition: 'transform .6s ease' }}
+                    onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.06)'; }}
+                    onMouseLeave={e => { e.currentTarget.style.transform = ''; }} />
+                  : <div style={{ width: '100%', height: '100%', background: 'rgba(200,161,53,.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 48 }}>🚀</div>}
+              </div>
+
+              {/* Content */}
+              <div style={{ flex: 1, minWidth: 220 }}>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 12 }}>
+                  {(p.technologies || []).slice(0, 4).map(t => (
+                    <span key={t} style={{
+                      fontSize: 12, fontWeight: 700, padding: '4px 12px', borderRadius: 9999,
+                      background: 'rgba(200,161,53,.1)', color: '#c8a135', border: '1px solid rgba(200,161,53,.2)'
+                    }}>{t}</span>
+                  ))}
+                </div>
+                <h3 style={{
+                  fontFamily: 'var(--font-display)', fontSize: 'clamp(1.3rem,2vw,1.9rem)', color: '#1a1a1a',
+                  marginBottom: 10, transition: 'color .3s'
+                }}>{p.title}</h3>
+                <p style={{
+                  fontSize: 14, color: '#666', lineHeight: 1.7, marginBottom: 16, display: '-webkit-box',
+                  WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden'
+                }}>{p.description}</p>
+                <Link href="/projects" style={{
+                  display: 'inline-flex', alignItems: 'center', gap: 8, fontSize: 14,
+                  fontWeight: 700, color: '#c8a135', textDecoration: 'none', transition: 'gap .3s'
+                }}>
+                  View Project <ArrowRightIcon style={{ width: 16, height: 16 }} />
+                </Link>
+              </div>
+
+              {/* Big number */}
+              <div style={{
+                fontFamily: 'var(--font-display)', fontSize: 'clamp(4rem,6vw,7rem)',
+                color: 'rgba(200,161,53,.07)', userSelect: 'none', flexShrink: 0
+              }}>0{i + 1}</div>
+            </div>
+          ))}
+        </div>
+
+        {/* All projects button */}
+        <div style={{ textAlign: 'center', marginTop: 56 }}>
+          <Magnetic strength={0.25}>
+            <Link href="/projects" className="btn-dark">View All Projects <ArrowRightIcon style={{ width: 16, height: 16 }} /></Link>
+          </Magnetic>
         </div>
       </div>
     </section>
   );
 }
 
+/* ═════════════════════════════════════════════
+   MAIN PAGE
+═════════════════════════════════════════════ */
 export default function Home() {
-  const [mounted, setMounted] = useState(false);
-  const [typedText, setTypedText] = useState('');
-  const [roleIdx, setRoleIdx] = useState(0);
-  const [projects, setProjects] = useState([]);
-  const [projectsLoading, setProjectsLoading] = useState(true);
-
-  const roles = ['Full-Stack Developer', 'UI/UX Designer', 'Problem Solver', 'Tech Enthusiast'];
-  const skills = ['React', 'Next.js', 'Node.js', 'Python', 'TypeScript', 'MongoDB', 'PostgreSQL', 'AWS'];
-
-  useEffect(() => { setMounted(true); }, []);
-
-  /* typewriter */
-  useEffect(() => {
-    let i = 0;
-    setTypedText('');
-    const role = roles[roleIdx];
-    const t = setInterval(() => {
-      if (i < role.length) setTypedText(role.substring(0, ++i));
-      else clearInterval(t);
-    }, 80);
-    return () => clearInterval(t);
-  }, [roleIdx]);
-
-  useEffect(() => {
-    const id = setInterval(() => setRoleIdx(r => (r + 1) % roles.length), 3800);
-    return () => clearInterval(id);
-  }, []);
-
-  /* projects */
-  useEffect(() => {
-    const fetchProjects = async () => {
-      try {
-        const base = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
-        const res = await fetch(`${base}/api/projects?featured=true`);
-        if (!res.ok) throw new Error('Failed');
-        const data = await res.json();
-        let featured = data.data || [];
-        if (featured.length < 3) {
-          const allRes = await fetch(`${base}/api/projects`);
-          const allData = await allRes.json();
-          const ids = new Set(featured.map(p => p._id));
-          featured = [...featured, ...(allData.data || []).filter(p => !ids.has(p._id))].slice(0, 3);
-        } else featured = featured.slice(0, 3);
-        setProjects(featured);
-      } catch { /* silent */ } finally { setProjectsLoading(false); }
-    };
-    fetchProjects();
-  }, []);
-
-  const technologies = [
-    { name: 'Frontend', icon: DevicePhoneMobileIcon, items: ['React', 'Next.js', 'TypeScript', 'Tailwind'] },
-    { name: 'Backend', icon: CommandLineIcon, items: ['Node.js', 'Python', 'Express', 'FastAPI'] },
-    { name: 'Database', icon: CpuChipIcon, items: ['MongoDB', 'PostgreSQL', 'Redis', 'Prisma'] },
-    { name: 'Cloud', icon: CloudIcon, items: ['AWS', 'Vercel', 'Docker', 'CI/CD'] },
-  ];
+  const pageEl = useRef(null);
+  const heroEl = useRef(null);
+  const [ready, setReady] = useState(false);
 
   const stats = [
-    { number: '12', suffix: '+', label: 'Projects Done' },
-    { number: '3', suffix: '+', label: 'Years Exp.' },
-    { number: '10', suffix: '+', label: 'Happy Clients' },
-    { number: '100', suffix: '%', label: 'Success Rate' },
+    { n: '12', s: '+', label: 'Projects Done' },
+    { n: '3', s: '+', label: 'Years Exp.' },
+    { n: '10', s: '+', label: 'Happy Clients' },
+    { n: '100', s: '%', label: 'Success Rate' },
   ];
 
-  const [projRef, projInView] = useInView();
+  const services = [
+    { icon: '⚡', num: '01', title: 'Full-Stack\nWeb Apps', desc: 'End-to-end web applications built for performance, scale, and maintainability.' },
+    { icon: '🎨', num: '02', title: 'UI / UX\nDesign', desc: 'Clean, intuitive interfaces that delight users and drive conversions.' },
+    { icon: '🔧', num: '03', title: 'API &\nBackend', desc: 'Robust REST & GraphQL APIs, microservices, and cloud-native architectures.' },
+    { icon: '📱', num: '04', title: 'Mobile\nReady', desc: 'Responsive progressive web experiences that work flawlessly on every device.' },
+  ];
+
+  useEffect(() => { setReady(true); }, []);
+
+  /* ───────────────────────────────────────
+     MASTER GSAP TIMELINE
+  ─────────────────────────────────────── */
+  useEffect(() => {
+    if (!ready || typeof window === 'undefined') return;
+    if (prefersReducedMotion()) return; // static, fully visible, no motion
+
+    const ctx = gsap.context(() => {
+
+      /* ── Hero intro — staggered entrance ── */
+      const heroTl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+      heroTl
+        .from('.h-badge', { y: 28, opacity: 0, duration: 0.7 }, 0.15)
+        .from('.h-stat', { y: 36, opacity: 0, duration: 0.65, stagger: 0.09 }, 0.35)
+        .from('.h-name-1', { y: 110, opacity: 0, duration: 1.0 }, 0.45)
+        .from('.h-name-2', { y: 110, opacity: 0, duration: 1.0 }, 0.6)
+        .from('.h-subtitle', { y: 30, opacity: 0, duration: 0.7 }, 0.8)
+        .from('.h-btn', { y: 22, opacity: 0, duration: 0.6, stagger: 0.1 }, 0.95)
+        .from('.h-photo', { scale: 1.08, opacity: 0, duration: 1.3, ease: 'power2.out' }, 0.1)
+        .from('.h-spiral', { scale: 0.85, opacity: 0, duration: 1.3, ease: 'power2.out' }, 0.3)
+        .from('.h-scroll', { opacity: 0, duration: 0.8 }, 1.5);
+
+      /* ── Hero parallax on scroll (scrub = moves with finger) ──
+         Layered by depth: the carved spiral watermark is the
+         "heaviest" (slowest, furthest back), then the photo drifts
+         gently, then the stat/name text — that counter-drift is
+         what sells the sense of real depth. */
+      gsap.to('.h-spiral', {
+        yPercent: 10, rotation: 6, ease: 'none',
+        scrollTrigger: { trigger: heroEl.current, start: 'top top', end: 'bottom top', scrub: 2.4 },
+      });
+      gsap.to('.h-name-wrap', {
+        yPercent: 18, ease: 'none',
+        scrollTrigger: { trigger: heroEl.current, start: 'top top', end: 'bottom top', scrub: 1.2 },
+      });
+      gsap.to('.h-stat-wrap', {
+        yPercent: 12, opacity: 0.3, ease: 'none',
+        scrollTrigger: { trigger: heroEl.current, start: 'top top', end: 'bottom top', scrub: 1.8 },
+      });
+      /* ── Photo parallax — drifts slower than the page for depth ── */
+      gsap.to('.h-photo', {
+        yPercent: -8, ease: 'none',
+        scrollTrigger: { trigger: heroEl.current, start: 'top top', end: 'bottom top', scrub: 1.5 },
+      });
+
+      /* ── Floating shapes — each at a different parallax speed ── */
+      document.querySelectorAll('.f-shape').forEach((el, i) => {
+        const dir = i % 2 === 0 ? -1 : 1;
+        const dist = 40 + i * 18;
+        gsap.to(el, {
+          y: dir * dist,
+          rotation: dir * (8 + i * 4),
+          ease: 'none',
+          scrollTrigger: {
+            trigger: heroEl.current,
+            start: 'top top',
+            end: 'bottom top',
+            scrub: 0.8 + i * 0.25,
+          },
+        });
+      });
+
+      /* ── Marquee strip scale reveal ── */
+      gsap.from('.mq-strip', {
+        scaleX: 0, opacity: 0, transformOrigin: 'left center', duration: 0.7, ease: 'power3.out',
+        scrollTrigger: { trigger: '.mq-strip', start: 'top 96%' },
+      });
+
+      /* ── Carved seam dividers — reveal like a chisel stroke ── */
+      gsap.utils.toArray('.carved-seam').forEach((el) => {
+        gsap.from(el, {
+          scaleX: 0, opacity: 0, transformOrigin: 'center', duration: 1.0, ease: 'power3.inOut',
+          scrollTrigger: { trigger: el, start: 'top 92%' },
+        });
+      });
+
+      /* ── Big text section — lines rise up with a touch of scale ── */
+      gsap.utils.toArray('.big-line').forEach((el) => {
+        gsap.from(el, {
+          y: 90, opacity: 0, scale: 0.97, duration: 1.0, ease: 'power3.out',
+          scrollTrigger: { trigger: el, start: 'top 88%' },
+        });
+      });
+
+      /* ── Big-text section shapes parallax ── */
+      document.querySelectorAll('.bt-shape').forEach((el, i) => {
+        const dir = i % 2 === 0 ? 1 : -1;
+        gsap.to(el, {
+          y: dir * 80, rotation: dir * 18, ease: 'none',
+          scrollTrigger: { trigger: '.big-text-section', start: 'top bottom', end: 'bottom top', scrub: 1.5 },
+        });
+      });
+      gsap.to('.bt-spiral', {
+        y: -70, rotation: -14, ease: 'none',
+        scrollTrigger: { trigger: '.big-text-section', start: 'top bottom', end: 'bottom top', scrub: 2.6 },
+      });
+
+      /* ── Services section ── */
+      gsap.from('.svc-head', {
+        y: 55, opacity: 0, scale: 0.95, duration: 0.9, ease: 'power3.out',
+        scrollTrigger: { trigger: '.svc-head', start: 'top 85%' },
+      });
+      gsap.utils.toArray('.svc-card').forEach((el, i) => {
+        gsap.from(el, {
+          y: 65, opacity: 0, scale: 0.93, duration: 0.75, delay: i * 0.1, ease: 'power3.out',
+          scrollTrigger: { trigger: el, start: 'top 92%' },
+        });
+      });
+
+      /* ── CTA section ── */
+      gsap.from('.cta-inner', {
+        y: 60, opacity: 0, scale: 0.94, duration: 1.0, ease: 'power3.out',
+        scrollTrigger: { trigger: '.cta-section', start: 'top 78%' },
+      });
+      document.querySelectorAll('.cta-shape').forEach((el, i) => {
+        const dir = i % 2 === 0 ? 1 : -1;
+        gsap.to(el, {
+          y: dir * 45, ease: 'none',
+          scrollTrigger: { trigger: '.cta-section', start: 'top bottom', end: 'bottom top', scrub: 2 },
+        });
+      });
+
+    }, pageEl);
+
+    return () => ctx.revert();
+  }, [ready]);
 
   return (
     <>
-      {/* ── global keyframes ── */}
+      {/* Shared defs for every carved-relief motif on this page — render once. */}
+      <CarvedDefs />
+
+      {/* ── Global styles ── */}
       <style>{`
-        @keyframes fadeUp   { from { opacity:0; transform:translateY(24px); } to { opacity:1; transform:translateY(0); } }
-        @keyframes fadeIn   { from { opacity:0; } to { opacity:1; } }
-        @keyframes floatY   { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-8px); } }
-        @keyframes aurora   { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-        @keyframes marquee  { from { transform:translateX(0); } to { transform:translateX(-50%); } }
-
-        .anim-fadeup    { animation: fadeUp 1s cubic-bezier(.16,1,.3,1) both; }
-        .anim-fadein    { animation: fadeIn 1.2s ease both; }
-        .anim-float     { animation: floatY 8s ease-in-out infinite; }
-        .marquee-track  { animation: marquee 30s linear infinite; }
-
-        .d1 { animation-delay:.1s; } .d2 { animation-delay:.2s; } .d3 { animation-delay:.3s; }
-        .d4 { animation-delay:.4s; } .d5 { animation-delay:.5s; } .d6 { animation-delay:.6s; }
-
-        .shimmer-orange {
-          background: linear-gradient(90deg, #f97316 0%, #fb923c 60%, #f97316 100%);
-          background-size: 200% auto;
+        /* ── Gold shimmer text ── */
+        @keyframes gShimmer {
+          0%,100% { background-position:0% 50%; }
+          50%      { background-position:100% 50%; }
+        }
+        .gold-text {
+          background: linear-gradient(90deg,#c8a135,#f5c842,#e5b94b,#c8a135);
+          background-size: 300% auto;
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
           background-clip: text;
+          animation: gShimmer 4s ease infinite;
         }
 
-        .glass-panel {
-          background: rgba(255, 255, 255, 0.6);
-          backdrop-filter: blur(12px);
-          -webkit-backdrop-filter: blur(12px);
-          border: 1px solid rgba(255, 255, 255, 0.4);
-          box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.05);
+        /* ── Pulse for loading skeleton ── */
+        @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.45} }
+
+        /* ── Infinite marquee ── */
+        @keyframes mq { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+        .mq-track { animation: mq 30s linear infinite; display: inline-flex; }
+
+        /* ── Shared label ── */
+        .s-label {
+          display: block;
+          font-size: 11px; font-weight: 700; text-transform: uppercase;
+          letter-spacing: .2em; color: #c8a135; margin-bottom: 14px;
         }
-        .dark .glass-panel {
-          background: rgba(13, 17, 32, 0.65);
-          backdrop-filter: blur(16px);
-          -webkit-backdrop-filter: blur(16px);
-          border: 1px solid rgba(255, 255, 255, 0.08);
-          box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+        .s-display {
+          font-family: var(--font-display);
+          color: #1a1a1a; letter-spacing: .01em; line-height: .95;
         }
 
-        .card-lift {
-          transition: transform .4s cubic-bezier(.16,1,.3,1), box-shadow .4s, border-color .4s;
+        /* ── Buttons ── */
+        .btn-gold {
+          display: inline-flex; align-items: center; gap: 8px;
+          background: #c8a135; color: #fff; font-weight: 700;
+          border-radius: 9999px; text-decoration: none;
+          transition: transform .35s cubic-bezier(.16,1,.3,1), box-shadow .35s, background .25s;
         }
-        .card-lift:hover {
-          transform: translateY(-4px);
-          box-shadow: 0 20px 40px -8px rgba(0,0,0,.15);
+        .btn-gold:hover { background:#f5c842; transform:translateY(-2px); box-shadow:0 12px 30px rgba(200,161,53,.38); }
+
+        .btn-dark {
+          display: inline-flex; align-items: center; gap: 8px;
+          background: #1a1a1a; color: #fff; font-weight: 700;
+          border-radius: 9999px; text-decoration: none;
+          transition: transform .35s cubic-bezier(.16,1,.3,1), box-shadow .35s, background .25s;
         }
-        .dark .card-lift:hover {
-          box-shadow: 0 20px 40px -8px rgba(0,0,0,.5);
+        .btn-dark:hover { background:#2a2a2a; transform:translateY(-2px); box-shadow:0 12px 30px rgba(0,0,0,.22); }
+
+        .btn-outline {
+          display: inline-flex; align-items: center; gap: 8px;
+          color: rgba(255,255,255,.85); font-weight: 700;
+          border: 1px solid rgba(255,255,255,.28); border-radius: 9999px;
+          text-decoration: none;
+          transition: transform .35s cubic-bezier(.16,1,.3,1), border-color .25s, color .25s, background .25s;
         }
-        .btn-glow {
-          transition: transform .3s, box-shadow .3s;
-        }
-        .btn-glow:hover {
-          transform: translateY(-1px);
-          box-shadow: 0 8px 24px rgba(249,115,22,.25);
-        }
-        .dot-grid-light {
-          background-image: radial-gradient(circle, #e5e7eb 1px, transparent 1px);
-          background-size: 32px 32px;
-        }
-        .dot-grid-dark {
-          background-image: radial-gradient(circle, rgba(255,255,255,0.04) 1px, transparent 1px);
-          background-size: 32px 32px;
-        }
-        .photo-circle {
-          position: relative;
-          border-radius: 9999px;
-          overflow: hidden;
-          border: 2px solid rgba(255,255,255,0.5);
-          flex-shrink: 0;
-        }
-        .dark .photo-circle {
-          border-color: rgba(255,255,255,0.05);
-        }
-        .photo-circle img {
-          border-radius: 9999px !important;
+        .btn-outline:hover { color:#1a1a1a; background:#fff; border-color:#fff; transform:translateY(-2px); }
+
+        /* ── Scroll-indicator bounce ── */
+        @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(8px)} }
+        .bounce { animation: bounce 2s ease-in-out infinite; }
+
+        /* ── Focus visibility (quality floor) ── */
+        a:focus-visible, button:focus-visible { outline: 2px solid #c8a135; outline-offset: 3px; border-radius: 6px; }
+
+        @media (prefers-reduced-motion: reduce) {
+          .gold-text, .mq-track, .bounce { animation: none !important; }
         }
       `}</style>
 
-      <div className="overflow-x-hidden bg-white dark:bg-[#080c18] text-gray-900 dark:text-white transition-colors duration-300">
+      <div ref={pageEl} style={{ background: '#F5F0E8', overflowX: 'hidden' }}>
 
-        {/* ══════════════════════════════════════════
-              HERO
-        ══════════════════════════════════════════ */}
-        <section className="relative min-h-screen flex flex-col bg-white dark:bg-[#080c18] transition-colors duration-300 pt-16 lg:pt-20" style={{ overflowX: 'hidden' }}>
-
-          {/* background layers */}
-          <div className="pointer-events-none absolute inset-0 dot-grid-light dark:dot-grid-dark" />
-          <div className="pointer-events-none absolute inset-0 overflow-hidden">
-            <div className="absolute top-[-10%] right-[-5%] w-[60vw] h-[60vw] max-w-[800px] max-h-[800px] rounded-full bg-orange-100 dark:bg-orange-500/10 blur-[120px] opacity-70" style={{ animation: 'aurora 15s ease infinite' }} />
-            <div className="absolute bottom-[-10%] left-[-10%] w-[50vw] h-[50vw] max-w-[600px] max-h-[600px] rounded-full bg-amber-50 dark:bg-amber-500/5 blur-[100px] opacity-60" style={{ animation: 'aurora 20s ease infinite reverse' }} />
+        {/* ═══════════════════════════════════════
+            § 1  HERO  — full-bleed portrait, warm gold gradient
+        ═══════════════════════════════════════ */}
+        <section ref={heroEl} style={{
+          position: 'relative', minHeight: '100vh',
+          display: 'flex', flexDirection: 'column', overflow: 'hidden',
+          paddingTop: 'clamp(72px,10vw,100px)',
+          background: 'linear-gradient(120deg, #15100a 0%, #3d2b0d 22%, #8a6b16 50%, #c8a135 74%, #ecc456 100%)',
+        }}>
+          {/* Full-bleed portrait, right side, fading left into the gradient */}
+          <div className="h-photo" style={{
+            position: 'absolute', inset: 0, zIndex: 0,
+            WebkitMaskImage: 'linear-gradient(to right, transparent 0%, transparent 28%, black 60%)',
+            maskImage: 'linear-gradient(to right, transparent 0%, transparent 28%, black 60%)',
+          }}>
+            <Image
+              src="/avatar.jpg"
+              alt="Dasun Methmal"
+              fill
+              sizes="100vw"
+              style={{ objectFit: 'cover', objectPosition: 'center 20%' }}
+              priority
+            />
+            {/* warm duotone wash so the photo sits inside the gold palette */}
+            <div style={{
+              position: 'absolute', inset: 0,
+              background: 'linear-gradient(180deg, rgba(21,16,10,.1) 0%, rgba(21,16,10,.6) 88%), linear-gradient(120deg, rgba(200,161,53,.28), rgba(236,196,86,.05))'
+            }} />
           </div>
 
-          {/* hero content */}
-          <div className="relative z-10 flex-1 flex items-center">
-            <div className="w-full max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 xl:px-20 py-6 sm:py-8 lg:py-0">
-              <div className="flex flex-col lg:grid lg:grid-cols-[minmax(0,1fr)_420px] xl:grid-cols-[minmax(0,1fr)_460px] 2xl:grid-cols-[minmax(0,1fr)_500px] gap-6 lg:gap-10 xl:gap-16 items-center w-full">
+          {/* Carved signature spiral — subtle, tucked upper-left, away from the portrait */}
+          <CarvedSpiral
+            className="h-spiral"
+            size={420}
+            variant="large"
+            style={{ position: 'absolute', top: '0%', left: '-10%', opacity: 0.12, pointerEvents: 'none', zIndex: 1 }}
+          />
 
-                {/* ── LEFT copy ── */}
-                <div className="flex flex-col justify-center order-2 lg:order-1 text-center lg:text-left min-w-0 w-full px-2 sm:px-4 lg:px-0">
+          {/* A couple of quiet floating accents over the gradient side only */}
+          <GShape className="f-shape" type="dot" size={16} style={{ top: '16%', left: '40%', opacity: .5, zIndex: 1 }} />
+          <GShape className="f-shape" type="ring" size={52} style={{ bottom: '22%', left: '32%', opacity: .3, zIndex: 1 }} />
+          <GShape className="f-shape" type="capsule" size={26} style={{ top: '8%', left: '4%', transform: 'rotate(-20deg)', opacity: .3, zIndex: 1 }} />
 
-                  {/* availability badge */}
-                  <div className="anim-fadeup d1 inline-flex items-center gap-2.5 self-center lg:self-start mb-6 px-4 py-2 rounded-full glass-panel border border-green-200 dark:border-green-500/20">
-                    <span className="relative flex h-2 w-2">
-                      <span className="absolute inset-0 rounded-full bg-green-500 opacity-70 animate-pulse" />
-                      <span className="relative inline-flex h-2 w-2 rounded-full bg-green-500" />
-                    </span>
-                    <span className="font-[family-name:var(--font-mono)] text-[11px] text-gray-700 dark:text-gray-300 tracking-wider font-semibold">
-                      2 project slots open · April 2025
-                    </span>
-                  </div>
+          {/* Content */}
+          <div style={{
+            position: 'relative', zIndex: 10, flex: 1, display: 'flex', flexDirection: 'column',
+            justifyContent: 'center', padding: '40px clamp(24px,6vw,90px)', maxWidth: 920,
+          }}>
 
-                  {/* headline */}
-                  <div className="anim-fadeup d2 mb-5">
-                    <div
-                      className="font-[family-name:var(--font-display)] text-gray-400 dark:text-white/20 tracking-wider select-none text-2xl lg:text-4xl mb-2"
-                      style={{ lineHeight: 1 }}
-                    >
-                      HI, I'M
-                    </div>
-                    <h1
-                      className="font-[family-name:var(--font-display)] shimmer-orange tracking-tight select-none py-1"
-                      style={{ fontSize: 'clamp(3.5rem,7vw,8rem)', lineHeight: 0.9 }}
-                    >
-                      METHMAL
-                    </h1>
-                    <div
-                      className="font-[family-name:var(--font-display)] text-gray-800 dark:text-white tracking-wider mt-2"
-                      style={{ fontSize: 'clamp(1.5rem,3.5vw,4.2rem)', lineHeight: 1.05 }}
-                    >
-                      BUILDING THE<br/>
-                      <span className="text-orange-500">DIGITAL </span>
-                      <span className="text-gray-800 dark:text-white">FUTURE.</span>
-                    </div>
-                  </div>
+            {/* Badge + role */}
+            <div className="h-badge" style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 16, marginBottom: 30 }}>
+              <span style={{
+                display: 'inline-flex', alignItems: 'center', gap: 8, padding: '7px 18px', borderRadius: 9999,
+                background: 'rgba(255,255,255,.08)', border: '1px solid rgba(245,200,66,.4)', color: '#f5c842',
+                fontSize: 12, fontWeight: 700, letterSpacing: '.15em', textTransform: 'uppercase', backdropFilter: 'blur(4px)'
+              }}>
+                <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#22c55e', animation: 'pulse 2s ease infinite' }} />
+                Available for Work
+              </span>
+              <span style={{ fontSize: 14, color: 'rgba(255,255,255,.75)' }}>Full-Stack Developer · Sri Lanka 🇱🇰</span>
+            </div>
 
-                  {/* typewriter */}
-                  <div className="anim-fadeup d3 flex items-center gap-1 h-7 mb-6 justify-center lg:justify-start">
-                    <span className="font-[family-name:var(--font-mono)] text-sm text-gray-500 dark:text-gray-400 tracking-wider">
-                      {typedText}
-                    </span>
-                    <span className="inline-block w-0.5 h-4 bg-orange-500/50 rounded animate-pulse" />
-                  </div>
-
-                  {/* bio */}
-                  <p className="anim-fadeup d4 text-sm sm:text-base lg:text-lg text-gray-600 dark:text-gray-400 leading-relaxed w-full lg:max-w-[480px] mx-auto lg:mx-0 mb-8 font-light">
-                    A full-stack developer with a sharp eye for scalable systems and user-centered design.
-                    I craft <strong className="text-gray-900 dark:text-gray-200 font-medium">high-performance web apps</strong> from
-                    idea to production.
-                  </p>
-
-                  {/* CTA row */}
-                  <div className="anim-fadeup d5 flex flex-col sm:flex-row gap-4 mb-8 w-full sm:justify-center lg:justify-start">
-                    <Link href="/projects" className="btn-glow inline-flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-400 text-white px-7 py-3.5 rounded-full font-bold text-sm shadow-lg shadow-orange-500/20 w-full sm:w-auto">
-                      View My Work
-                      <ArrowRightIcon className="w-4 h-4" />
-                    </Link>
-                    <Link href="/contact" className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full font-bold text-sm border border-gray-200 dark:border-white/10 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 transition-all w-full sm:w-auto">
-                      <EnvelopeIcon className="w-4 h-4" />
-                      Hire Me
-                    </Link>
-                  </div>
-
-                  {/* skill chips marquee */}
-                  <div className="anim-fadeup d6 overflow-hidden w-full max-w-full opacity-80 hover:opacity-100 transition-opacity">
-                    <div className="flex gap-2" style={{ width: 'max-content' }}>
-                      <div className="marquee-track flex gap-2">
-                        {[...skills, ...skills].map((s, i) => (
-                          <span key={i} className="shrink-0 px-3 py-1.5 rounded-full text-[10px] font-medium font-[family-name:var(--font-mono)] tracking-wider bg-gray-50 dark:bg-white/5 text-gray-500 dark:text-gray-400 border border-gray-100 dark:border-white/5">
-                            {s}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
+            {/* Stats */}
+            <div className="h-stat-wrap" style={{ display: 'flex', flexWrap: 'wrap', gap: '18px 44px', marginBottom: 36 }}>
+              {stats.map(s => (
+                <div key={s.label} className="h-stat" style={{ display: 'flex', flexDirection: 'column' }}>
+                  <span style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2rem,3.5vw,3rem)', lineHeight: 1, color: '#f5c842' }}>
+                    <Counter target={s.n} suffix={s.s} />
+                  </span>
+                  <span style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '.16em', color: 'rgba(255,255,255,.62)', marginTop: 4 }}>{s.label}</span>
                 </div>
+              ))}
+            </div>
 
-                {/* ── RIGHT photo ── */}
-                <div className="relative order-1 lg:order-2 flex items-center justify-center py-6 sm:py-8 lg:py-12 w-full lg:w-[420px] xl:w-[460px] 2xl:w-[500px] flex-shrink-0">
-                  
-                  {/* photo + badges */}
-                  <div className="relative flex items-center justify-center anim-float">
+            {/* Big name */}
+            <div className="h-name-wrap" style={{ marginBottom: 22 }}>
+              <h1 style={{
+                fontFamily: 'var(--font-display)', lineHeight: .92, letterSpacing: '-.02em', userSelect: 'none',
+                fontSize: 'clamp(3.2rem,9vw,8.5rem)', margin: 0
+              }}>
+                <span className="h-name-1" style={{ display: 'block', color: '#fff' }}>DASUN</span>
+                <span className="h-name-2" style={{ display: 'block', color: '#f5c842' }}>METHMAL</span>
+              </h1>
+            </div>
 
-                    <div
-                      className="photo-circle"
-                      style={{
-                        width: 'clamp(180px, 35vw, 420px)',
-                        height: 'clamp(180px, 35vw, 420px)',
-                        boxShadow: '0 20px 60px -10px rgba(0,0,0,0.1)',
-                      }}
-                    >
-                      <Image
-                        src="/methmal.jpg"
-                        alt="Dasun Methmal"
-                        fill
-                        priority
-                        sizes="(max-width: 640px) 180px, (max-width: 1024px) 35vw, 420px"
-                        style={{
-                          objectFit: 'cover',
-                          objectPosition: 'center top',
-                          borderRadius: '9999px',
-                        }}
-                      />
-                    </div>
+            {/* Subtitle */}
+            <p className="h-subtitle" style={{
+              fontFamily: 'var(--font-display)', fontSize: 'clamp(1.1rem,2.2vw,1.7rem)',
+              color: 'rgba(255,255,255,.82)', letterSpacing: '.03em', margin: '0 0 34px'
+            }}>
+              Freelance Developer <span style={{ color: '#f5c842' }}>|</span> Designer
+            </p>
 
-                    {/* badge: Available */}
-                    <div className="absolute -top-2 -right-2 lg:-top-4 lg:-right-4 glass-panel rounded-2xl px-4 py-2.5 shadow-xl flex items-center gap-2 z-10 transition-transform hover:scale-105">
-                      <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse flex-shrink-0" />
-                      <span className="text-xs font-semibold text-gray-800 dark:text-gray-200 whitespace-nowrap">Available</span>
-                    </div>
-
-                    {/* badge: Full-Stack */}
-                    <div className="absolute -bottom-2 -left-2 lg:-bottom-4 lg:-left-4 glass-panel rounded-2xl px-4 py-2.5 shadow-xl flex items-center gap-2 z-10 transition-transform hover:scale-105">
-                      <CodeBracketIcon className="w-4 h-4 text-orange-500 flex-shrink-0" />
-                      <span className="text-xs font-semibold text-gray-800 dark:text-gray-200 whitespace-nowrap">Full-Stack</span>
-                    </div>
-                  </div>
-                </div>
-
-              </div>
+            {/* CTAs */}
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
+              <Magnetic className="h-btn" strength={0.3}>
+                <Link href="/projects" className="btn-gold" style={{ padding: '14px 30px', fontSize: 14 }}>
+                  View My Work <ArrowRightIcon style={{ width: 16, height: 16 }} />
+                </Link>
+              </Magnetic>
+              <Magnetic className="h-btn" strength={0.3}>
+                <Link href="/contact" className="btn-outline" style={{ padding: '14px 30px', fontSize: 14 }}>
+                  <EnvelopeIcon style={{ width: 16, height: 16 }} /> Hire Me
+                </Link>
+              </Magnetic>
             </div>
           </div>
 
-          {/* bottom info bar */}
-          <div className="relative z-10 border-t border-gray-100 dark:border-white/5 bg-gray-50/80 dark:bg-white/[0.02] backdrop-blur-sm">
-            <div className="w-full max-w-7xl mx-auto px-4 sm:px-10 lg:px-16 xl:px-20 py-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-              <div className="flex items-center gap-4 sm:gap-10 flex-wrap">
-                {[
-                  { label: 'Stack', value: 'React · Next.js · Node.js · PostgreSQL' },
-                  { label: 'Based in', value: 'Sri Lanka 🇱🇰' },
-                  { label: 'Open to', value: 'Remote · Freelance · Full-time' },
-                ].map(({ label, value }) => (
-                  <div key={label}>
-                    <p className="text-[10px] text-gray-400 dark:text-gray-600 uppercase tracking-widest font-bold mb-0.5">{label}</p>
-                    <p className="text-xs sm:text-sm text-gray-700 dark:text-gray-300 font-semibold">{value}</p>
-                  </div>
-                ))}
-              </div>
-              <Link href="/contact" className="shrink-0 inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-400 text-white text-sm font-bold px-6 py-2.5 rounded-full transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-orange-500/30">
-                <EnvelopeIcon className="w-4 h-4" />
-                Email Me
-              </Link>
+          {/* Scroll indicator */}
+          <div className="h-scroll bounce" style={{ position: 'relative', zIndex: 10, display: 'flex', justifyContent: 'center', paddingBottom: 32, opacity: .55 }}>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
+              <span style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '.2em', color: 'rgba(255,255,255,.7)' }}>Scroll</span>
+              <div style={{ width: 1, height: 44, background: 'linear-gradient(to bottom, transparent, #f5c842)' }} />
             </div>
           </div>
         </section>
 
-        {/* ══════════════════════════════════════════
-              STATS
-        ══════════════════════════════════════════ */}
-        <section className="py-16 bg-gray-50 dark:bg-[#0d1120] border-y border-gray-100 dark:border-white/5 transition-colors duration-300">
-          <div className="w-full max-w-7xl mx-auto px-4 sm:px-10 lg:px-16 xl:px-20">
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
-              {stats.map((s, i) => (
-                <div key={s.label} className="text-center">
-                  <div
-                    className="font-[family-name:var(--font-display)] text-5xl lg:text-6xl text-orange-500 mb-1"
-                    style={{ letterSpacing: '0.02em' }}
-                  >
-                    <Counter target={s.number} suffix={s.suffix} />
-                  </div>
-                  <div className="text-gray-500 dark:text-gray-400 text-sm font-semibold tracking-wide">{s.label}</div>
-                </div>
+        {/* ═══════════════════════════════════════
+            § 2  TECH MARQUEE STRIP
+        ═══════════════════════════════════════ */}
+        <div className="mq-strip" style={{ background: '#1a1a1a', padding: '18px 0', overflow: 'hidden', whiteSpace: 'nowrap' }}>
+          <div className="mq-track">
+            {['React', '·', 'Next.js', '·', 'Node.js', '·', 'TypeScript', '·', 'MongoDB', '·', 'PostgreSQL', '·', 'AWS', '·', 'Docker', '·',
+              'Python', '·', 'FastAPI', '·', 'Redis', '·', 'Prisma', '·', 'Figma', '·', 'Tailwind', '·',
+              'React', '·', 'Next.js', '·', 'Node.js', '·', 'TypeScript', '·', 'MongoDB', '·', 'PostgreSQL', '·', 'AWS', '·', 'Docker', '·',
+              'Python', '·', 'FastAPI', '·', 'Redis', '·', 'Prisma', '·', 'Figma', '·', 'Tailwind', '·',
+            ].map((t, i) => (
+              <span key={i} style={{
+                display: 'inline-block', padding: '0 16px', fontSize: 13, fontFamily: 'var(--font-display)',
+                fontWeight: 700, letterSpacing: '.08em',
+                color: t === '·' ? '#c8a135' : 'rgba(255,255,255,.65)'
+              }}>{t}</span>
+            ))}
+          </div>
+        </div>
+
+        {/* Carved seam — marks the shift from the marquee band into the
+            editorial statement section below */}
+        <div className="carved-seam" style={{ background: '#F5F0E8', padding: '10px 0' }}>
+          <CarvedDivider height={28} />
+        </div>
+
+        {/* ═══════════════════════════════════════
+            § 3  BIG TEXT STATEMENT
+        ═══════════════════════════════════════ */}
+        <section className="big-text-section" style={{
+          position: 'relative', overflow: 'hidden', background: '#F5F0E8',
+          padding: 'clamp(72px,9vw,130px) clamp(24px,5vw,80px)'
+        }}>
+          {/* Parallax shapes */}
+          <GShape className="bt-shape" type="sphere" size={160} style={{ bottom: -40, left: -30, opacity: .65 }} />
+          <GShape className="bt-shape" type="capsule" size={55} style={{ top: '6%', right: '3%', transform: 'rotate(22deg)', opacity: .45 }} />
+          <GShape className="bt-shape" type="ring" size={70} style={{ top: '38%', right: '13%', opacity: .5 }} />
+          <GShape className="bt-shape" type="hex" size={56} style={{ bottom: '20%', right: '23%', opacity: .4 }} />
+          <GShape className="bt-shape" type="dot" size={20} style={{ top: '20%', left: '30%', opacity: .55 }} />
+          <CarvedSpiral className="bt-spiral" size={200} variant="small" flip
+            style={{ position: 'absolute', top: '12%', left: '2%', opacity: 0.14, pointerEvents: 'none' }} />
+
+          <div style={{ position: 'relative', zIndex: 1 }}>
+            {['Building sleek', 'digital products.', ''].map((text, i) => (
+              <div key={i} className="big-line" style={{ overflow: 'hidden' }}>
+                {i < 2
+                  ? <h2 style={{
+                    fontFamily: 'var(--font-display)', margin: 0, lineHeight: .94,
+                    fontSize: 'clamp(3.2rem,10vw,12rem)', color: '#1a1a1a', letterSpacing: '-.02em'
+                  }}>{text}</h2>
+                  : <h2 style={{
+                    fontFamily: 'var(--font-display)', margin: 0, lineHeight: .94,
+                    fontSize: 'clamp(3.2rem,10vw,12rem)', letterSpacing: '-.02em',
+                    display: 'flex', flexWrap: 'wrap', alignItems: 'baseline', gap: '0 24px'
+                  }}>
+                    <span style={{ color: '#1a1a1a' }}>Click and</span>
+                    <span className="gold-text">Scroll ↓</span>
+                  </h2>
+                }
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* ═══════════════════════════════════════
+            § 4  SERVICES
+        ═══════════════════════════════════════ */}
+        <section style={{ background: 'white', overflow: 'hidden', padding: 'clamp(80px,10vw,140px) clamp(24px,5vw,80px)' }}>
+          <div className="svc-head" style={{ marginBottom: 56 }}>
+            <span className="s-label">Developer</span>
+            <h2 className="s-display" style={{ fontSize: 'clamp(2.4rem,6.5vw,8rem)', maxWidth: '90%' }}>
+              I help businesses grow<br />with projects like:
+            </h2>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px,1fr))', gap: 20 }}>
+            {services.map((svc) => (
+              <div key={svc.num} className="svc-card" style={{
+                background: '#F5F0E8', border: '1px solid rgba(200,161,53,.1)', borderRadius: 20, padding: '28px 24px',
+                transition: 'transform .4s cubic-bezier(.16,1,.3,1), box-shadow .4s'
+              }}
+                onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-6px)'; e.currentTarget.style.boxShadow = '0 20px 50px rgba(0,0,0,.07)'; }}
+                onMouseLeave={e => { e.currentTarget.style.transform = ''; e.currentTarget.style.boxShadow = ''; }}>
+                <div style={{ fontSize: 36, marginBottom: 14 }}>{svc.icon}</div>
+                <div style={{ fontFamily: 'var(--font-display)', fontSize: '4rem', color: 'rgba(200,161,53,.12)', lineHeight: 1, marginBottom: 16 }}>{svc.num}</div>
+                <h3 style={{
+                  fontFamily: 'var(--font-display)', fontSize: 'clamp(1.4rem,2.2vw,1.9rem)', color: '#1a1a1a',
+                  whiteSpace: 'pre-line', lineHeight: 1.1, marginBottom: 14
+                }}>{svc.title}</h3>
+                <p style={{ fontSize: 14, lineHeight: 1.7, color: '#777' }}>{svc.desc}</p>
+              </div>
+            ))}
+          </div>
+
+          {/* Scrolling text ticker */}
+          <div style={{ marginTop: 64, overflow: 'hidden', whiteSpace: 'nowrap' }}>
+            <div className="mq-track" style={{ animationDuration: '22s' }}>
+              {['Websites & UIUX', '·', 'Full-Stack Apps', '·', 'REST APIs', '·', 'Cloud & DevOps', '·',
+                'Websites & UIUX', '·', 'Full-Stack Apps', '·', 'REST APIs', '·', 'Cloud & DevOps', '·',
+              ].map((t, i) => (
+                <span key={i} style={{
+                  display: 'inline-block', padding: '0 20px', fontFamily: 'var(--font-display)',
+                  fontSize: 'clamp(2.2rem,4.5vw,5.5rem)', letterSpacing: '.02em',
+                  color: t === '·' ? '#c8a135' : (i % 4 < 2 ? '#1a1a1a' : '#c8a135')
+                }}>{t}</span>
               ))}
             </div>
           </div>
         </section>
 
-        {/* ══════════════════════════════════════════
-              TECHNOLOGIES  – 3D redesign
-        ══════════════════════════════════════════ */}
-        <TechStackSection />
+        {/* ═══════════════════════════════════════
+            § 5  SELECTED WORKS
+        ═══════════════════════════════════════ */}
+        <ProjectsSection />
 
-        {/* ══════════════════════════════════════════
-              FEATURED PROJECTS
-        ══════════════════════════════════════════ */}
-        <section ref={projRef} id="projects" className="py-16 lg:py-24 bg-gray-50 dark:bg-[#0d1120] transition-colors duration-300">
-          <div className="w-full max-w-7xl mx-auto px-4 sm:px-10 lg:px-16 xl:px-20">
-            <div className={`text-center mb-12 lg:mb-16 transition-all duration-700 ${projInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-              <span className="inline-block text-[11px] font-black font-[family-name:var(--font-mono)] uppercase tracking-[0.25em] text-orange-500 mb-3">
-                Portfolio
-              </span>
-              <h2 className="font-[family-name:var(--font-display)] text-4xl lg:text-5xl text-gray-900 dark:text-white mb-3" style={{ letterSpacing: '0.02em' }}>
-                FEATURED PROJECTS
-              </h2>
-              <p className="text-gray-500 dark:text-gray-400 leading-relaxed max-w-xl mx-auto">
-                A selection of my recent full-stack development work
-              </p>
-            </div>
+        {/* ═══════════════════════════════════════
+            § 6  CLIENT REVIEWS
+        ═══════════════════════════════════════ */}
+        <ReviewsSection />
 
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-              {projectsLoading ? (
-                [...Array(3)].map((_, i) => (
-                  <div key={i} className="rounded-2xl border border-gray-100 dark:border-white/5 bg-white dark:bg-[#080c18] overflow-hidden animate-pulse">
-                    <div className="h-48 bg-gray-100 dark:bg-white/5" />
-                    <div className="p-6 space-y-3">
-                      <div className="h-4 bg-gray-100 dark:bg-white/5 rounded w-3/4" />
-                      <div className="h-3 bg-gray-100 dark:bg-white/5 rounded" />
-                      <div className="h-3 bg-gray-100 dark:bg-white/5 rounded w-5/6" />
-                    </div>
-                  </div>
-                ))
-              ) : projects.length === 0 ? (
-                <div className="col-span-3 text-center py-20 text-gray-400 dark:text-gray-600">
-                  <div className="text-6xl mb-4">🚀</div>
-                  <p className="text-lg font-semibold">Projects coming soon!</p>
-                </div>
-              ) : (
-                projects.map((project, i) => (
-                  <div
-                    key={project._id}
-                    className={`card-lift group glass-panel rounded-2xl overflow-hidden transition-all duration-700 ${projInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
-                    style={{ transitionDelay: `${i * 80}ms` }}
-                  >
-                    <div className="relative h-48 bg-gradient-to-br from-orange-100 to-orange-50 dark:from-orange-900/30 dark:to-orange-800/10 overflow-hidden">
-                      {project.image && !project.image.includes('placeholder') ? (
-                        <Image src={project.image} alt={project.title} fill className="object-cover group-hover:scale-105 transition-transform duration-500" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" />
-                      ) : (
-                        <div className="absolute inset-0 flex items-center justify-center text-5xl">🚀</div>
-                      )}
-                    </div>
-                    <div className="p-6">
-                      <h3 className="text-base font-bold text-gray-900 dark:text-gray-100 mb-2 group-hover:text-orange-500 transition-colors duration-300 line-clamp-1">
-                        {project.title}
-                      </h3>
-                      <p className="text-gray-500 dark:text-gray-400 text-sm leading-relaxed mb-4 line-clamp-3">{project.description}</p>
-                      <div className="flex flex-wrap gap-2 mb-5">
-                        {(project.technologies || []).slice(0, 4).map(tag => (
-                          <span key={tag} className="text-xs font-bold px-3 py-1 bg-orange-500/10 text-orange-500 border border-orange-500/20 rounded-full">{tag}</span>
-                        ))}
-                      </div>
-                      <Link href="/projects" className="inline-flex items-center gap-1.5 text-sm font-bold text-orange-500 hover:text-orange-400 transition-colors duration-300">
-                        View Project
-                        <ArrowRightIcon className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
-                      </Link>
-                    </div>
-                  </div>
-                ))
-              )}
-            </div>
+        {/* Carved seam — marks the shift into the closing CTA */}
+        <div className="carved-seam" style={{ background: '#F5F0E8', padding: '10px 0' }}>
+          <CarvedDivider height={28} />
+        </div>
 
-            <div className="text-center mt-12">
-              <Link href="/projects" className="inline-flex items-center gap-2 border-2 border-gray-200 dark:border-white/10 hover:border-orange-500/40 text-gray-600 dark:text-gray-400 hover:text-orange-500 dark:hover:text-orange-400 px-8 py-4 rounded-full font-bold text-sm transition-all duration-300 hover:scale-105 hover:bg-orange-500/5">
-                View All Projects
-                <ArrowRightIcon className="w-4 h-4" />
-              </Link>
-            </div>
-          </div>
-        </section>
+        {/* ═══════════════════════════════════════
+            § 7  CTA BANNER
+        ═══════════════════════════════════════ */}
+        <section className="cta-section" style={{
+          background: '#1a1a1a', overflow: 'hidden', position: 'relative',
+          padding: 'clamp(80px,10vw,140px) clamp(24px,5vw,80px)'
+        }}>
 
-        {/* ══════════════════════════════════════════
-              CLIENT REVIEWS
-        ══════════════════════════════════════════ */}
-        <ClientReviewsSection />
+          <GShape className="cta-shape" type="sphere" size={260} style={{ top: -60, right: -50, opacity: .1 }} />
+          <GShape className="cta-shape" type="ring" size={120} style={{ bottom: -20, left: '8%', opacity: .08 }} />
+          <GShape className="cta-shape" type="hex" size={85} style={{ top: '35%', left: '4%', opacity: .06 }} />
 
-        {/* ══════════════════════════════════════════
-              CTA BANNER
-        ══════════════════════════════════════════ */}
-        <section className="py-24 lg:py-32 bg-white dark:bg-[#080c18] relative overflow-hidden transition-colors duration-300">
-          {/* decorative layers */}
-          <div className="pointer-events-none absolute inset-0 overflow-hidden">
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60vw] h-[60vw] max-w-[800px] max-h-[800px] rounded-full bg-orange-50 dark:bg-orange-500/5 blur-[120px] opacity-70" style={{ animation: 'aurora 25s ease infinite reverse' }} />
-          </div>
-
-          <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-10 lg:px-16 xl:px-20">
-            <div className="max-w-3xl mx-auto text-center">
-              <span className="inline-block font-[family-name:var(--font-mono)] text-[11px] font-bold uppercase tracking-[0.25em] text-orange-500 mb-5">
-                Let's Work Together
-              </span>
-              <h2 className="font-[family-name:var(--font-display)] text-gray-900 dark:text-white mb-6" style={{ fontSize: 'clamp(2.8rem,7vw,6rem)', lineHeight: 0.95, letterSpacing: '0.02em' }}>
-                READY TO BUILD<br />
-                <span className="shimmer-orange">SOMETHING AMAZING?</span>
-              </h2>
-              <p className="text-gray-500 dark:text-gray-400 text-lg leading-relaxed mb-12 max-w-xl mx-auto">
-                Let's collaborate and create exceptional digital experiences that drive your business forward.
-              </p>
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                <Link href="/contact" className="btn-glow w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-400 text-white font-bold px-10 py-4 rounded-full text-base shadow-lg shadow-orange-500/20 transition-all">
-                  Start a Project
-                  <ArrowRightIcon className="w-4 h-4" />
+          <div className="cta-inner" style={{ position: 'relative', zIndex: 1, textAlign: 'center' }}>
+            <span className="s-label" style={{ color: '#f5c842' }}>Let&apos;s Work Together</span>
+            <h2 style={{
+              fontFamily: 'var(--font-display)', lineHeight: .92, letterSpacing: '-.02em', margin: '0 0 28px',
+              fontSize: 'clamp(3rem,9vw,12rem)', color: 'white'
+            }}>
+              READY TO BUILD<br /><span className="gold-text">SOMETHING AMAZING?</span>
+            </h2>
+            <p style={{ maxWidth: 520, margin: '0 auto 48px', fontSize: 17, lineHeight: 1.75, color: 'rgba(255,255,255,.5)' }}>
+              Let&apos;s collaborate and create exceptional digital experiences that drive your business forward.
+            </p>
+            <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 16 }}>
+              <Magnetic strength={0.3}>
+                <Link href="/contact" className="btn-gold" style={{ padding: '16px 36px', fontSize: 15 }}>
+                  Start a Project <ArrowRightIcon style={{ width: 16, height: 16 }} />
                 </Link>
-                <Link href="/about" className="w-full sm:w-auto inline-flex items-center justify-center gap-2 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white font-medium px-10 py-4 rounded-full text-base border border-gray-200 dark:border-white/10 hover:bg-gray-50 dark:hover:bg-white/5 transition-all">
-                  Learn More About Me
+              </Magnetic>
+              <Magnetic strength={0.3}>
+                <Link href="/about" className="btn-outline" style={{ padding: '16px 36px', fontSize: 15, color: 'rgba(255,255,255,.7)', borderColor: 'rgba(255,255,255,.16)' }}>
+                  Learn About Me
                 </Link>
-              </div>
+              </Magnetic>
             </div>
           </div>
         </section>

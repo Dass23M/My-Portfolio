@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
 /* ── Base resets ── */
 *,
 *::before,
@@ -11,7 +10,11 @@
 }
 
 html {
-  scroll-behavior: smooth;
+  /* NOTE: scroll-behavior: smooth is intentionally omitted.
+     GSAP ScrollTrigger scrub animations require native scroll
+     to calculate positions precisely. CSS smooth-scroll causes
+     jittery scrub because the reported scrollY lags behind
+     the visual position. */
 }
 
 body {
@@ -20,25 +23,34 @@ body {
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: #F5F0E8;
+  color: #1a1a1a;
 }
 
 /* ── Scrollbar styling ── */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 5px;
 }
 ::-webkit-scrollbar-track {
-  background: transparent;
+  background: #F5F0E8;
 }
 ::-webkit-scrollbar-thumb {
-  background: #f97316;
+  background: #c8a135;
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #ea580c;
+  background: #f5c518;
 }
 
 /* ── Selection color ── */
 ::selection {
-  background: rgba(249, 115, 22, 0.25);
+  background: rgba(200, 161, 53, 0.2);
   color: inherit;
+}
+
+/* ── Custom focus ring ── */
+:focus-visible {
+  outline: 2px solid #c8a135;
+  outline-offset: 2px;
+  border-radius: 4px;
 }
