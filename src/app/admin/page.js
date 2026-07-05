@@ -1,0 +1,13 @@
+﻿'use client';
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+
+// /admin redirects to /admin/dashboard
+export default function AdminRoot() {
+  const router = useRouter();
+  useEffect(() => {
+    router.replace('/admin/dashboard');
+  }, [router]);
+  return null;
+}
+
