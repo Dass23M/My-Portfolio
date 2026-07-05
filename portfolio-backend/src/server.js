@@ -1,6 +1,8 @@
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
+const helmet = require("helmet");
+const xss = require("xss-clean");
 const connectDB = require("./config/db");
 
 // Import routes
@@ -18,6 +20,10 @@ connectDB();
 const app = express();
 
 // ─── Middleware ───────────────────────────────────────────────────────────────
+
+// Security middleware
+app.use(helmet());
+app.use(xss());
 
 // CORS – allow requests from the Next.js frontend
 const allowedOrigins = [
